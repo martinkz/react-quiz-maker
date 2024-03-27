@@ -1,0 +1,43 @@
+{
+	"name": "quizmaker",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"main": "./dist/quizmaker.umd.cjs",
+	"module": "./dist/quizmaker.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/quizmaker.js",
+			"require": "./dist/quizmaker.umd.cjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+		"preview": "vite preview",
+		"prod": "npm run build && npm run preview"
+	},
+	"dependencies": {
+		"framer-motion": "^11.0.22",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.30",
+		"@types/react": "^18.2.69",
+		"@types/react-dom": "^18.2.22",
+		"@typescript-eslint/eslint-plugin": "^7.3.1",
+		"@typescript-eslint/parser": "^7.3.1",
+		"@vitejs/plugin-react": "^4.2.1",
+		"eslint": "^8.57.0",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.6",
+		"typescript": "^5.4.3",
+		"vite": "^5.2.6",
+		"vite-plugin-dts": "^3.7.3",
+		"vite-plugin-lib-inject-css": "^2.0.1"
+	}
+}
