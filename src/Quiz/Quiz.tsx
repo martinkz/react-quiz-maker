@@ -1,6 +1,6 @@
-import { useState, forwardRef, ComponentProps } from "react";
-import styles from "./styles.module.css";
-import testData from "./testData.json";
+import { useState, forwardRef, ComponentProps, ForwardedRef } from "react";
+// import styles from "./styles.module.css";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 export type ButtonProps = ComponentProps<"button"> & {
@@ -12,38 +12,66 @@ export type QuizProps = {
 	children?: React.ReactNode;
 };
 
-export const Quiz = ({ quizData, children }: QuizProps) => {
-	const [count, setCount] = useState(0);
-	console.log(quizData, children);
+enum QuizState {
+	START,
+	QUESTION,
+	RESULT,
+}
 
-	function handleAnswer(answer: string) {
-		setCount(0);
+export const Quiz = ({ quizData, children }: QuizProps) => {
+	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
+	const [currentQuestion, setCurrentQuestion] = useState(0);
+	const [userAnswers, setUserAnswers] = useState<Array<number>>([]);
+	const maxQuestions = quizData.questions.length;
+	// console.log(quizData, children);
+
+	function handleAnswer(answerIdx: number) {
+		const updatedUserAnswers = [...userAnswers, answerIdx];
+
+		setUserAnswers(updatedUserAnswers);
+
+		if (currentQuestion === maxQuestions - 1) {
+			setQuizState(QuizState.RESULT);
+			console.log("Your score is: ", evaluateAnswers(quizData.questions, updatedUserAnswers));
+			return;
+		}
+
+		setCurrentQuestion(currentQuestion + 1);
 	}
 
 	function handleStart() {
-		setCount(1);
+		setQuizState(QuizState.QUESTION);
+		setCurrentQuestion(0);
+		setUserAnswers([]);
+	}
+
+	function evaluateAnswers(questions: Array<any>, answers: Array<number>) {
+		const score = questions.filter((question: any, index: number) => question.answers[answers[index]].result === "1").length;
+		return score;
 	}
 
 	return (
 		<>
 			<AnimatePresence mode="popLayout">
-				{count === 0 && (
+				{quizState === QuizState.START && (
 					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
-					<MotionWrapper key={0}>
+					<MotionWrapper key={-1}>
 						<IntroPage onStart={handleStart} />
 					</MotionWrapper>
 					// </motion.div>
 				)}
 
-				{count === 1 && (
-					<MotionWrapper key={1}>
-						<QuestionPage question={testData.questions[3]} onAnswer={handleAnswer} />
+				{quizState === QuizState.QUESTION && (
+					<MotionWrapper key={currentQuestion}>
+						<QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer} />
 					</MotionWrapper>
 				)}
 
-				{/* <button className={styles.quiz} onClick={() => setCount((count) => (count > 0 ? 0 : 1))}>
-					Count is {count}
-				</button> */}
+				{quizState === QuizState.RESULT && (
+					<MotionWrapper key={maxQuestions}>
+						<ResultPage onRestart={handleStart} />
+					</MotionWrapper>
+				)}
 			</AnimatePresence>
 		</>
 	);
@@ -58,16 +86,25 @@ export const IntroPage = ({ onStart }: { onStart: () => void }) => {
 	);
 };
 
-const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answer: string) => void }) => {
+const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answerIdx: number) => void }) => {
 	return (
 		<div>
 			<h2>Question 1</h2>
-			<p>{question.text}</p>
-			{question.answers.map((option: string, index: number) => (
-				<button key={index} onClick={() => onAnswer(option)}>
-					{option}
+			<p>{question.question}</p>
+			{question.answers.map((item: object, index: number) => (
+				<button key={index} onClick={() => onAnswer(index)}>
+					{item.answer}
 				</button>
 			))}
+		</div>
+	);
+};
+
+export const ResultPage = ({ onRestart }: { onRestart: () => void }) => {
+	return (
+		<div>
+			<h1>Your results:</h1>
+			<button onClick={onRestart}>Play again</button>
 		</div>
 	);
 };
@@ -87,7 +124,7 @@ type MotionWrapperProps = {
 	children: React.ReactNode;
 };
 
-const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: RefObject<HTMLDivElement>) => {
+const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: ForwardedRef<HTMLDivElement>) => {
 	return (
 		<motion.div
 			key={props.key}
