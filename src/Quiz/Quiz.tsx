@@ -3,6 +3,8 @@ import { useState, forwardRef, ComponentProps, ForwardedRef } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
 
+import { evaluateScore, evaluatePersonality } from "./utility";
+
 export type ButtonProps = ComponentProps<"button"> & {
 	icon?: string;
 };
@@ -24,24 +26,30 @@ enum QuizType {
 	CUSTOM = "custom",
 }
 
-export const Quiz = ({ quizData, children }: QuizProps) => {
+export type userAnswer = {
+	index: number;
+	result: string;
+};
+
+export const Quiz = ({ quizData }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [userAnswers, setUserAnswers] = useState<Array<number>>([]);
+	const [userAnswers, setUserAnswers] = useState<Array<userAnswer>>([]);
+	const [result, setResult] = useState<number | string | null>(null);
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	// console.log(quizData, children);
 
-	function handleAnswer(answerIdx: number) {
-		const updatedUserAnswers = [...userAnswers, answerIdx];
+	function handleAnswer(answerIdx: number, answerResult: string) {
+		const updatedUserAnswers = [...userAnswers, { index: answerIdx, result: answerResult }];
 
 		setUserAnswers(updatedUserAnswers);
 
 		if (currentQuestion === maxQuestions - 1) {
-			setQuizState(QuizState.RESULT);
-			const result =
-				quizType === QuizType.SCORED ? evaluateScore(quizData.questions, updatedUserAnswers) : evaluatePersonality(quizData.questions, updatedUserAnswers);
+			const result = quizType === QuizType.SCORED ? evaluateScore(updatedUserAnswers) : evaluatePersonality(updatedUserAnswers);
+			setResult(result);
 			console.log("Your result is: ", result);
+			setQuizState(QuizState.RESULT);
 			return;
 		}
 
@@ -52,33 +60,6 @@ export const Quiz = ({ quizData, children }: QuizProps) => {
 		setQuizState(QuizState.QUESTION);
 		setCurrentQuestion(0);
 		setUserAnswers([]);
-	}
-
-	function evaluateScore(questions: Array<any>, answers: Array<number>) {
-		const score = questions.filter((question: any, index: number) => question.answers[answers[index]].result === "1").length;
-		return score;
-	}
-
-	function evaluatePersonality(questions: Array<any>, answers: Array<number>) {
-		const personalityTypesWithScore = questions.reduce((acc: any, question: any, index: number) => {
-			const answer = question.answers[answers[index]];
-			acc[answer.result] = (acc[answer.result] || 0) + 1;
-			return acc;
-		}, {});
-		// console.log(personalityTypesWithScore);
-
-		// Find the personality with the highest score
-		const typeWithHighestScore = Object.keys(personalityTypesWithScore).reduce((a, b) => (personalityTypesWithScore[a] > personalityTypesWithScore[b] ? a : b));
-
-		// Find if there is more than one personality type with the same high score
-		const allTypesWithHighestScore = Object.keys(personalityTypesWithScore).filter(
-			(key) => personalityTypesWithScore[key] === personalityTypesWithScore[typeWithHighestScore]
-		);
-
-		// Return a random type from the types with the highest score
-		const randomType = allTypesWithHighestScore[Math.floor(Math.random() * allTypesWithHighestScore.length)];
-
-		return randomType;
 	}
 
 	return (
@@ -100,7 +81,7 @@ export const Quiz = ({ quizData, children }: QuizProps) => {
 
 				{quizState === QuizState.RESULT && (
 					<MotionWrapper key={maxQuestions}>
-						<ResultPage onRestart={handleStart} />
+						<ResultPage result={result} onRestart={handleStart} />
 					</MotionWrapper>
 				)}
 			</AnimatePresence>
@@ -117,13 +98,13 @@ export const IntroPage = ({ onStart }: { onStart: () => void }) => {
 	);
 };
 
-const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answerIdx: number) => void }) => {
+const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answerIdx: number, answerResult: string) => void }) => {
 	return (
 		<div>
 			<h2>Question 1</h2>
 			<p>{question.question}</p>
-			{question.answers.map((item: object, index: number) => (
-				<button key={index} onClick={() => onAnswer(index)}>
+			{question.answers.map((item: any, index: number) => (
+				<button key={index} onClick={() => onAnswer(index, item.result)}>
 					{item.answer}
 				</button>
 			))}
@@ -131,10 +112,10 @@ const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answer
 	);
 };
 
-export const ResultPage = ({ onRestart }: { onRestart: () => void }) => {
+export const ResultPage = ({ result, onRestart }: { result: number | string | null; onRestart: () => void }) => {
 	return (
 		<div>
-			<h1>Your results:</h1>
+			<h1>Your results is: {result}</h1>
 			<button onClick={onRestart}>Play again</button>
 		</div>
 	);
