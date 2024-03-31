@@ -18,11 +18,18 @@ enum QuizState {
 	RESULT,
 }
 
+enum QuizType {
+	SCORED = "scored",
+	PERSONALITY = "personality",
+	CUSTOM = "custom",
+}
+
 export const Quiz = ({ quizData, children }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<number>>([]);
 	const maxQuestions = quizData.questions.length;
+	const quizType: QuizType = quizData.type;
 	// console.log(quizData, children);
 
 	function handleAnswer(answerIdx: number) {
@@ -32,7 +39,9 @@ export const Quiz = ({ quizData, children }: QuizProps) => {
 
 		if (currentQuestion === maxQuestions - 1) {
 			setQuizState(QuizState.RESULT);
-			console.log("Your score is: ", evaluateAnswers(quizData.questions, updatedUserAnswers));
+			const result =
+				quizType === QuizType.SCORED ? evaluateScore(quizData.questions, updatedUserAnswers) : evaluatePersonality(quizData.questions, updatedUserAnswers);
+			console.log("Your result is: ", result);
 			return;
 		}
 
@@ -45,9 +54,31 @@ export const Quiz = ({ quizData, children }: QuizProps) => {
 		setUserAnswers([]);
 	}
 
-	function evaluateAnswers(questions: Array<any>, answers: Array<number>) {
+	function evaluateScore(questions: Array<any>, answers: Array<number>) {
 		const score = questions.filter((question: any, index: number) => question.answers[answers[index]].result === "1").length;
 		return score;
+	}
+
+	function evaluatePersonality(questions: Array<any>, answers: Array<number>) {
+		const personalityTypesWithScore = questions.reduce((acc: any, question: any, index: number) => {
+			const answer = question.answers[answers[index]];
+			acc[answer.result] = (acc[answer.result] || 0) + 1;
+			return acc;
+		}, {});
+		// console.log(personalityTypesWithScore);
+
+		// Find the personality with the highest score
+		const typeWithHighestScore = Object.keys(personalityTypesWithScore).reduce((a, b) => (personalityTypesWithScore[a] > personalityTypesWithScore[b] ? a : b));
+
+		// Find if there is more than one personality type with the same high score
+		const allTypesWithHighestScore = Object.keys(personalityTypesWithScore).filter(
+			(key) => personalityTypesWithScore[key] === personalityTypesWithScore[typeWithHighestScore]
+		);
+
+		// Return a random type from the types with the highest score
+		const randomType = allTypesWithHighestScore[Math.floor(Math.random() * allTypesWithHighestScore.length)];
+
+		return randomType;
 	}
 
 	return (
