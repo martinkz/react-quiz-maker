@@ -34,25 +34,27 @@ export type UserAnswer = {
 	result: string;
 };
 
+export type QuizResult = number | string | null;
+
 export const Quiz = ({ quizData, evalCustom }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
-	const [result, setResult] = useState<number | string | null>(null);
+	const [result, setResult] = useState<QuizResult>(null);
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	// console.log(quizData, children);
 
 	if (!Object.values(QuizType).includes(quizType)) {
-		throw new Error("Invalid quiz type. Please provide a valid quiz type.");
+		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
 	}
 
 	if (evalCustom === undefined && quizType === QuizType.CUSTOM) {
 		throw new Error("Quiz type set as type 'custom' but no custom evaluation function was provided. Please provide a custom evaluation function parameter.");
 	}
 
-	function handleAnswer(answerIdx: number, answerResult: string) {
-		const updatedUserAnswers = [...userAnswers, { index: answerIdx, result: answerResult }];
+	function handleAnswer(userAnswer: UserAnswer) {
+		const updatedUserAnswers = [...userAnswers, userAnswer];
 
 		setUserAnswers(updatedUserAnswers);
 
@@ -115,13 +117,13 @@ export const IntroPage = ({ onStart }: { onStart: () => void }) => {
 	);
 };
 
-const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answerIdx: number, answerResult: string) => void }) => {
+const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (userAnswer: UserAnswer) => void }) => {
 	return (
 		<div>
 			<h2>Question 1</h2>
 			<p>{question.question}</p>
 			{question.answers.map((item: any, index: number) => (
-				<button key={index} onClick={() => onAnswer(index, item.result)}>
+				<button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
 					{item.answer}
 				</button>
 			))}
@@ -129,7 +131,7 @@ const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (answer
 	);
 };
 
-export const ResultPage = ({ result, onRestart }: { result: number | string | null; onRestart: () => void }) => {
+export const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestart: () => void }) => {
 	return (
 		<div>
 			<h1>Your results is: {result}</h1>
