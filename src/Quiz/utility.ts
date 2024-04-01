@@ -1,12 +1,12 @@
-import { userAnswer } from "./Quiz";
+import { UserAnswer } from "./Quiz";
 
-export function evaluateScore(userAnswers: userAnswer[]) {
+export function evaluateScore(userAnswers: UserAnswer[]) {
 	const score = userAnswers.filter((answer: any) => answer.result === "1").length;
 	return score;
 }
 
-export function evaluatePersonality(userAnswers: userAnswer[]) {
-	const personalityTypesWithScore = userAnswers.reduce((acc: Record<string, number>, answer: userAnswer) => {
+export function evaluatePersonality(userAnswers: UserAnswer[]) {
+	const personalityTypesWithScore = userAnswers.reduce((acc: Record<string, number>, answer: UserAnswer) => {
 		acc[answer.result] = (acc[answer.result] || 0) + 1;
 		return acc;
 	}, {});

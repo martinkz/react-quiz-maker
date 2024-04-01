@@ -1,9 +1,9 @@
 import Quiz from "./Quiz/Quiz";
 import quizJson from "./quizData.json";
 
-import { userAnswer } from "./Quiz/Quiz";
+import { UserAnswer } from "./Quiz/Quiz";
 
-function customAnswerEval(userAnswers: userAnswer[]) {
+function customAnswerEval(userAnswers: UserAnswer[]) {
 	console.log(userAnswers);
 	return "Custom result";
 }

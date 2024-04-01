@@ -9,7 +9,7 @@ export type ButtonProps = ComponentProps<"button"> & {
 	icon?: string;
 };
 
-type EvalFunction = (userAnswers: userAnswer[]) => string | number | null;
+type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 
 export type QuizProps = {
 	quizData: any;
@@ -29,7 +29,7 @@ enum QuizType {
 	CUSTOM = "custom",
 }
 
-export type userAnswer = {
+export type UserAnswer = {
 	index: number;
 	result: string;
 };
@@ -37,7 +37,7 @@ export type userAnswer = {
 export const Quiz = ({ quizData, evalCustom }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [userAnswers, setUserAnswers] = useState<Array<userAnswer>>([]);
+	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<number | string | null>(null);
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
