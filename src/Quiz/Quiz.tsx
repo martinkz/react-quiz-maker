@@ -9,8 +9,11 @@ export type ButtonProps = ComponentProps<"button"> & {
 	icon?: string;
 };
 
+type EvalFunction = (userAnswers: userAnswer[]) => string | number | null;
+
 export type QuizProps = {
 	quizData: any;
+	evalCustom?: EvalFunction;
 	children?: React.ReactNode;
 };
 
@@ -31,7 +34,7 @@ export type userAnswer = {
 	result: string;
 };
 
-export const Quiz = ({ quizData }: QuizProps) => {
+export const Quiz = ({ quizData, evalCustom }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<userAnswer>>([]);
@@ -40,15 +43,29 @@ export const Quiz = ({ quizData }: QuizProps) => {
 	const quizType: QuizType = quizData.type;
 	// console.log(quizData, children);
 
+	if (!Object.values(QuizType).includes(quizType)) {
+		throw new Error("Invalid quiz type. Please provide a valid quiz type.");
+	}
+
+	if (evalCustom === undefined && quizType === QuizType.CUSTOM) {
+		throw new Error("Quiz type set as type 'custom' but no custom evaluation function was provided. Please provide a custom evaluation function parameter.");
+	}
+
 	function handleAnswer(answerIdx: number, answerResult: string) {
 		const updatedUserAnswers = [...userAnswers, { index: answerIdx, result: answerResult }];
 
 		setUserAnswers(updatedUserAnswers);
 
+		const evalFunctions = {
+			[QuizType.SCORED]: evaluateScore,
+			[QuizType.PERSONALITY]: evaluatePersonality,
+			[QuizType.CUSTOM]: evalCustom,
+		};
+
 		if (currentQuestion === maxQuestions - 1) {
-			const result = quizType === QuizType.SCORED ? evaluateScore(updatedUserAnswers) : evaluatePersonality(updatedUserAnswers);
-			setResult(result);
-			console.log("Your result is: ", result);
+			const evalResult = (evalFunctions[quizType] as EvalFunction)(updatedUserAnswers);
+			console.log("Your result is: ", evalResult);
+			setResult(evalResult);
 			setQuizState(QuizState.RESULT);
 			return;
 		}
