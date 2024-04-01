@@ -1,13 +1,7 @@
-import { useState, forwardRef, ComponentProps, ForwardedRef } from "react";
+import { useState, forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
-
 import { motion, AnimatePresence } from "framer-motion";
-
 import { evaluateScore, evaluatePersonality } from "./utility";
-
-export type ButtonProps = ComponentProps<"button"> & {
-	icon?: string;
-};
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 
@@ -36,14 +30,14 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export const Quiz = ({ quizData, evalCustom }: QuizProps) => {
+export const Quiz = ({ quizData, evalCustom, children }: QuizProps) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
-	// console.log(quizData, children);
+	console.log(children);
 
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
@@ -94,7 +88,9 @@ export const Quiz = ({ quizData, evalCustom }: QuizProps) => {
 
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={currentQuestion}>
-						<QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer} />
+						<QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer}>
+							Question children
+						</QuestionPage>
 					</MotionWrapper>
 				)}
 
@@ -117,7 +113,15 @@ export const IntroPage = ({ onStart }: { onStart: () => void }) => {
 	);
 };
 
-const QuestionPage = ({ question, onAnswer }: { question: any; onAnswer: (userAnswer: UserAnswer) => void }) => {
+export type Question = {
+	question: any;
+	onAnswer: (userAnswer: UserAnswer) => void;
+	children?: React.ReactNode;
+};
+
+const QuestionPage = ({ question, onAnswer, children }: Question) => {
+	console.log(children);
+
 	return (
 		<div>
 			<h2>Question 1</h2>
