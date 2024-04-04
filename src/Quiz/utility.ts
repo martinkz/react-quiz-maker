@@ -1,3 +1,4 @@
+import React from "react";
 import { UserAnswer } from "./Quiz";
 
 export function evaluateScore(userAnswers: UserAnswer[]) {
@@ -13,7 +14,9 @@ export function evaluatePersonality(userAnswers: UserAnswer[]) {
 	console.log(personalityTypesWithScore);
 
 	// Find the personality type with the highest score
-	const typeWithHighestScore = Object.keys(personalityTypesWithScore).reduce((a, b) => (personalityTypesWithScore[a] > personalityTypesWithScore[b] ? a : b));
+	const typeWithHighestScore = Object.keys(personalityTypesWithScore).reduce((a, b) =>
+		personalityTypesWithScore[a] > personalityTypesWithScore[b] ? a : b
+	);
 
 	// Find all personality types with the same highest score
 	const allTypesWithHighestScore = Object.keys(personalityTypesWithScore).filter(
@@ -24,4 +27,8 @@ export function evaluatePersonality(userAnswers: UserAnswer[]) {
 	const randomType = allTypesWithHighestScore[Math.floor(Math.random() * allTypesWithHighestScore.length)];
 
 	return randomType;
+}
+
+export function findReactChild(children: React.ReactNode, type: string) {
+	return React.Children.toArray(children).find((child: any) => child.type.__displayName === type);
 }

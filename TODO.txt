@@ -1,0 +1,2 @@
+- Remove MotionWrapper keys - currentQuestion, maxQuestion and replace with something else
+- Move MotionWrapper outside Quiz.tsx and in myQuiz.tsx (potentially)

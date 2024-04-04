@@ -58,7 +58,10 @@
 					"result": "1"
 				},
 				{ "answer": "React components have lifecycle events that fall into State/Property Updates", "result": "1" },
-				{ "answer": "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer", "result": "0" }
+				{
+					"answer": "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer",
+					"result": "0"
+				}
 			],
 			"messageForCorrectAnswer": "Correct answer. Good job.",
 			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",

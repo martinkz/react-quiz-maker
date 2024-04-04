@@ -1,26 +1,18 @@
-import { useState, forwardRef, ForwardedRef } from "react";
+import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { evaluateScore, evaluatePersonality } from "./utility";
-
-type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
+import { findReactChild } from "./utility";
+import { useQuiz } from "./QuizContext";
 
 export type QuizProps = {
 	quizData: any;
-	evalCustom?: EvalFunction;
 	children?: React.ReactNode;
 };
 
-enum QuizState {
+export enum QuizState {
 	START,
 	QUESTION,
 	RESULT,
-}
-
-enum QuizType {
-	SCORED = "scored",
-	PERSONALITY = "personality",
-	CUSTOM = "custom",
 }
 
 export type UserAnswer = {
@@ -30,59 +22,19 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export const Quiz = ({ quizData, evalCustom, children }: QuizProps) => {
-	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
-	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
-	const [result, setResult] = useState<QuizResult>(null);
-	const maxQuestions = quizData.questions.length;
-	const quizType: QuizType = quizData.type;
-	console.log(children);
+export const Quiz = ({ quizData, children }: QuizProps) => {
+	const { quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer } = useQuiz();
 
-	if (!Object.values(QuizType).includes(quizType)) {
-		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
-	}
+	// console.log("Quiz: ", quizState);
 
-	if (evalCustom === undefined && quizType === QuizType.CUSTOM) {
-		throw new Error("Quiz type set as type 'custom' but no custom evaluation function was provided. Please provide a custom evaluation function parameter.");
-	}
-
-	function handleAnswer(userAnswer: UserAnswer) {
-		const updatedUserAnswers = [...userAnswers, userAnswer];
-
-		setUserAnswers(updatedUserAnswers);
-
-		const evalFunctions = {
-			[QuizType.SCORED]: evaluateScore,
-			[QuizType.PERSONALITY]: evaluatePersonality,
-			[QuizType.CUSTOM]: evalCustom,
-		};
-
-		if (currentQuestion === maxQuestions - 1) {
-			const evalResult = (evalFunctions[quizType] as EvalFunction)(updatedUserAnswers);
-			console.log("Your result is: ", evalResult);
-			setResult(evalResult);
-			setQuizState(QuizState.RESULT);
-			return;
-		}
-
-		setCurrentQuestion(currentQuestion + 1);
-	}
-
-	function handleStart() {
-		setQuizState(QuizState.QUESTION);
-		setCurrentQuestion(0);
-		setUserAnswers([]);
-	}
+	const IntroChild = findReactChild(children, "IntroPage");
 
 	return (
 		<>
 			<AnimatePresence mode="popLayout">
 				{quizState === QuizState.START && (
 					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
-					<MotionWrapper key={-1}>
-						<IntroPage onStart={handleStart} />
-					</MotionWrapper>
+					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>
 					// </motion.div>
 				)}
 
@@ -104,14 +56,21 @@ export const Quiz = ({ quizData, evalCustom, children }: QuizProps) => {
 	);
 };
 
-export const IntroPage = ({ onStart }: { onStart: () => void }) => {
+const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: React.ReactNode }) => {
 	return (
 		<div>
-			<h1>Welcome to the Quiz</h1>
-			<button onClick={onStart}>Start Quiz</button>
+			{children || (
+				<>
+					<h1>Welcome to the Quiz</h1>
+					<button onClick={onStart}>Start Quiz</button>
+				</>
+			)}
 		</div>
 	);
 };
+
+IntroPage.__displayName = "IntroPage";
+Quiz.IntroPage = IntroPage;
 
 export type Question = {
 	question: any;
@@ -135,7 +94,7 @@ const QuestionPage = ({ question, onAnswer, children }: Question) => {
 	);
 };
 
-export const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestart: () => void }) => {
+const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestart: () => void }) => {
 	return (
 		<div>
 			<h1>Your results is: {result}</h1>
@@ -143,6 +102,8 @@ export const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestar
 		</div>
 	);
 };
+
+Quiz.ResultPage = ResultPage;
 
 // const motionVariants = {
 // 	initial: { opacity: 0, scale: 0 },
