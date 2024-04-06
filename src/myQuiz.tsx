@@ -1,17 +1,27 @@
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
-import quizJson from "./quizData.json";
 
 export default function MyQuiz() {
-	const { handleStart } = useQuiz();
+	const { handleStart, handleAnswer, currentQuestion, currentQuestionData } = useQuiz();
 
 	return (
-		<Quiz quizData={quizJson}>
+		<Quiz>
 			<Quiz.IntroPage>
-				<p>Start the quiz</p>
-				<button onClick={handleStart}>Start Quiz</button>
+				<div>
+					<p>Start the quiz</p>
+					<button onClick={handleStart}>Start Quiz</button>
+				</div>
 			</Quiz.IntroPage>
-			<p>fdfs</p>
+			<Quiz.QuestionPage>
+				<h1>Question {currentQuestion + 1}</h1>
+				<p>{currentQuestionData.question}</p>
+				{currentQuestionData.answers.map((item: any, index: number) => (
+					<button key={index} onClick={() => handleAnswer({ index: index, result: item.result })}>
+						{item.answer}
+					</button>
+				))}
+			</Quiz.QuestionPage>
+			<p>this is ignored and not rendered yet</p>
 		</Quiz>
 	);
 }

@@ -1,4 +1,5 @@
 import MyQuiz from "./myQuiz";
+import MyQuiz2 from "./myQuiz2";
 import { QuizProvider } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
 
@@ -10,9 +11,14 @@ import quizJson from "./quizData.json";
 
 function App() {
 	return (
-		<QuizProvider quizData={quizJson}>
-			<MyQuiz />
-		</QuizProvider>
+		<>
+			<QuizProvider quizData={quizJson}>
+				<MyQuiz />
+			</QuizProvider>
+			<QuizProvider quizData={quizJson}>
+				<MyQuiz2 />
+			</QuizProvider>
+		</>
 	);
 }
 

@@ -23,6 +23,8 @@ interface QuizContextProps {
 	quizType: QuizType;
 	handleStart: () => void;
 	handleAnswer: (userAnswer: UserAnswer) => void;
+	currentQuestionData: any;
+	quizData: any;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -38,6 +40,8 @@ const QuizContext = createContext<QuizContextProps>({
 	quizType: QuizType.SCORED,
 	handleStart: () => {},
 	handleAnswer: () => {},
+	currentQuestionData: null,
+	quizData: null,
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -55,6 +59,7 @@ export const QuizProvider = ({
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
+	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	// console.log("QuizProvider: ", quizType);
@@ -118,6 +123,8 @@ export const QuizProvider = ({
 				quizType,
 				handleStart,
 				handleAnswer,
+				currentQuestionData,
+				quizData,
 			}}
 		>
 			{children}

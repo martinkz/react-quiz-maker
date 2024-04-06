@@ -5,7 +5,6 @@ import { findReactChild } from "./utility";
 import { useQuiz } from "./QuizContext";
 
 export type QuizProps = {
-	quizData: any;
 	children?: React.ReactNode;
 };
 
@@ -22,12 +21,13 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export const Quiz = ({ quizData, children }: QuizProps) => {
-	const { quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer } = useQuiz();
+export const Quiz = ({ children }: QuizProps) => {
+	const { quizData, quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer } = useQuiz();
 
 	// console.log("Quiz: ", quizState);
 
 	const IntroChild = findReactChild(children, "IntroPage");
+	const QuestionChild = findReactChild(children, "QuestionPage");
 
 	return (
 		<>
@@ -40,9 +40,9 @@ export const Quiz = ({ quizData, children }: QuizProps) => {
 
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={currentQuestion}>
-						<QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer}>
-							Question children
-						</QuestionPage>
+						{QuestionChild || (
+							<Quiz.QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer} />
+						)}
 					</MotionWrapper>
 				)}
 
@@ -73,26 +73,31 @@ IntroPage.__displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 export type Question = {
-	question: any;
-	onAnswer: (userAnswer: UserAnswer) => void;
+	question?: any;
+	onAnswer?: (userAnswer: UserAnswer) => void;
 	children?: React.ReactNode;
 };
 
-const QuestionPage = ({ question, onAnswer, children }: Question) => {
-	console.log(children);
-
+const QuestionPage = ({ question, onAnswer = () => {}, children }: Question) => {
 	return (
 		<div>
-			<h2>Question 1</h2>
-			<p>{question.question}</p>
-			{question.answers.map((item: any, index: number) => (
-				<button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
-					{item.answer}
-				</button>
-			))}
+			{children || (
+				<>
+					<h2>Question 1</h2>
+					<p>{question.question}</p>
+					{question.answers.map((item: any, index: number) => (
+						<button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
+							{item.answer}
+						</button>
+					))}
+				</>
+			)}
 		</div>
 	);
 };
+
+QuestionPage.__displayName = "QuestionPage";
+Quiz.QuestionPage = QuestionPage;
 
 const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestart: () => void }) => {
 	return (
@@ -121,6 +126,7 @@ type MotionWrapperProps = {
 };
 
 const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: ForwardedRef<HTMLDivElement>) => {
+	// return <>{props.children}</>;
 	return (
 		<motion.div
 			key={props.key}
