@@ -28,6 +28,7 @@ export const Quiz = ({ children }: QuizProps) => {
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const QuestionChild = findReactChild(children, "QuestionPage");
+	const ResultPage = findReactChild(children, "ResultPage");
 
 	return (
 		<>
@@ -48,7 +49,7 @@ export const Quiz = ({ children }: QuizProps) => {
 
 				{quizState === QuizState.RESULT && (
 					<MotionWrapper key={maxQuestions}>
-						<ResultPage result={result} onRestart={handleStart} />
+						{ResultPage || <Quiz.ResultPage result={result} onRestart={handleStart} />}
 					</MotionWrapper>
 				)}
 			</AnimatePresence>
@@ -99,15 +100,26 @@ const QuestionPage = ({ question, onAnswer = () => {}, children }: Question) => 
 QuestionPage.__displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
-const ResultPage = ({ result, onRestart }: { result: QuizResult; onRestart: () => void }) => {
+export type Result = {
+	result?: QuizResult;
+	onRestart?: () => void;
+	children?: React.ReactNode;
+};
+
+const ResultPage = ({ children, result, onRestart }: Result) => {
 	return (
 		<div>
-			<h1>Your results is: {result}</h1>
-			<button onClick={onRestart}>Play again</button>
+			{children || (
+				<>
+					<h1>Your results is: {result}</h1>
+					<button onClick={onRestart}>Play again</button>
+				</>
+			)}
 		</div>
 	);
 };
 
+ResultPage.__displayName = "ResultPage";
 Quiz.ResultPage = ResultPage;
 
 // const motionVariants = {
