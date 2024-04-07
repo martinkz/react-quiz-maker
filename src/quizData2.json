@@ -1,7 +1,7 @@
 {
 	"quizTitle": "React Quiz Component Demo",
 	"quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
-	"type": "personality",
+	"type": "scored",
 	"questions": [
 		{
 			"question": "ReactJS is developed by _____?",
@@ -9,7 +9,7 @@
 			"questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
 			"answerSelectionType": "single",
 			"answers": [
-				{ "answer": "Answer 1", "result": "test" },
+				{ "answer": "Answer 1", "result": "1" },
 				{ "answer": "Answer 2", "result": "0" },
 				{ "answer": "Answer 3", "result": "0" },
 				{ "answer": "Answer 4", "result": "0" }
@@ -24,7 +24,7 @@
 			"questionType": "text",
 			"answerSelectionType": "single",
 			"answers": [
-				{ "answer": "Be the life and soul of the party", "result": "test" },
+				{ "answer": "Be the life and soul of the party", "result": "1" },
 				{ "answer": "Be calm, collected and always reliable", "result": "0" }
 			],
 			"messageForCorrectAnswer": "Correct answer. Good job.",
@@ -37,7 +37,7 @@
 			"questionType": "photo",
 			"answerSelectionType": "single",
 			"answers": [
-				{ "answer": "https://dummyimage.com/600x400/000/fff&text=A", "result": "test" },
+				{ "answer": "https://dummyimage.com/600x400/000/fff&text=A", "result": "1" },
 				{ "answer": "https://dummyimage.com/600x400/000/fff&text=B", "result": "0" },
 				{ "answer": "https://dummyimage.com/600x400/000/fff&text=C", "result": "0" },
 				{ "answer": "https://dummyimage.com/600x400/000/fff&text=D", "result": "0" }
@@ -52,7 +52,7 @@
 			"questionType": "text",
 			"answerSelectionType": "multiple",
 			"answers": [
-				{ "answer": "React can be used on client and as well as server side too", "result": "test" },
+				{ "answer": "React can be used on client and as well as server side too", "result": "1" },
 				{
 					"answer": "Using React increases readability and makes maintainability easier. Component, Data patterns improves readability and thus makes it easier for manitaining larger apps",
 					"result": "1"

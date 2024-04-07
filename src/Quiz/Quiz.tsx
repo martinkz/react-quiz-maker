@@ -2,7 +2,8 @@ import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild } from "./utility";
-import { useQuiz } from "./QuizContext";
+import { QuizType, useQuiz } from "./QuizContext";
+import { QuizConfig } from "./QuizContext";
 
 export type QuizProps = {
 	children?: React.ReactNode;
@@ -22,7 +23,7 @@ export type UserAnswer = {
 export type QuizResult = number | string | null;
 
 export const Quiz = ({ children }: QuizProps) => {
-	const { quizData, quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer } = useQuiz();
+	const { quizData, quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer, config } = useQuiz();
 
 	// console.log("Quiz: ", quizState);
 
@@ -42,7 +43,11 @@ export const Quiz = ({ children }: QuizProps) => {
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={currentQuestion}>
 						{QuestionChild || (
-							<Quiz.QuestionPage question={quizData.questions[currentQuestion]} onAnswer={handleAnswer} />
+							<Quiz.QuestionPage
+							// question={quizData.questions[currentQuestion]}
+							// onAnswer={handleAnswer}
+							// config={config}
+							/>
 						)}
 					</MotionWrapper>
 				)}
@@ -74,30 +79,84 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 IntroPage.__displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const AnswerButton = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => {
-	return <button onClick={onClick}>{children}</button>;
-};
+const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
+	const { config, quizData, currentQuestion, currentAnswer, setCurrentAnswer, handleAnswer } = useQuiz();
+	const { nextButton, revealAnswer } = config || {};
+	const answers = quizData.questions[currentQuestion].answers;
+	const quizType = quizData.type;
+	// Sometimes the answer buttons re-render with the indexes of the previous question
+	// This is a workaround to prevent an error
+	if (answers?.[index] === undefined) {
+		return null;
+	}
 
+	const correctIndex = answers.findIndex((item: any) => item.result === "1");
+	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate" && currentAnswer !== undefined;
+	const isHighlightedForCorrectness = currentAnswer?.index === index || index === correctIndex;
+	const isHighlightedForSelected = currentAnswer?.index === index;
+	// console.log("AnswerButton: ", correctIndex, currentAnswer, answers?.[index], index);
+	let bgColor = "#222";
+	if (showCorrectAnswer && isHighlightedForCorrectness) {
+		const isCorrect = answers[index].result === "1";
+		bgColor = isCorrect ? "green" : "red";
+	} else if (isHighlightedForSelected) {
+		bgColor = "blue";
+	}
+
+	function nextStep() {
+		const theAnswer = { index: index, result: answers[index].result };
+		setCurrentAnswer(theAnswer);
+		if (nextButton) {
+			// console.log("Next button");
+		} else {
+			handleAnswer(theAnswer);
+		}
+	}
+
+	return (
+		<button style={{ background: bgColor }} onClick={nextStep}>
+			{children}
+		</button>
+	);
+};
 Quiz.AnswerButton = AnswerButton;
 
-export type Question = {
-	question?: any;
-	onAnswer?: (userAnswer: UserAnswer) => void;
-	children?: React.ReactNode;
-};
+const NextButton = ({ children }: { children: React.ReactNode }) => {
+	const { config, quizData, currentQuestion, handleAnswer } = useQuiz();
+	const { nextButton, revealAnswer } = config || {};
 
-const QuestionPage = ({ question, onAnswer = () => {}, children }: Question) => {
+	function nextStep() {
+		handleAnswer({ index: 0, result: "next" });
+	}
+
+	return <button onClick={() => {}}>{children}</button>;
+};
+Quiz.NextButton = NextButton;
+
+const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
+	const { quizData, config, currentQuestion, currentQuestionData, handleAnswer } = useQuiz();
+	const { nextButton, revealAnswer } = config || {};
+	// console.log(nextButton, revealAnswer);
+
 	return (
 		<div>
 			{children || (
 				<>
 					<h2>Question 1</h2>
-					<p>{question.question}</p>
-					{question.answers.map((item: any, index: number) => (
-						<button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
+					<p>{currentQuestionData.question}</p>
+					{currentQuestionData.answers.map((item: any, index: number) => (
+						// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
+						// 	{item.answer}
+						// </button>
+						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 							{item.answer}
-						</button>
+						</Quiz.AnswerButton>
 					))}
+					{nextButton && (
+						<p>
+							<Quiz.NextButton>Next</Quiz.NextButton>
+						</p>
+					)}
 				</>
 			)}
 		</div>

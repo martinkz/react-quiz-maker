@@ -2,7 +2,8 @@ import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
 export default function MyQuiz() {
-	const { handleStart, handleAnswer, currentQuestion, currentQuestionData, result } = useQuiz();
+	const { handleStart, currentQuestion, currentQuestionData, result } = useQuiz();
+	// console.log("MyQuiz: ", currentQuestionData.answers);
 
 	return (
 		<Quiz>
@@ -16,10 +17,16 @@ export default function MyQuiz() {
 				<h1>Question {currentQuestion + 1}</h1>
 				<p>{currentQuestionData.question}</p>
 				{currentQuestionData.answers.map((item: any, index: number) => (
-					<button key={index} onClick={() => handleAnswer({ index: index, result: item.result })}>
+					// <button key={index} onClick={() => handleAnswer({ index: index, result: item.result })}>
+					// 	{item.answer}
+					// </button>
+					<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 						{item.answer}
-					</button>
+					</Quiz.AnswerButton>
 				))}
+				<p>
+					<Quiz.NextButton>Next</Quiz.NextButton>
+				</p>
 			</Quiz.QuestionPage>
 			<Quiz.ResultPage>
 				<h1>

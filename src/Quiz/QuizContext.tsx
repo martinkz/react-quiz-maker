@@ -13,6 +13,7 @@ export enum QuizType {
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
 	nextButton?: boolean;
+	revealAnswer?: "immediate" | "newpage" | false;
 };
 
 interface QuizContextProps {
@@ -22,6 +23,8 @@ interface QuizContextProps {
 	setCurrentQuestion: React.Dispatch<React.SetStateAction<number>>;
 	userAnswers: Array<UserAnswer>;
 	setUserAnswers: React.Dispatch<React.SetStateAction<Array<UserAnswer>>>;
+	currentAnswer: UserAnswer | undefined;
+	setCurrentAnswer: React.Dispatch<React.SetStateAction<UserAnswer | undefined>>;
 	result: QuizResult;
 	setResult: React.Dispatch<React.SetStateAction<QuizResult>>;
 	maxQuestions: number;
@@ -30,6 +33,7 @@ interface QuizContextProps {
 	handleAnswer: (userAnswer: UserAnswer) => void;
 	currentQuestionData: any;
 	quizData: any;
+	config?: QuizConfig;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -39,6 +43,8 @@ const QuizContext = createContext<QuizContextProps>({
 	setCurrentQuestion: () => {},
 	userAnswers: [],
 	setUserAnswers: () => {},
+	currentAnswer: undefined,
+	setCurrentAnswer: () => {},
 	result: null,
 	setResult: () => {},
 	maxQuestions: 0,
@@ -47,6 +53,7 @@ const QuizContext = createContext<QuizContextProps>({
 	handleAnswer: () => {},
 	currentQuestionData: null,
 	quizData: null,
+	config: {},
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -64,14 +71,15 @@ export const QuizProvider = ({
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
+	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	// console.log("QuizProvider: ", config);
 
-	const { evalCustom, nextButton } = config || {};
+	const { evalCustom, nextButton, revealAnswer } = config || {};
 
-	console.log("QuizProvider: ", nextButton);
+	// console.log("QuizProvider: ", nextButton);
 
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
@@ -93,6 +101,7 @@ export const QuizProvider = ({
 		setQuizState(QuizState.QUESTION);
 		setCurrentQuestion(0);
 		setUserAnswers([]);
+		setCurrentAnswer(undefined);
 	}
 
 	function handleAnswer(userAnswer: UserAnswer) {
@@ -100,21 +109,32 @@ export const QuizProvider = ({
 
 		setUserAnswers(updatedUserAnswers);
 
+		if (currentQuestion === maxQuestions - 1) {
+			endQuiz(updatedUserAnswers);
+			return;
+		}
+
+		if (revealAnswer) {
+			setTimeout(() => {
+				console.log("------ Set Next question ------");
+				setCurrentQuestion(currentQuestion + 1);
+				setCurrentAnswer(undefined);
+			}, 400);
+		} else {
+			setCurrentQuestion(currentQuestion + 1);
+		}
+	}
+
+	function endQuiz(userAnswers: UserAnswer[]) {
 		const evalFunctions = {
 			[QuizType.SCORED]: evaluateScore,
 			[QuizType.PERSONALITY]: evaluatePersonality,
 			[QuizType.CUSTOM]: evalCustom,
 		};
-
-		if (currentQuestion === maxQuestions - 1) {
-			const evalResult = (evalFunctions[quizType] as EvalFunction)(updatedUserAnswers);
-			console.log("Your result is: ", evalResult);
-			setResult(evalResult);
-			setQuizState(QuizState.RESULT);
-			return;
-		}
-
-		setCurrentQuestion(currentQuestion + 1);
+		const evalResult = (evalFunctions[quizType] as EvalFunction)(userAnswers);
+		console.log("Your result is: ", evalResult);
+		setResult(evalResult);
+		setQuizState(QuizState.RESULT);
 	}
 
 	return (
@@ -130,10 +150,13 @@ export const QuizProvider = ({
 				maxQuestions,
 				userAnswers,
 				setUserAnswers,
+				currentAnswer,
+				setCurrentAnswer,
 				result,
 				setResult,
 				handleStart,
 				handleAnswer,
+				config,
 			}}
 		>
 			{children}

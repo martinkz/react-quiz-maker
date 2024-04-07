@@ -10,18 +10,25 @@ import quizJson2 from "./quizData2.json";
 // 	return "Custom result";
 // }
 
-const quizSettings: QuizConfig = {
+const quizSettings1: QuizConfig = {
 	// evalCustom: customAnswerEval,
 	nextButton: true,
+	revealAnswer: "immediate",
+};
+
+const quizSettings2: QuizConfig = {
+	// evalCustom: customAnswerEval,
+	nextButton: false,
+	revealAnswer: "immediate",
 };
 
 function App() {
 	return (
 		<>
-			<QuizProvider quizData={quizJson} config={quizSettings}>
+			<QuizProvider quizData={quizJson} config={quizSettings1}>
 				<MyQuiz />
 			</QuizProvider>
-			<QuizProvider quizData={quizJson2}>
+			<QuizProvider quizData={quizJson2} config={quizSettings2}>
 				<MyQuiz2 />
 			</QuizProvider>
 		</>
