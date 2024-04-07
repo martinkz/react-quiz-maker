@@ -25,7 +25,7 @@ const quizSettings2: QuizConfig = {
 function App() {
 	return (
 		<>
-			<QuizProvider quizData={quizJson} config={quizSettings1}>
+			<QuizProvider quizData={quizJson2} config={quizSettings1}>
 				<MyQuiz />
 			</QuizProvider>
 			<QuizProvider quizData={quizJson2} config={quizSettings2}>

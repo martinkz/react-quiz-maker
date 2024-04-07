@@ -2,8 +2,7 @@ import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild } from "./utility";
-import { QuizType, useQuiz } from "./QuizContext";
-import { QuizConfig } from "./QuizContext";
+import { QuizType, AnswerButtonState, useQuiz } from "./QuizContext";
 
 export type QuizProps = {
 	children?: React.ReactNode;
@@ -80,32 +79,47 @@ IntroPage.__displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
-	const { config, quizData, currentQuestion, currentAnswer, setCurrentAnswer, handleAnswer } = useQuiz();
+	const { config, quizData, currentQuestion, setCurrentAnswer, handleAnswer, answerButtonState, setAnswerButtonState } =
+		useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
 	const quizType = quizData.type;
+
 	// Sometimes the answer buttons re-render with the indexes of the previous question
 	// This is a workaround to prevent an error
-	if (answers?.[index] === undefined) {
-		return null;
-	}
+	// Currently not needed, but may be needed in the future
+	// if (answers?.[index] === undefined) {
+	// 	return null;
+	// }
 
-	const correctIndex = answers.findIndex((item: any) => item.result === "1");
-	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate" && currentAnswer !== undefined;
-	const isHighlightedForCorrectness = currentAnswer?.index === index || index === correctIndex;
-	const isHighlightedForSelected = currentAnswer?.index === index;
-	// console.log("AnswerButton: ", correctIndex, currentAnswer, answers?.[index], index);
-	let bgColor = "#222";
-	if (showCorrectAnswer && isHighlightedForCorrectness) {
-		const isCorrect = answers[index].result === "1";
-		bgColor = isCorrect ? "green" : "red";
-	} else if (isHighlightedForSelected) {
-		bgColor = "blue";
-	}
+	const colors = {
+		[AnswerButtonState.DEFAULT]: "#222",
+		[AnswerButtonState.SELECTED]: "blue",
+		[AnswerButtonState.CORRECT]: "green",
+		[AnswerButtonState.INCORRECT]: "red",
+	};
+
+	const bgColor = colors[answerButtonState[index]];
+
+	// console.log("AnswerButton: ", index, currentAnswer, answers[index]);
 
 	function nextStep() {
 		const theAnswer = { index: index, result: answers[index].result };
 		setCurrentAnswer(theAnswer);
+		const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
+		const isHighlightedForSelected = theAnswer.index === index;
+		const initialAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
+		const newBtnStateAll = [...initialAnswerButtonState];
+		if (showCorrectAnswer) {
+			const correctIndex = answers.findIndex((item: any) => item.result === "1");
+			const isCorrect = index === correctIndex;
+			const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
+			newBtnStateAll[index] = newBtnState;
+			newBtnStateAll[correctIndex] = AnswerButtonState.CORRECT;
+		} else if (isHighlightedForSelected) {
+			newBtnStateAll[index] = AnswerButtonState.SELECTED;
+		}
+		setAnswerButtonState(newBtnStateAll);
 		if (nextButton) {
 			// console.log("Next button");
 		} else {

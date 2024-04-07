@@ -16,6 +16,13 @@ export type QuizConfig = {
 	revealAnswer?: "immediate" | "newpage" | false;
 };
 
+export enum AnswerButtonState {
+	DEFAULT = "default",
+	CORRECT = "correct",
+	INCORRECT = "incorrect",
+	SELECTED = "selected",
+}
+
 interface QuizContextProps {
 	quizState: QuizState;
 	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
@@ -34,6 +41,8 @@ interface QuizContextProps {
 	currentQuestionData: any;
 	quizData: any;
 	config?: QuizConfig;
+	answerButtonState: AnswerButtonState[];
+	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -54,6 +63,8 @@ const QuizContext = createContext<QuizContextProps>({
 	currentQuestionData: null,
 	quizData: null,
 	config: {},
+	answerButtonState: [],
+	setAnswerButtonState: () => {},
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -67,11 +78,13 @@ export const QuizProvider = ({
 	quizData: any;
 	config?: QuizConfig;
 }) => {
+	const initialAnswerButtonState = Array(quizData.questions[0].answers.length).fill(AnswerButtonState.DEFAULT);
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
+	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
@@ -102,6 +115,7 @@ export const QuizProvider = ({
 		setCurrentQuestion(0);
 		setUserAnswers([]);
 		setCurrentAnswer(undefined);
+		setAnswerButtonState(initialAnswerButtonState);
 	}
 
 	function handleAnswer(userAnswer: UserAnswer) {
@@ -117,8 +131,13 @@ export const QuizProvider = ({
 		if (revealAnswer) {
 			setTimeout(() => {
 				console.log("------ Set Next question ------");
-				setCurrentQuestion(currentQuestion + 1);
+				const nextQuestion = currentQuestion + 1;
+				setCurrentQuestion(nextQuestion);
 				setCurrentAnswer(undefined);
+				const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
+					AnswerButtonState.DEFAULT
+				);
+				setAnswerButtonState(initialAnswerButtonState);
 			}, 400);
 		} else {
 			setCurrentQuestion(currentQuestion + 1);
@@ -157,6 +176,8 @@ export const QuizProvider = ({
 				handleStart,
 				handleAnswer,
 				config,
+				answerButtonState,
+				setAnswerButtonState,
 			}}
 		>
 			{children}

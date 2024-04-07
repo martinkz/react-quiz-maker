@@ -2,7 +2,7 @@ import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
 export default function MyQuiz() {
-	const { handleStart, currentQuestion, currentQuestionData, result } = useQuiz();
+	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
 	// console.log("MyQuiz: ", currentQuestionData.answers);
 
 	return (
@@ -22,6 +22,7 @@ export default function MyQuiz() {
 					// </button>
 					<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 						{item.answer}
+						{answerButtonState[index] === "correct" && <span> ✔</span>}
 					</Quiz.AnswerButton>
 				))}
 				<p>
