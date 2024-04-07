@@ -1,2 +1,3 @@
 - Remove MotionWrapper keys - currentQuestion, maxQuestion and replace with something else
 - Move MotionWrapper outside Quiz.tsx and in myQuiz.tsx (potentially)
+- Add QuizButton component and try to handle some state inside (e.g. immediately showing the correct answer, highlighting of answer correctness, etc)

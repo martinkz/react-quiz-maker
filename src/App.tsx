@@ -1,7 +1,8 @@
 import MyQuiz from "./myQuiz";
 import MyQuiz2 from "./myQuiz2";
-import { QuizProvider } from "./Quiz/QuizContext";
+import { QuizProvider, QuizConfig } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
+import quizJson2 from "./quizData2.json";
 
 // import { UserAnswer } from "./Quiz/Quiz";
 // function customAnswerEval(userAnswers: UserAnswer[]) {
@@ -9,13 +10,18 @@ import quizJson from "./quizData.json";
 // 	return "Custom result";
 // }
 
+const quizSettings: QuizConfig = {
+	// evalCustom: customAnswerEval,
+	nextButton: true,
+};
+
 function App() {
 	return (
 		<>
-			<QuizProvider quizData={quizJson}>
+			<QuizProvider quizData={quizJson} config={quizSettings}>
 				<MyQuiz />
 			</QuizProvider>
-			<QuizProvider quizData={quizJson}>
+			<QuizProvider quizData={quizJson2}>
 				<MyQuiz2 />
 			</QuizProvider>
 		</>

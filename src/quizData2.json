@@ -1,0 +1,72 @@
+{
+	"quizTitle": "React Quiz Component Demo",
+	"quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
+	"type": "personality",
+	"questions": [
+		{
+			"question": "ReactJS is developed by _____?",
+			"questionType": "text",
+			"questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
+			"answerSelectionType": "single",
+			"answers": [
+				{ "answer": "Answer 1", "result": "test" },
+				{ "answer": "Answer 2", "result": "0" },
+				{ "answer": "Answer 3", "result": "0" },
+				{ "answer": "Answer 4", "result": "0" }
+			],
+			"messageForCorrectAnswer": "Correct answer. Good job.",
+			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+			"explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+			"point": "20"
+		},
+		{
+			"question": "ReactJS is an MVC based framework?",
+			"questionType": "text",
+			"answerSelectionType": "single",
+			"answers": [
+				{ "answer": "Be the life and soul of the party", "result": "test" },
+				{ "answer": "Be calm, collected and always reliable", "result": "0" }
+			],
+			"messageForCorrectAnswer": "Correct answer. Good job.",
+			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+			"explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+			"point": "10"
+		},
+		{
+			"question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
+			"questionType": "photo",
+			"answerSelectionType": "single",
+			"answers": [
+				{ "answer": "https://dummyimage.com/600x400/000/fff&text=A", "result": "test" },
+				{ "answer": "https://dummyimage.com/600x400/000/fff&text=B", "result": "0" },
+				{ "answer": "https://dummyimage.com/600x400/000/fff&text=C", "result": "0" },
+				{ "answer": "https://dummyimage.com/600x400/000/fff&text=D", "result": "0" }
+			],
+			"messageForCorrectAnswer": "Correct answer. Good job.",
+			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+			"explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+			"point": "20"
+		},
+		{
+			"question": "What are the advantages of React JS?",
+			"questionType": "text",
+			"answerSelectionType": "multiple",
+			"answers": [
+				{ "answer": "React can be used on client and as well as server side too", "result": "test" },
+				{
+					"answer": "Using React increases readability and makes maintainability easier. Component, Data patterns improves readability and thus makes it easier for manitaining larger apps",
+					"result": "1"
+				},
+				{ "answer": "React components have lifecycle events that fall into State/Property Updates", "result": "1" },
+				{
+					"answer": "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer",
+					"result": "0"
+				}
+			],
+			"messageForCorrectAnswer": "Correct answer. Good job.",
+			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+			"explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+			"point": "20"
+		}
+	]
+}

@@ -63,6 +63,7 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 			{children || (
 				<>
 					<h1>Welcome to the Quiz</h1>
+					{/* <Quiz.Button onClick={onStart}>Start Quiz</Quiz.Button> */}
 					<button onClick={onStart}>Start Quiz</button>
 				</>
 			)}
@@ -72,6 +73,12 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 
 IntroPage.__displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
+
+const AnswerButton = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => {
+	return <button onClick={onClick}>{children}</button>;
+};
+
+Quiz.AnswerButton = AnswerButton;
 
 export type Question = {
 	question?: any;

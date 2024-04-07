@@ -10,6 +10,11 @@ export enum QuizType {
 	CUSTOM = "custom",
 }
 
+export type QuizConfig = {
+	evalCustom?: EvalFunction;
+	nextButton?: boolean;
+};
+
 interface QuizContextProps {
 	quizState: QuizState;
 	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
@@ -49,11 +54,11 @@ export const useQuiz = () => useContext(QuizContext);
 export const QuizProvider = ({
 	children,
 	quizData,
-	evalCustom,
+	config,
 }: {
 	children: React.ReactNode;
 	quizData: any;
-	evalCustom?: EvalFunction;
+	config?: QuizConfig;
 }) => {
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -62,7 +67,11 @@ export const QuizProvider = ({
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
-	// console.log("QuizProvider: ", quizType);
+	// console.log("QuizProvider: ", config);
+
+	const { evalCustom, nextButton } = config || {};
+
+	console.log("QuizProvider: ", nextButton);
 
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
@@ -111,20 +120,20 @@ export const QuizProvider = ({
 	return (
 		<QuizContext.Provider
 			value={{
+				quizData,
 				quizState,
+				quizType,
 				setQuizState,
 				currentQuestion,
 				setCurrentQuestion,
+				currentQuestionData,
+				maxQuestions,
 				userAnswers,
 				setUserAnswers,
 				result,
 				setResult,
-				maxQuestions,
-				quizType,
 				handleStart,
 				handleAnswer,
-				currentQuestionData,
-				quizData,
 			}}
 		>
 			{children}
