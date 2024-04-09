@@ -1,7 +1,7 @@
 import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { findReactChild } from "./utility";
+import { findReactChild, findIndexes } from "./utility";
 import { QuizType, AnswerButtonState, useQuiz } from "./QuizContext";
 
 export type QuizProps = {
@@ -84,9 +84,10 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 	const { nextButton, revealAnswer } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
 	const quizType = quizData.type;
+	const theAnswer = { index: index, result: answers[index].result };
 
 	// Sometimes the answer buttons re-render with the indexes of the previous question
-	// This is a workaround to prevent an error
+	// This is a workaround to prevent an error when the next question has fewer answers
 	// Currently not needed, but may be needed in the future
 	// if (answers?.[index] === undefined) {
 	// 	return null;
@@ -101,30 +102,36 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 
 	const bgColor = colors[answerButtonState[index]];
 
-	// console.log("AnswerButton: ", index, currentAnswer, answers[index]);
+	// console.log("AnswerButton: ", index, theAnswer, answers[index]);
 
 	function nextStep() {
-		const theAnswer = { index: index, result: answers[index].result };
 		setCurrentAnswer(theAnswer);
-		const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
-		const isHighlightedForSelected = theAnswer.index === index;
-		const initialAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
-		const newBtnStateAll = [...initialAnswerButtonState];
-		if (showCorrectAnswer) {
-			const correctIndex = answers.findIndex((item: any) => item.result === "1");
-			const isCorrect = index === correctIndex;
-			const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
-			newBtnStateAll[index] = newBtnState;
-			newBtnStateAll[correctIndex] = AnswerButtonState.CORRECT;
-		} else if (isHighlightedForSelected) {
-			newBtnStateAll[index] = AnswerButtonState.SELECTED;
-		}
-		setAnswerButtonState(newBtnStateAll);
+		setHihglight();
 		if (nextButton) {
 			// console.log("Next button");
 		} else {
 			handleAnswer(theAnswer);
 		}
+	}
+
+	function setHihglight() {
+		const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
+		const isHighlightedForSelected = theAnswer.index === index;
+		const initialAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
+		const newBtnStateAll = [...initialAnswerButtonState];
+		if (showCorrectAnswer) {
+			const correctIndexes = findIndexes(
+				answers.map((item: any) => item.result),
+				"1"
+			);
+			const isCorrect = correctIndexes.includes(index);
+			const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
+			newBtnStateAll[index] = newBtnState;
+			correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
+		} else if (isHighlightedForSelected) {
+			newBtnStateAll[index] = AnswerButtonState.SELECTED;
+		}
+		setAnswerButtonState(newBtnStateAll);
 	}
 
 	return (
