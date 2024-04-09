@@ -17,6 +17,9 @@ export type QuizConfig = {
 };
 
 export enum AnswerButtonState {
+	// UNSET is an initial value only, once clicked, it will be set to one of the other values
+	// This is to distinguish between the initial state and the state after the user has clicked an answer
+	UNSET = "unset",
 	DEFAULT = "default",
 	CORRECT = "correct",
 	INCORRECT = "incorrect",
@@ -78,7 +81,7 @@ export const QuizProvider = ({
 	quizData: any;
 	config?: QuizConfig;
 }) => {
-	const initialAnswerButtonState = Array(quizData.questions[0].answers.length).fill(AnswerButtonState.DEFAULT);
+	const initialAnswerButtonState = Array(quizData.questions[0].answers.length).fill(AnswerButtonState.UNSET);
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
@@ -135,7 +138,7 @@ export const QuizProvider = ({
 				setCurrentQuestion(nextQuestion);
 				setCurrentAnswer(undefined);
 				const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
-					AnswerButtonState.DEFAULT
+					AnswerButtonState.UNSET
 				);
 				setAnswerButtonState(initialAnswerButtonState);
 			}, 400);

@@ -85,6 +85,9 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 	const answers = quizData.questions[currentQuestion].answers;
 	const quizType = quizData.type;
 	const theAnswer = { index: index, result: answers[index].result };
+	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
+	const btnStateIsSet = answerButtonState[index] !== AnswerButtonState.UNSET;
+	const btnDisabled = showCorrectAnswer && btnStateIsSet;
 
 	// Sometimes the answer buttons re-render with the indexes of the previous question
 	// This is a workaround to prevent an error when the next question has fewer answers
@@ -94,6 +97,7 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 	// }
 
 	const colors = {
+		[AnswerButtonState.UNSET]: "#222",
 		[AnswerButtonState.DEFAULT]: "#222",
 		[AnswerButtonState.SELECTED]: "blue",
 		[AnswerButtonState.CORRECT]: "green",
@@ -102,11 +106,10 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 
 	const bgColor = colors[answerButtonState[index]];
 
-	// console.log("AnswerButton: ", index, theAnswer, answers[index]);
-
-	function nextStep() {
+	function answerBtnClick() {
 		setCurrentAnswer(theAnswer);
-		setHihglight();
+		const answerButtonsUpdatedState = getAnswerBtnsNewState(answers, theAnswer, showCorrectAnswer);
+		setAnswerButtonState(answerButtonsUpdatedState);
 		if (nextButton) {
 			// console.log("Next button");
 		} else {
@@ -114,11 +117,9 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		}
 	}
 
-	function setHihglight() {
-		const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
-		const isHighlightedForSelected = theAnswer.index === index;
-		const initialAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
-		const newBtnStateAll = [...initialAnswerButtonState];
+	function getAnswerBtnsNewState(answers: any, currentAnswer: UserAnswer, showCorrectAnswer: boolean) {
+		const defaultAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
+		const newBtnStateAll = [...defaultAnswerButtonState];
 		if (showCorrectAnswer) {
 			const correctIndexes = findIndexes(
 				answers.map((item: any) => item.result),
@@ -128,14 +129,17 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 			const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
 			newBtnStateAll[index] = newBtnState;
 			correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
-		} else if (isHighlightedForSelected) {
-			newBtnStateAll[index] = AnswerButtonState.SELECTED;
+		} else {
+			const isHighlightedForSelected = currentAnswer.index === index;
+			if (isHighlightedForSelected) {
+				newBtnStateAll[index] = AnswerButtonState.SELECTED;
+			}
 		}
-		setAnswerButtonState(newBtnStateAll);
+		return newBtnStateAll;
 	}
 
 	return (
-		<button style={{ background: bgColor }} onClick={nextStep}>
+		<button style={{ background: bgColor }} onClick={answerBtnClick} disabled={btnDisabled}>
 			{children}
 		</button>
 	);
