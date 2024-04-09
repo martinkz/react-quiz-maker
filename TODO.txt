@@ -2,4 +2,5 @@
 - Move MotionWrapper outside Quiz.tsx and in myQuiz.tsx (potentially)
 - Add QuizButton component and try to handle some state inside (e.g. immediately showing the correct answer, highlighting of answer correctness, etc)
 - Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
+- Move "newpage" option of revealAnswer into it's own "showAnswerExplainer" option, as we may want to either immediately show the correct answer + provide an explainer, or not show it, but provide the answer in an explainer
 - Document the various ways to configure the quiz - config object / quiz json
