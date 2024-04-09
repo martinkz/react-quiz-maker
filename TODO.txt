@@ -4,3 +4,4 @@
 - Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
 - Move "newpage" option of revealAnswer into it's own "showAnswerExplainer" option, as we may want to either immediately show the correct answer + provide an explainer, or not show it, but provide the answer in an explainer
 - Document the various ways to configure the quiz - config object / quiz json
+- Sort out answer button keys: <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>

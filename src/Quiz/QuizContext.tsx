@@ -17,7 +17,7 @@ export type QuizConfig = {
 };
 
 export enum AnswerButtonState {
-	// UNSET is an initial value only, once clicked, it will be set to one of the other values
+	// UNSET is an initial value only, once clicked, the button will be set to one of the other values
 	// This is to distinguish between the initial state and the state after the user has clicked an answer
 	UNSET = "unset",
 	DEFAULT = "default",

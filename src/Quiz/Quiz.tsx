@@ -83,18 +83,19 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
+
+	// Sometimes the answer buttons re-render with the indexes of the previous question
+	// This is a workaround to prevent an error when the next question has fewer answers
+	// Currently not needed, but may be needed in the future
+	if (answers?.[index] === undefined) {
+		return null;
+	}
+
 	const quizType = quizData.type;
 	const theAnswer = { index: index, result: answers[index].result };
 	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
 	const btnStateIsSet = answerButtonState[index] !== AnswerButtonState.UNSET;
 	const btnDisabled = showCorrectAnswer && btnStateIsSet;
-
-	// Sometimes the answer buttons re-render with the indexes of the previous question
-	// This is a workaround to prevent an error when the next question has fewer answers
-	// Currently not needed, but may be needed in the future
-	// if (answers?.[index] === undefined) {
-	// 	return null;
-	// }
 
 	const colors = {
 		[AnswerButtonState.UNSET]: "#222",
@@ -147,14 +148,19 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 Quiz.AnswerButton = AnswerButton;
 
 const NextButton = ({ children }: { children: React.ReactNode }) => {
-	const { config, quizData, currentQuestion, handleAnswer } = useQuiz();
-	const { nextButton, revealAnswer } = config || {};
+	const { currentAnswer, handleAnswer } = useQuiz();
 
 	function nextStep() {
-		handleAnswer({ index: 0, result: "next" });
+		if (currentAnswer) {
+			handleAnswer(currentAnswer);
+		}
 	}
 
-	return <button onClick={() => {}}>{children}</button>;
+	return (
+		<button onClick={nextStep} disabled={!currentAnswer}>
+			{children}
+		</button>
+	);
 };
 Quiz.NextButton = NextButton;
 
