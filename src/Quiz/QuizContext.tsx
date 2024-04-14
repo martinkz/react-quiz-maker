@@ -16,11 +16,14 @@ export enum QuizState {
 	RESULT = "result",
 }
 
+export type AnimationVariants = "slide" | "scale";
+
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
 	nextButton?: boolean;
 	revealAnswer?: boolean;
 	showAnswerExplainer?: boolean;
+	animation?: AnimationVariants;
 };
 
 export enum AnswerButtonState {
@@ -86,7 +89,7 @@ export const useQuiz = () => useContext(QuizContext);
 export const QuizProvider = ({
 	children,
 	quizData,
-	config,
+	config = { animation: "scale" },
 }: {
 	children: React.ReactNode;
 	quizData: any;
@@ -151,7 +154,7 @@ export const QuizProvider = ({
 			return;
 		}
 
-		const delay = revealAnswer ? 300 : 150;
+		const delay = revealAnswer ? 300 : 400;
 
 		setTimeout(() => {
 			console.log("------ Set Next question ------");

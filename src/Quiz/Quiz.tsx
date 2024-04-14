@@ -2,7 +2,7 @@ import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
-import { QuizType, QuizState, AnswerButtonState, useQuiz } from "./QuizContext";
+import { QuizType, QuizState, AnimationVariants, AnswerButtonState, useQuiz } from "./QuizContext";
 
 export type QuizProps = {
 	children?: React.ReactNode;
@@ -16,17 +16,13 @@ export type UserAnswer = {
 export type QuizResult = number | string | null;
 
 export const Quiz = ({ children }: QuizProps) => {
-	const {
-		quizData,
-		quizState,
-		currentQuestion,
-		result,
-		maxQuestions,
-		handleStart,
-		showExplainer,
-		setShowExplainer,
-		config,
-	} = useQuiz();
+	const { quizState, currentQuestion, result, maxQuestions, handleStart, showExplainer, config } = useQuiz();
+
+	if (!config) {
+		throw new Error("No config object provided");
+	}
+
+	const { animation } = config;
 
 	// console.log("Quiz: ", quizState);
 
@@ -35,9 +31,11 @@ export const Quiz = ({ children }: QuizProps) => {
 	const ExplainerChild = findReactChild(children, "ExplainerPage");
 	const ResultPage = findReactChild(children, "ResultPage");
 
+	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
+
 	return (
 		<>
-			<AnimatePresence mode="popLayout">
+			<AnimatePresence mode={animatePresenceMode}>
 				{quizState === QuizState.START && (
 					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
 					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>
@@ -264,29 +262,43 @@ Quiz.ResultPage = ResultPage;
 // 	exit: { opacity: 0, scale: 0 },
 // };
 
-type MotionWrapperProps = {
-	key: number;
-	children: React.ReactNode;
-};
+const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
+	const { config } = useQuiz();
+	if (!config) {
+		throw new Error("No config object provided");
+	}
 
-const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: ForwardedRef<HTMLDivElement>) => {
-	// return <>{props.children}</>;
+	const { animation } = config;
+
+	const wrappers = {
+		slide: MotionSlideProps,
+		scale: MotionScaleProps,
+	};
 	return (
-		<motion.div
-			key={props.key}
-			ref={ref}
-			style={{ display: "flex" }}
-			initial={{ opacity: 0, scale: 0 }}
-			animate={{ opacity: 1, scale: 1 }}
-			transition={{
-				duration: 0.5,
-				// ease: [0, 0.71, 0.2, 1.01],
-			}}
-			exit={{ opacity: 0, scale: 0 }}
-		>
-			{props.children}
+		<motion.div ref={ref} {...wrappers[animation!]}>
+			{children}
 		</motion.div>
 	);
 });
+
+const MotionSlideProps = {
+	style: { overflow: "hidden" },
+	initial: { height: 0 },
+	animate: { height: "auto" },
+	transition: {
+		duration: 1,
+	},
+	exit: { height: 0 },
+};
+
+const MotionScaleProps = {
+	initial: { opacity: 0, scale: 0 },
+	animate: { opacity: 1, scale: 1 },
+	transition: {
+		duration: 0.5,
+		// ease: [0, 0.71, 0.2, 1.01],
+	},
+	exit: { opacity: 0, scale: 0 },
+};
 
 export default Quiz;

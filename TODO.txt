@@ -2,7 +2,6 @@
 - Move MotionWrapper outside Quiz.tsx and in myQuiz.tsx (potentially)
 - Add QuizButton component and try to handle some state inside (e.g. immediately showing the correct answer, highlighting of answer correctness, etc)
 - Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
-- Move "newpage" option of revealAnswer into it's own "showAnswerExplainer" option, as we may want to either immediately show the correct answer + provide an explainer, or not show it, but provide the answer in an explainer
 - Document the various ways to configure the quiz - config object / quiz json
 - Sort out answer button keys: <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 - Add timer
@@ -14,6 +13,6 @@
   * personality quiz type && revealAnswer: true
   * showAnswerExplainer: true && nextButton: true
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything)
-- Exit animation for each question doesn't trigger anymore for some reason
-- Figure out key prop error in browser console
 - Create ExplainerNext button and rename nextButton to QuestionNextButton
+- Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop
+- Figure out how to set the explainer to be displayed below the question, or on a new page alternatively

@@ -1,6 +1,6 @@
 import MyQuiz from "./myQuiz";
 import MyQuiz2 from "./myQuiz2";
-import { QuizProvider } from "./Quiz/QuizContext";
+import { AnimationVariants, QuizProvider } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
 
@@ -20,6 +20,7 @@ function App() {
 					nextButton: true,
 					revealAnswer: false,
 					showAnswerExplainer: true,
+					animation: "slide",
 				}}
 			>
 				<MyQuiz />
@@ -30,7 +31,8 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: false,
 					revealAnswer: false,
-					showAnswerExplainer: false,
+					animation: "scale",
+					showAnswerExplainer: true,
 				}}
 			>
 				<MyQuiz2 />
