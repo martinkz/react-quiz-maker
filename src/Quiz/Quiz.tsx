@@ -45,16 +45,13 @@ export const Quiz = ({ children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && (
-					<>
-						{!showExplainer && (
-							<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
-						)}
-						{showExplainer && (
-							<MotionWrapper key={currentQuestion + maxQuestions + 1}>
-								{ExplainerChild || <Quiz.ExplainerPage />}
-							</MotionWrapper>
-						)}
-					</>
+					<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
+				)}
+
+				{quizState === QuizState.QUESTION && showExplainer && (
+					<MotionWrapper key={currentQuestion + maxQuestions + 1}>
+						{ExplainerChild || <Quiz.ExplainerPage />}
+					</MotionWrapper>
 				)}
 
 				{quizState === QuizState.RESULT && (
@@ -282,8 +279,8 @@ const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: ForwardedRef<H
 			initial={{ opacity: 0, scale: 0 }}
 			animate={{ opacity: 1, scale: 1 }}
 			transition={{
-				duration: 0.9,
-				ease: [0, 0.71, 0.2, 1.01],
+				duration: 0.5,
+				// ease: [0, 0.71, 0.2, 1.01],
 			}}
 			exit={{ opacity: 0, scale: 0 }}
 		>

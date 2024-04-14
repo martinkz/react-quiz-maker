@@ -28,9 +28,9 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					nextButton: false,
 					revealAnswer: false,
-					showAnswerExplainer: true,
+					showAnswerExplainer: false,
 				}}
 			>
 				<MyQuiz2 />
