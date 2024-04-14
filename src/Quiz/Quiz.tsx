@@ -2,17 +2,11 @@ import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
-import { QuizType, AnswerButtonState, useQuiz } from "./QuizContext";
+import { QuizType, QuizState, AnswerButtonState, useQuiz } from "./QuizContext";
 
 export type QuizProps = {
 	children?: React.ReactNode;
 };
-
-export enum QuizState {
-	START,
-	QUESTION,
-	RESULT,
-}
 
 export type UserAnswer = {
 	index: number;
@@ -22,12 +16,23 @@ export type UserAnswer = {
 export type QuizResult = number | string | null;
 
 export const Quiz = ({ children }: QuizProps) => {
-	const { quizData, quizState, currentQuestion, result, maxQuestions, handleStart, handleAnswer, config } = useQuiz();
+	const {
+		quizData,
+		quizState,
+		currentQuestion,
+		result,
+		maxQuestions,
+		handleStart,
+		showExplainer,
+		setShowExplainer,
+		config,
+	} = useQuiz();
 
 	// console.log("Quiz: ", quizState);
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const QuestionChild = findReactChild(children, "QuestionPage");
+	const ExplainerChild = findReactChild(children, "ExplainerPage");
 	const ResultPage = findReactChild(children, "ResultPage");
 
 	return (
@@ -40,15 +45,16 @@ export const Quiz = ({ children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && (
-					<MotionWrapper key={currentQuestion}>
-						{QuestionChild || (
-							<Quiz.QuestionPage
-							// question={quizData.questions[currentQuestion]}
-							// onAnswer={handleAnswer}
-							// config={config}
-							/>
+					<>
+						{!showExplainer && (
+							<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
 						)}
-					</MotionWrapper>
+						{showExplainer && (
+							<MotionWrapper key={currentQuestion + maxQuestions + 1}>
+								{ExplainerChild || <Quiz.ExplainerPage />}
+							</MotionWrapper>
+						)}
+					</>
 				)}
 
 				{quizState === QuizState.RESULT && (
@@ -79,8 +85,16 @@ IntroPage.__displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
-	const { config, quizData, currentQuestion, setCurrentAnswer, handleAnswer, answerButtonState, setAnswerButtonState } =
-		useQuiz();
+	const {
+		config,
+		quizData,
+		currentQuestion,
+		setCurrentAnswer,
+		handleAnswer,
+		answerButtonState,
+		setAnswerButtonState,
+		showExplainer,
+	} = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
 
@@ -93,9 +107,9 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 
 	const quizType = quizData.type;
 	const theAnswer = { index: index, result: answers[index].result };
-	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === "immediate";
+	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
 	const btnStateIsSet = answerButtonState[index] !== AnswerButtonState.UNSET;
-	const btnDisabled = showCorrectAnswer && btnStateIsSet;
+	const btnDisabled = btnStateIsSet && (showCorrectAnswer || showExplainer);
 
 	const colors = {
 		[AnswerButtonState.UNSET]: "#222",
@@ -118,6 +132,7 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		}
 	}
 
+	// Update the state of all answer buttons based on the current answer and whether to show the correct answer
 	function getAnswerBtnsNewState(answers: any, currentAnswer: UserAnswer, showCorrectAnswer: boolean) {
 		const defaultAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
 		const newBtnStateAll = [...defaultAnswerButtonState];
@@ -148,7 +163,11 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 Quiz.AnswerButton = AnswerButton;
 
 const NextButton = ({ children }: { children: React.ReactNode }) => {
-	const { currentAnswer, handleAnswer } = useQuiz();
+	const { currentAnswer, handleAnswer, showExplainer } = useQuiz();
+
+	// if (showExplainer) {
+	// 	return null;
+	// }
 
 	function nextStep() {
 		if (currentAnswer) {
@@ -165,7 +184,7 @@ const NextButton = ({ children }: { children: React.ReactNode }) => {
 Quiz.NextButton = NextButton;
 
 const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
-	const { quizData, config, currentQuestion, currentQuestionData, handleAnswer } = useQuiz();
+	const { quizData, config, currentQuestion, currentQuestionData, showExplainer } = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
 
@@ -196,6 +215,25 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 
 QuestionPage.__displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
+
+const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
+	return (
+		<div>
+			{children || (
+				<>
+					<h1>Explainer</h1>
+					<p>Explanation of the answer</p>
+					<p>
+						<Quiz.NextButton>Next</Quiz.NextButton>
+					</p>
+				</>
+			)}
+		</div>
+	);
+};
+
+ExplainerPage.__displayName = "ExplainerPage";
+Quiz.ExplainerPage = ExplainerPage;
 
 export type Result = {
 	result?: QuizResult;
@@ -244,7 +282,7 @@ const MotionWrapper = forwardRef((props: MotionWrapperProps, ref: ForwardedRef<H
 			initial={{ opacity: 0, scale: 0 }}
 			animate={{ opacity: 1, scale: 1 }}
 			transition={{
-				duration: 0.5,
+				duration: 0.9,
 				ease: [0, 0.71, 0.2, 1.01],
 			}}
 			exit={{ opacity: 0, scale: 0 }}

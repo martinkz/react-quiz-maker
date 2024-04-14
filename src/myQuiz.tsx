@@ -26,6 +26,13 @@ export default function MyQuiz() {
 					<Quiz.NextButton>Next</Quiz.NextButton>
 				</p>
 			</Quiz.QuestionPage>
+			<Quiz.ExplainerPage>
+				<h1>Explainer Custom</h1>
+				<p>{currentQuestionData.question}</p>
+				<p>
+					<Quiz.NextButton>Next</Quiz.NextButton>
+				</p>
+			</Quiz.ExplainerPage>
 			<Quiz.ResultPage>
 				<h1>
 					<em>Your results is: {result}</em>

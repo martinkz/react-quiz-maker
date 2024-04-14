@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { QuizState, UserAnswer, QuizResult } from "./Quiz";
+import { UserAnswer, QuizResult } from "./Quiz";
 import { evaluateScore, evaluatePersonality } from "./utility";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
@@ -10,10 +10,17 @@ export enum QuizType {
 	CUSTOM = "custom",
 }
 
+export enum QuizState {
+	START = "start",
+	QUESTION = "question",
+	RESULT = "result",
+}
+
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
 	nextButton?: boolean;
-	revealAnswer?: "immediate" | "newpage" | false;
+	revealAnswer?: boolean;
+	showAnswerExplainer?: boolean;
 };
 
 export enum AnswerButtonState {
@@ -46,10 +53,12 @@ interface QuizContextProps {
 	config?: QuizConfig;
 	answerButtonState: AnswerButtonState[];
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
+	showExplainer: boolean;
+	setShowExplainer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const QuizContext = createContext<QuizContextProps>({
-	quizState: 0,
+	quizState: QuizState.START,
 	setQuizState: () => {},
 	currentQuestion: 0,
 	setCurrentQuestion: () => {},
@@ -68,6 +77,8 @@ const QuizContext = createContext<QuizContextProps>({
 	config: {},
 	answerButtonState: [],
 	setAnswerButtonState: () => {},
+	showExplainer: false,
+	setShowExplainer: () => {},
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -86,8 +97,10 @@ export const QuizProvider = ({
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
+	// currentAnswer is used to store the user's current answer when the next button setting is on. We need to store it as the user can change their answer before the press Next
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
+	const [showExplainer, setShowExplainer] = useState(false);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
@@ -126,25 +139,38 @@ export const QuizProvider = ({
 
 		setUserAnswers(updatedUserAnswers);
 
+		if (config?.showAnswerExplainer && !showExplainer) {
+			setShowExplainer(true);
+			return;
+		} else {
+			setShowExplainer(false);
+		}
+
 		if (currentQuestion === maxQuestions - 1) {
 			endQuiz(updatedUserAnswers);
 			return;
 		}
 
-		if (revealAnswer) {
-			setTimeout(() => {
-				console.log("------ Set Next question ------");
-				const nextQuestion = currentQuestion + 1;
-				setCurrentQuestion(nextQuestion);
-				setCurrentAnswer(undefined);
-				const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
-					AnswerButtonState.UNSET
-				);
-				setAnswerButtonState(initialAnswerButtonState);
-			}, 400);
-		} else {
-			setCurrentQuestion(currentQuestion + 1);
-		}
+		const delay = revealAnswer ? 300 : 150;
+
+		setTimeout(() => {
+			console.log("------ Set Next question ------");
+			setUpNextQuestion();
+		}, delay);
+	}
+
+	function setUpNextQuestion() {
+		const nextQuestion = currentQuestion + 1;
+		setCurrentQuestion(nextQuestion);
+		setCurrentAnswer(undefined);
+		const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
+			AnswerButtonState.UNSET
+		);
+		setAnswerButtonState(initialAnswerButtonState);
+	}
+
+	function showAnswerExplainer() {
+		setShowExplainer(true);
 	}
 
 	function endQuiz(userAnswers: UserAnswer[]) {
@@ -181,6 +207,8 @@ export const QuizProvider = ({
 				config,
 				answerButtonState,
 				setAnswerButtonState,
+				showExplainer,
+				setShowExplainer,
 			}}
 		>
 			{children}

@@ -18,7 +18,8 @@ function App() {
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: true,
-					revealAnswer: "immediate",
+					revealAnswer: false,
+					showAnswerExplainer: true,
 				}}
 			>
 				<MyQuiz />
@@ -27,8 +28,9 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
-					revealAnswer: "immediate",
+					nextButton: true,
+					revealAnswer: false,
+					showAnswerExplainer: true,
 				}}
 			>
 				<MyQuiz2 />
