@@ -1,6 +1,6 @@
 import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, stagger } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
 import { QuizType, QuizState, AnimationVariants, AnswerButtonState, useQuiz } from "./QuizContext";
 
@@ -26,8 +26,8 @@ export const Quiz = ({ children }: QuizProps) => {
 
 	// console.log("Quiz: ", quizState);
 
-	const IntroChild = findReactChild(children, "IntroPage");
-	const QuestionChild = findReactChild(children, "QuestionPage");
+	const IntroChild = findReactChild(children, "MotionIntroPage") || findReactChild(children, "IntroPage");
+	const QuestionChild = findReactChild(children, "MotionQuestionPage");
 	const ExplainerChild = findReactChild(children, "ExplainerPage");
 	const ResultPage = findReactChild(children, "ResultPage");
 
@@ -36,15 +36,15 @@ export const Quiz = ({ children }: QuizProps) => {
 	return (
 		<>
 			<AnimatePresence mode={animatePresenceMode}>
-				{quizState === QuizState.START && (
-					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
-					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>
+				{
+					quizState === QuizState.START &&
+						// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
+						(IntroChild || <MotionWrapper key={-1}>{<Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>)
 					// </motion.div>
-				)}
+				}
 
-				{quizState === QuizState.QUESTION && (
-					<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
-				)}
+				{quizState === QuizState.QUESTION &&
+					(QuestionChild || <MotionWrapper key={currentQuestion}>{<Quiz.QuestionPage />}</MotionWrapper>)}
 
 				{quizState === QuizState.QUESTION && showExplainer && (
 					<MotionWrapper key={currentQuestion + maxQuestions + 1}>
@@ -76,8 +76,26 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 	);
 };
 
-IntroPage.__displayName = "IntroPage";
+IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
+
+const CustomIntroPage = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
+	return <div ref={ref}>{children}</div>;
+});
+
+const MotionIntroPage = motion(CustomIntroPage, { forwardMotionProps: true });
+MotionIntroPage.displayName = "MotionIntroPage";
+Quiz.MotionIntroPage = MotionIntroPage;
+
+// const CustomQuestionPage = forwardRef(
+// 	({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
+// 		return <div ref={ref}>{children}</div>;
+// 	}
+// );
+// const MotionQuestionPage = motion(CustomQuestionPage, { forwardMotionProps: true });
+const MotionQuestionPage = motion(CustomIntroPage, { forwardMotionProps: true });
+MotionQuestionPage.displayName = "MotionQuestionPage";
+Quiz.MotionQuestionPage = MotionQuestionPage;
 
 const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
 	const {
@@ -193,9 +211,9 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 						// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
 						// 	{item.answer}
 						// </button>
-						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
-							{item.answer}
-						</Quiz.AnswerButton>
+						<motion.div {...MotionButtonProps} key={currentQuestionData.question + index}>
+							<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
+						</motion.div>
 					))}
 					{nextButton && (
 						<p>
@@ -208,7 +226,7 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-QuestionPage.__displayName = "QuestionPage";
+QuestionPage.displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
 const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
@@ -227,7 +245,7 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-ExplainerPage.__displayName = "ExplainerPage";
+ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
 export type Result = {
@@ -249,7 +267,7 @@ const ResultPage = ({ children, result, onRestart }: Result) => {
 	);
 };
 
-ResultPage.__displayName = "ResultPage";
+ResultPage.displayName = "ResultPage";
 Quiz.ResultPage = ResultPage;
 
 // const motionVariants = {
@@ -280,6 +298,17 @@ const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, r
 		</motion.div>
 	);
 });
+
+const MotionButtonProps = {
+	initial: { opacity: 0, scale: 0 },
+	animate: { opacity: 1, scale: 1 },
+	transition: {
+		duration: 1.5,
+		// delay: stagger(0.3),
+		// ease: [0, 0.71, 0.2, 1.01],
+	},
+	exit: { opacity: 0, scale: 0 },
+};
 
 const MotionSlideProps = {
 	style: { overflow: "hidden" },

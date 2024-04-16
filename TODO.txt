@@ -16,3 +16,5 @@
 - Create ExplainerNext button and rename nextButton to QuestionNextButton
 - Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop
 - Figure out how to set the explainer to be displayed below the question, or on a new page alternatively
+- Add animation type "custom" so you can pass your own motion framer config object. This will also require the user to pass the AnimatePresence mode
+- Add AnswerButton animation

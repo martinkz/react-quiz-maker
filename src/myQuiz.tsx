@@ -5,16 +5,26 @@ export default function MyQuiz() {
 	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
 	// console.log("MyQuiz: ", currentQuestionData.answers);
 
+	const MotionScaleProps = {
+		initial: { opacity: 0, scale: 0 },
+		animate: { opacity: 1, scale: 1 },
+		transition: {
+			duration: 1,
+			// ease: [0, 0.71, 0.2, 1.01],
+		},
+		exit: { opacity: 0, scale: 0 },
+	};
+
 	return (
 		<Quiz>
-			<Quiz.IntroPage>
+			<Quiz.MotionIntroPage key={-2} {...MotionScaleProps}>
 				<div>
-					<p>Start the quiz</p>
+					<p>~~~ Start the quiz ~~~</p>
 					<button onClick={handleStart}>Start Quiz</button>
 				</div>
-			</Quiz.IntroPage>
-			<Quiz.QuestionPage>
-				<h1>Question {currentQuestion + 1}</h1>
+			</Quiz.MotionIntroPage>
+			<Quiz.MotionQuestionPage key={currentQuestion} {...MotionScaleProps}>
+				<h1>~~~ Question {currentQuestion + 1} ~~~</h1>
 				<p>{currentQuestionData.question}</p>
 				{currentQuestionData.answers.map((item: any, index: number) => (
 					<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
@@ -25,7 +35,7 @@ export default function MyQuiz() {
 				<p>
 					<Quiz.NextButton>Next</Quiz.NextButton>
 				</p>
-			</Quiz.QuestionPage>
+			</Quiz.MotionQuestionPage>
 			<Quiz.ExplainerPage>
 				<h1>Explainer Custom</h1>
 				<p>{currentQuestionData.question}</p>
@@ -35,7 +45,7 @@ export default function MyQuiz() {
 			</Quiz.ExplainerPage>
 			<Quiz.ResultPage>
 				<h1>
-					<em>Your results is: {result}</em>
+					<em>~~~ Your results is: {result} ~~~</em>
 				</h1>
 				<button onClick={handleStart}>Play again</button>
 			</Quiz.ResultPage>
