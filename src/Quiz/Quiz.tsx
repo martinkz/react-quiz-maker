@@ -79,21 +79,15 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const CustomIntroPage = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
+const RefWrapper = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
 	return <div ref={ref}>{children}</div>;
 });
 
-const MotionIntroPage = motion(CustomIntroPage, { forwardMotionProps: true });
+const MotionIntroPage = motion(RefWrapper, { forwardMotionProps: true });
 MotionIntroPage.displayName = "MotionIntroPage";
 Quiz.MotionIntroPage = MotionIntroPage;
 
-// const CustomQuestionPage = forwardRef(
-// 	({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
-// 		return <div ref={ref}>{children}</div>;
-// 	}
-// );
-// const MotionQuestionPage = motion(CustomQuestionPage, { forwardMotionProps: true });
-const MotionQuestionPage = motion(CustomIntroPage, { forwardMotionProps: true });
+const MotionQuestionPage = motion(RefWrapper, { forwardMotionProps: true });
 MotionQuestionPage.displayName = "MotionQuestionPage";
 Quiz.MotionQuestionPage = MotionQuestionPage;
 
