@@ -1,3 +1,4 @@
+import { Quiz } from "./Quiz";
 import MyQuiz from "./myQuiz";
 import MyQuiz2 from "./myQuiz2";
 import { AnimationVariants, QuizProvider } from "./Quiz/QuizContext";
@@ -32,10 +33,10 @@ function App() {
 					nextButton: false,
 					revealAnswer: false,
 					animation: "scale",
-					showAnswerExplainer: true,
+					// showAnswerExplainer: true,
 				}}
 			>
-				<MyQuiz2 />
+				<Quiz />
 			</QuizProvider>
 		</>
 	);

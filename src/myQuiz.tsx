@@ -17,12 +17,12 @@ export default function MyQuiz() {
 
 	return (
 		<Quiz>
-			<Quiz.MotionIntroPage key={-2} {...MotionScaleProps}>
+			<Quiz.IntroPage>
 				<div>
 					<p>~~~ Start the quiz ~~~</p>
 					<button onClick={handleStart}>Start Quiz</button>
 				</div>
-			</Quiz.MotionIntroPage>
+			</Quiz.IntroPage>
 			<Quiz.MotionQuestionPage key={currentQuestion} {...MotionScaleProps}>
 				<h1>~~~ Question {currentQuestion + 1} ~~~</h1>
 				<p>{currentQuestionData.question}</p>

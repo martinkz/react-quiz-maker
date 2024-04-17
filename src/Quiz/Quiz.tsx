@@ -1,4 +1,4 @@
-import { forwardRef, ForwardedRef } from "react";
+import { forwardRef, ForwardedRef, memo } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence, stagger } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
@@ -26,7 +26,7 @@ export const Quiz = ({ children }: QuizProps) => {
 
 	// console.log("Quiz: ", quizState);
 
-	const IntroChild = findReactChild(children, "MotionIntroPage") || findReactChild(children, "IntroPage");
+	const IntroChild = findReactChild(children, "IntroPage");
 	const QuestionChild = findReactChild(children, "MotionQuestionPage");
 	const ExplainerChild = findReactChild(children, "ExplainerPage");
 	const ResultPage = findReactChild(children, "ResultPage");
@@ -36,15 +36,13 @@ export const Quiz = ({ children }: QuizProps) => {
 	return (
 		<>
 			<AnimatePresence mode={animatePresenceMode}>
-				{
-					quizState === QuizState.START &&
-						// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
-						(IntroChild || <MotionWrapper key={-1}>{<Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>)
-					// </motion.div>
-				}
+				{quizState === QuizState.START && (
+					<MotionWrapper key={-1}>{IntroChild || <DefaultIntroPage onStart={handleStart} />}</MotionWrapper>
+				)}
 
-				{quizState === QuizState.QUESTION &&
-					(QuestionChild || <MotionWrapper key={currentQuestion}>{<Quiz.QuestionPage />}</MotionWrapper>)}
+				{quizState === QuizState.QUESTION && (
+					<MotionWrapper key={currentQuestion}>{QuestionChild || <QuestionPageDefault />}</MotionWrapper>
+				)}
 
 				{quizState === QuizState.QUESTION && showExplainer && (
 					<MotionWrapper key={currentQuestion + maxQuestions + 1}>
@@ -62,34 +60,34 @@ export const Quiz = ({ children }: QuizProps) => {
 	);
 };
 
-const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: React.ReactNode }) => {
+const DefaultIntroPage = ({ onStart }: { onStart?: () => void }) => {
 	return (
 		<div>
-			{children || (
-				<>
-					<h1>Welcome to the Quiz</h1>
-					{/* <Quiz.Button onClick={onStart}>Start Quiz</Quiz.Button> */}
-					<button onClick={onStart}>Start Quiz</button>
-				</>
-			)}
+			<h1>Welcome to the Quiz</h1>
+			<button onClick={onStart}>Start Quiz</button>
 		</div>
 	);
 };
 
-IntroPage.displayName = "IntroPage";
-Quiz.IntroPage = IntroPage;
+const PageWrapper = ({ children }: { children: React.ReactNode }) => {
+	return <div>{children}</div>;
+};
 
 const RefWrapper = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
 	return <div ref={ref}>{children}</div>;
 });
 
-const MotionIntroPage = motion(RefWrapper, { forwardMotionProps: true });
-MotionIntroPage.displayName = "MotionIntroPage";
-Quiz.MotionIntroPage = MotionIntroPage;
+const IntroPage = memo(PageWrapper);
+IntroPage.displayName = "IntroPage";
+Quiz.IntroPage = IntroPage;
 
 const MotionQuestionPage = motion(RefWrapper, { forwardMotionProps: true });
 MotionQuestionPage.displayName = "MotionQuestionPage";
 Quiz.MotionQuestionPage = MotionQuestionPage;
+
+const QuestionPage = memo(PageWrapper);
+QuestionPage.displayName = "QuestionPage";
+Quiz.QuestionPage = QuestionPage;
 
 const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
 	const {
@@ -190,31 +188,27 @@ const NextButton = ({ children }: { children: React.ReactNode }) => {
 };
 Quiz.NextButton = NextButton;
 
-const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
+const QuestionPageDefault = () => {
 	const { quizData, config, currentQuestion, currentQuestionData, showExplainer } = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
 
 	return (
 		<div>
-			{children || (
-				<>
-					<h2>Question 1</h2>
-					<p>{currentQuestionData.question}</p>
-					{currentQuestionData.answers.map((item: any, index: number) => (
-						// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
-						// 	{item.answer}
-						// </button>
-						<motion.div {...MotionButtonProps} key={currentQuestionData.question + index}>
-							<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
-						</motion.div>
-					))}
-					{nextButton && (
-						<p>
-							<Quiz.NextButton>Next</Quiz.NextButton>
-						</p>
-					)}
-				</>
+			<h2>Question 1</h2>
+			<p>{currentQuestionData.question}</p>
+			{currentQuestionData.answers.map((item: any, index: number) => (
+				// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
+				// 	{item.answer}
+				// </button>
+				<motion.div {...MotionButtonProps} key={currentQuestionData.question + index}>
+					<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
+				</motion.div>
+			))}
+			{nextButton && (
+				<p>
+					<Quiz.NextButton>Next</Quiz.NextButton>
+				</p>
 			)}
 		</div>
 	);
@@ -318,7 +312,7 @@ const MotionScaleProps = {
 	initial: { opacity: 0, scale: 0 },
 	animate: { opacity: 1, scale: 1 },
 	transition: {
-		duration: 0.5,
+		duration: 1,
 		// ease: [0, 0.71, 0.2, 1.01],
 	},
 	exit: { opacity: 0, scale: 0 },
