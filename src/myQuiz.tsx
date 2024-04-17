@@ -1,5 +1,6 @@
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
+import { motion } from "framer-motion";
 
 export default function MyQuiz() {
 	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
@@ -15,6 +16,48 @@ export default function MyQuiz() {
 		exit: { opacity: 0, scale: 0 },
 	};
 
+	const MotionAnswerButtonContainerProps3 = {
+		style: { display: "block" },
+		initial: "hideBtn",
+		animate: "showBtn",
+		variants: {
+			hideBtn: {
+				transition: {
+					staggerChildren: 0.2,
+					staggerDirection: -1,
+				},
+			},
+			showBtn: {
+				transition: {
+					delayChildren: 0.7,
+					staggerChildren: 0.2,
+					staggerDirection: 1,
+				},
+			},
+		},
+	};
+
+	const MotionAnswerButtonProps3 = {
+		style: { display: "inline-block" },
+		variants: {
+			hideBtn: {
+				opacity: 0,
+				scale: 0,
+				transition: {
+					duration: 0.3,
+				},
+			},
+			showBtn: {
+				opacity: 1,
+				scale: 1,
+				transition: {
+					duration: 0.5,
+					ease: [0, 0.71, 0.2, 1.01],
+				},
+			},
+		},
+	};
+
 	return (
 		<Quiz>
 			<Quiz.IntroPage>
@@ -26,12 +69,16 @@ export default function MyQuiz() {
 			<Quiz.MotionQuestionPage key={currentQuestion} {...MotionScaleProps}>
 				<h1>~~~ Question {currentQuestion + 1} ~~~</h1>
 				<p>{currentQuestionData.question}</p>
-				{currentQuestionData.answers.map((item: any, index: number) => (
-					<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
-						{item.answer}
-						{answerButtonState[index] === "correct" && <span> ✔</span>}
-					</Quiz.AnswerButton>
-				))}
+				<motion.div {...MotionAnswerButtonContainerProps3}>
+					{currentQuestionData.answers.map((item: any, index: number) => (
+						<motion.span {...MotionAnswerButtonProps3} key={currentQuestionData.question + index}>
+							<Quiz.AnswerButton index={index}>
+								{item.answer}
+								{answerButtonState[index] === "correct" && <span> ✔</span>}
+							</Quiz.AnswerButton>
+						</motion.span>
+					))}
+				</motion.div>
 				<p>
 					<Quiz.NextButton>Next</Quiz.NextButton>
 				</p>
