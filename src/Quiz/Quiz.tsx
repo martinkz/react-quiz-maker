@@ -1,6 +1,6 @@
 import { forwardRef, ForwardedRef, memo } from "react";
 // import styles from "./styles.module.css";
-import { motion, AnimatePresence, stagger } from "framer-motion";
+import { motion, AnimatePresence, stagger, delay } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
 import { QuizType, QuizState, AnimationVariants, AnswerButtonState, useQuiz } from "./QuizContext";
 
@@ -63,7 +63,7 @@ export const Quiz = ({ children }: QuizProps) => {
 const DefaultIntroPage = ({ onStart }: { onStart?: () => void }) => {
 	return (
 		<div>
-			<h1>Welcome to the Quiz</h1>
+			<h1>Template</h1>
 			<button onClick={onStart}>Start Quiz</button>
 		</div>
 	);
@@ -197,25 +197,19 @@ const QuestionPageDefault = () => {
 		<div>
 			<h2>Question 1</h2>
 			<p>{currentQuestionData.question}</p>
-			<AnimatePresence>
-				<motion.div
-					style={{ display: "flex" }}
-					key={currentQuestionData.question}
-					variants={parentVars}
-					initial="initial"
-					animate="open"
-				>
-					{currentQuestionData.answers.map((item: any, index: number) => {
-						return (
-							<div key={currentQuestion + item.answer + index} style={{ overflow: "hidden" }}>
-								<motion.div variants={childVars}>
-									<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
-								</motion.div>
-							</div>
-						);
-					})}
-				</motion.div>
-			</AnimatePresence>
+
+			<motion.div {...MotionAnswerButtonContainerProps3}>
+				{currentQuestionData.answers.map((item: any, index: number) => {
+					return (
+						<div key={currentQuestion + item.answer + index} style={{ overflow: "hidden" }}>
+							<motion.span {...MotionAnswerButtonProps3}>
+								<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
+							</motion.span>
+						</div>
+					);
+				})}
+			</motion.div>
+
 			{nextButton && (
 				<p>
 					<Quiz.NextButton>Next</Quiz.NextButton>
@@ -298,51 +292,88 @@ const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, r
 	);
 });
 
-const parentVars = {
-	initial: {
-		transition: {
-			staggerChildren: 0.2,
-			staggerDirection: -1,
-		},
-	},
-	open: {
-		transition: {
-			delayChildren: 0.3,
-			staggerChildren: 0.2,
-			staggerDirection: 1,
-		},
-	},
-};
-
-const childVars = {
-	style: { display: "inline-block" },
-	initial: {
-		y: "200px",
-		transition: {
-			duration: 0.5,
-		},
-	},
-	open: {
-		y: 0,
-		transition: {
-			duration: 0.7,
-		},
-	},
-};
-
 const MotionAnswerButtonContainerProps = {
-	initial: { opacity: 0, scale: 0 },
-	animate: { opacity: 1, scale: 1 },
-	transition: {
-		duration: 1,
-		delay: 0.7,
-		ease: [0, 0.71, 0.2, 1.01],
+	style: { display: "block" },
+	initial: "hideBtn",
+	animate: "showBtn",
+	variants: {
+		hideBtn: {
+			transition: {
+				staggerChildren: 0.2,
+				staggerDirection: -1,
+			},
+		},
+		showBtn: {
+			transition: {
+				delayChildren: 0.3,
+				staggerChildren: 0.2,
+				staggerDirection: 1,
+			},
+		},
 	},
-	// Having exit here causes the question to be duplicated on the next replay
-	// exit: { opacity: 0, scale: 0 },
 };
 
 const MotionAnswerButtonProps = {
+	style: { display: "inline-block" },
+	variants: {
+		hideBtn: {
+			y: "200px",
+			transition: {
+				duration: 0.3,
+			},
+		},
+		showBtn: {
+			y: 0,
+			transition: {
+				duration: 0.5,
+			},
+		},
+	},
+};
+
+const MotionAnswerButtonContainerProps3 = {
+	style: { display: "block" },
+	initial: "hideBtn",
+	animate: "showBtn",
+	variants: {
+		hideBtn: {
+			transition: {
+				staggerChildren: 0.2,
+				staggerDirection: -1,
+			},
+		},
+		showBtn: {
+			transition: {
+				delayChildren: 0.7,
+				staggerChildren: 0.2,
+				staggerDirection: 1,
+			},
+		},
+	},
+};
+
+const MotionAnswerButtonProps3 = {
+	style: { display: "inline-block" },
+	variants: {
+		hideBtn: {
+			opacity: 0,
+			scale: 0,
+			transition: {
+				duration: 0.3,
+			},
+		},
+		showBtn: {
+			opacity: 1,
+			scale: 1,
+			transition: {
+				duration: 0.5,
+				ease: [0, 0.71, 0.2, 1.01],
+			},
+		},
+	},
+};
+
+const MotionAnswerButtonProps2 = {
 	style: { display: "inline-block" },
 	initial: { opacity: 0, scale: 0 },
 	animate: { opacity: 1, scale: 1 },
