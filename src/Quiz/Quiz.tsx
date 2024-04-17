@@ -198,11 +198,11 @@ const QuestionPageDefault = () => {
 			<h2>Question 1</h2>
 			<p>{currentQuestionData.question}</p>
 
-			<motion.div {...MotionAnswerButtonContainerProps3}>
+			<motion.div {...MotionAnswerButtonContainerProps}>
 				{currentQuestionData.answers.map((item: any, index: number) => {
 					return (
 						<div key={currentQuestion + item.answer + index} style={{ overflow: "hidden" }}>
-							<motion.span {...MotionAnswerButtonProps3}>
+							<motion.span {...MotionAnswerButtonProps}>
 								<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
 							</motion.span>
 						</div>
