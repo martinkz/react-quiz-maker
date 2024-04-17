@@ -197,14 +197,25 @@ const QuestionPageDefault = () => {
 		<div>
 			<h2>Question 1</h2>
 			<p>{currentQuestionData.question}</p>
-			{currentQuestionData.answers.map((item: any, index: number) => (
-				// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>
-				// 	{item.answer}
-				// </button>
-				<motion.div {...MotionButtonProps} key={currentQuestionData.question + index}>
-					<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
+			<AnimatePresence>
+				<motion.div
+					style={{ display: "flex" }}
+					key={currentQuestionData.question}
+					variants={parentVars}
+					initial="initial"
+					animate="open"
+				>
+					{currentQuestionData.answers.map((item: any, index: number) => {
+						return (
+							<div key={currentQuestion + item.answer + index} style={{ overflow: "hidden" }}>
+								<motion.div variants={childVars}>
+									<Quiz.AnswerButton index={index}>{item.answer}</Quiz.AnswerButton>
+								</motion.div>
+							</div>
+						);
+					})}
 				</motion.div>
-			))}
+			</AnimatePresence>
 			{nextButton && (
 				<p>
 					<Quiz.NextButton>Next</Quiz.NextButton>
@@ -214,8 +225,8 @@ const QuestionPageDefault = () => {
 	);
 };
 
-QuestionPage.displayName = "QuestionPage";
-Quiz.QuestionPage = QuestionPage;
+// QuestionPage.displayName = "QuestionPage";
+// Quiz.QuestionPage = QuestionPage;
 
 const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 	return (
@@ -287,15 +298,61 @@ const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, r
 	);
 });
 
-const MotionButtonProps = {
+const parentVars = {
+	initial: {
+		transition: {
+			staggerChildren: 0.2,
+			staggerDirection: -1,
+		},
+	},
+	open: {
+		transition: {
+			delayChildren: 0.3,
+			staggerChildren: 0.2,
+			staggerDirection: 1,
+		},
+	},
+};
+
+const childVars = {
+	style: { display: "inline-block" },
+	initial: {
+		y: "200px",
+		transition: {
+			duration: 0.5,
+		},
+	},
+	open: {
+		y: 0,
+		transition: {
+			duration: 0.7,
+		},
+	},
+};
+
+const MotionAnswerButtonContainerProps = {
 	initial: { opacity: 0, scale: 0 },
 	animate: { opacity: 1, scale: 1 },
 	transition: {
-		duration: 1.5,
-		// delay: stagger(0.3),
-		// ease: [0, 0.71, 0.2, 1.01],
+		duration: 1,
+		delay: 0.7,
+		ease: [0, 0.71, 0.2, 1.01],
 	},
-	exit: { opacity: 0, scale: 0 },
+	// Having exit here causes the question to be duplicated on the next replay
+	// exit: { opacity: 0, scale: 0 },
+};
+
+const MotionAnswerButtonProps = {
+	style: { display: "inline-block" },
+	initial: { opacity: 0, scale: 0 },
+	animate: { opacity: 1, scale: 1 },
+	transition: {
+		duration: 1,
+		delay: 0.7,
+		ease: [0, 0.71, 0.2, 1.01],
+	},
+	// Having exit here causes the question to be duplicated on the next replay
+	// exit: { opacity: 0, scale: 0 },
 };
 
 const MotionSlideProps = {
