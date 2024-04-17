@@ -18,3 +18,4 @@
 - Figure out how to set the explainer to be displayed below the question, or on a new page alternatively
 - Add animation type "custom" so you can pass your own motion framer config object. This will also require the user to pass the AnimatePresence mode
 - Add AnswerButton animation
+- Fix bug: answerExplainer adds answer twice to userAnswers (see react dev tools)
