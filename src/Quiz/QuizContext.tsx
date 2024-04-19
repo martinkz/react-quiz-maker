@@ -56,8 +56,8 @@ interface QuizContextProps {
 	config?: QuizConfig;
 	answerButtonState: AnswerButtonState[];
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
-	showExplainer: boolean;
-	setShowExplainer: React.Dispatch<React.SetStateAction<boolean>>;
+	explainerVisible: boolean;
+	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -80,8 +80,8 @@ const QuizContext = createContext<QuizContextProps>({
 	config: {},
 	answerButtonState: [],
 	setAnswerButtonState: () => {},
-	showExplainer: false,
-	setShowExplainer: () => {},
+	explainerVisible: false,
+	setExplainerVisible: () => {},
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -103,7 +103,7 @@ export const QuizProvider = ({
 	// currentAnswer is used to store the user's current answer when the next button setting is on. We need to store it as the user can change their answer before the press Next
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
-	const [showExplainer, setShowExplainer] = useState(false);
+	const [explainerVisible, setExplainerVisible] = useState(false);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
@@ -139,15 +139,7 @@ export const QuizProvider = ({
 
 	function handleAnswer(userAnswer: UserAnswer) {
 		const updatedUserAnswers = [...userAnswers, userAnswer];
-
 		setUserAnswers(updatedUserAnswers);
-
-		if (config?.showAnswerExplainer && !showExplainer) {
-			setShowExplainer(true);
-			return;
-		} else {
-			setShowExplainer(false);
-		}
 
 		if (currentQuestion === maxQuestions - 1) {
 			endQuiz(updatedUserAnswers);
@@ -170,10 +162,6 @@ export const QuizProvider = ({
 			AnswerButtonState.UNSET
 		);
 		setAnswerButtonState(initialAnswerButtonState);
-	}
-
-	function showAnswerExplainer() {
-		setShowExplainer(true);
 	}
 
 	function endQuiz(userAnswers: UserAnswer[]) {
@@ -210,8 +198,8 @@ export const QuizProvider = ({
 				config,
 				answerButtonState,
 				setAnswerButtonState,
-				showExplainer,
-				setShowExplainer,
+				explainerVisible,
+				setExplainerVisible,
 			}}
 		>
 			{children}

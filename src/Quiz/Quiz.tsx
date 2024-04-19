@@ -16,7 +16,7 @@ export type UserAnswer = {
 export type QuizResult = number | string | null;
 
 export const Quiz = ({ children }: QuizProps) => {
-	const { quizState, currentQuestion, result, maxQuestions, handleStart, showExplainer, config } = useQuiz();
+	const { quizState, currentQuestion, result, maxQuestions, handleStart, explainerVisible, config } = useQuiz();
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -46,7 +46,7 @@ export const Quiz = ({ children }: QuizProps) => {
 					<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
 				)}
 
-				{quizState === QuizState.QUESTION && showExplainer && (
+				{quizState === QuizState.QUESTION && explainerVisible && (
 					<MotionWrapper key={currentQuestion + maxQuestions + 1}>
 						{ExplainerChild || <Quiz.ExplainerPage />}
 					</MotionWrapper>
@@ -88,9 +88,10 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		handleAnswer,
 		answerButtonState,
 		setAnswerButtonState,
-		showExplainer,
+		explainerVisible,
+		setExplainerVisible,
 	} = useQuiz();
-	const { nextButton, revealAnswer } = config || {};
+	const { nextButton, revealAnswer, showAnswerExplainer } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
 
 	// Sometimes the answer buttons re-render with the indexes of the previous question
@@ -104,7 +105,7 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 	const theAnswer = { index: index, result: answers[index].result };
 	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
 	const btnStateIsSet = answerButtonState[index] !== AnswerButtonState.UNSET;
-	const btnDisabled = btnStateIsSet && (showCorrectAnswer || showExplainer);
+	const btnDisabled = btnStateIsSet && (showCorrectAnswer || explainerVisible);
 
 	const colors = {
 		[AnswerButtonState.UNSET]: "#222",
@@ -120,10 +121,13 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		setCurrentAnswer(theAnswer);
 		const answerButtonsUpdatedState = getAnswerBtnsNewState(answers, theAnswer, showCorrectAnswer);
 		setAnswerButtonState(answerButtonsUpdatedState);
-		if (nextButton) {
-			// console.log("Next button");
-		} else {
+		// Only handle the answer if we're not using a next button and not showing the explainer.
+		// Otherwise the answer will be handled by the next button
+		if (!nextButton && !showAnswerExplainer) {
 			handleAnswer(theAnswer);
+		}
+		if (showAnswerExplainer && !explainerVisible) {
+			setExplainerVisible(true);
 		}
 	}
 
@@ -158,15 +162,12 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 Quiz.AnswerButton = AnswerButton;
 
 const NextButton = ({ children }: { children: React.ReactNode }) => {
-	const { currentAnswer, handleAnswer, showExplainer } = useQuiz();
-
-	// if (showExplainer) {
-	// 	return null;
-	// }
+	const { currentAnswer, handleAnswer, setExplainerVisible } = useQuiz();
 
 	function nextStep() {
 		if (currentAnswer) {
 			handleAnswer(currentAnswer);
+			setExplainerVisible(false);
 		}
 	}
 
@@ -179,7 +180,7 @@ const NextButton = ({ children }: { children: React.ReactNode }) => {
 Quiz.NextButton = NextButton;
 
 const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
-	const { quizData, config, currentQuestion, currentQuestionData, showExplainer } = useQuiz();
+	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
 

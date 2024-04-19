@@ -1,5 +1,5 @@
 import MyQuiz from "./myQuiz";
-import MyQuiz2 from "./myQuiz2";
+import Quiz from "./Quiz/Quiz";
 import { AnimationVariants, QuizProvider } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
@@ -30,12 +30,12 @@ function App() {
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: false,
-					revealAnswer: false,
+					revealAnswer: true,
 					animation: "scale",
 					showAnswerExplainer: true,
 				}}
 			>
-				<MyQuiz2 />
+				<Quiz />
 			</QuizProvider>
 		</>
 	);
