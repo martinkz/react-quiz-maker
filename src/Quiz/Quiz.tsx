@@ -76,7 +76,7 @@ const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: Rea
 	);
 };
 
-IntroPage.__displayName = "IntroPage";
+IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
@@ -208,7 +208,7 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-QuestionPage.__displayName = "QuestionPage";
+QuestionPage.displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
 const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
@@ -227,7 +227,7 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-ExplainerPage.__displayName = "ExplainerPage";
+ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
 export type Result = {
@@ -249,7 +249,7 @@ const ResultPage = ({ children, result, onRestart }: Result) => {
 	);
 };
 
-ResultPage.__displayName = "ResultPage";
+ResultPage.displayName = "ResultPage";
 Quiz.ResultPage = ResultPage;
 
 // const motionVariants = {

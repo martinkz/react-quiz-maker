@@ -30,7 +30,7 @@ export function evaluatePersonality(userAnswers: UserAnswer[]) {
 }
 
 export function findReactChild(children: React.ReactNode, type: string) {
-	return React.Children.toArray(children).find((child: any) => child.type.__displayName === type);
+	return React.Children.toArray(children).find((child: any) => child.type.displayName === type);
 }
 
 export function findIndexes<T>(arr: Array<T>, value: T): number[] {
