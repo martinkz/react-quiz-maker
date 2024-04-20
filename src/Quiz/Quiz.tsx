@@ -45,7 +45,7 @@ export const Quiz = ({ children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && showExplainer && (
-					<MotionWrapper key={currentQuestion + maxQuestions + 1}>
+					<MotionWrapper animation="slide" key={currentQuestion + maxQuestions + 1}>
 						{ExplainerChild || <Quiz.ExplainerPage />}
 					</MotionWrapper>
 				)}
@@ -273,24 +273,30 @@ Quiz.ResultPage = ResultPage;
 // 	exit: { opacity: 0, scale: 0 },
 // };
 
-const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
-	const { config } = useQuiz();
-	if (!config) {
-		throw new Error("No config object provided");
+const MotionWrapper = forwardRef(
+	(
+		{ children, animation }: { children: React.ReactNode; animation?: AnimationVariants },
+		ref: ForwardedRef<HTMLDivElement>
+	) => {
+		const { config } = useQuiz();
+		if (!config) {
+			throw new Error("No config object provided");
+		}
+
+		const { animation: animationConfig } = config;
+		const anim = animation || animationConfig || "slide";
+
+		const wrappers = {
+			slide: MotionSlideProps,
+			scale: MotionScaleProps,
+		};
+		return (
+			<motion.div ref={ref} {...wrappers[anim]}>
+				{children}
+			</motion.div>
+		);
 	}
-
-	const { animation } = config;
-
-	const wrappers = {
-		slide: MotionSlideProps,
-		scale: MotionScaleProps,
-	};
-	return (
-		<motion.div ref={ref} {...wrappers[animation!]}>
-			{children}
-		</motion.div>
-	);
-});
+);
 
 const MotionAnswerButtonContainerProps = {
 	style: { display: "block" },

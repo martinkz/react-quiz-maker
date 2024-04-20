@@ -33,7 +33,7 @@ function App() {
 					nextButton: false,
 					revealAnswer: false,
 					animation: "scale",
-					// showAnswerExplainer: true,
+					showAnswerExplainer: true,
 				}}
 			>
 				<Quiz />
