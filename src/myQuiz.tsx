@@ -1,18 +1,22 @@
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
+import { QuizState } from "./Quiz/QuizContext";
 
 export default function MyQuiz() {
-	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
+	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result, quizState, state } = useQuiz();
 	// console.log("MyQuiz: ", currentQuestionData.answers);
+	console.log(state(QuizState.QUESTION));
 
 	return (
 		<Quiz>
-			<Quiz.IntroPage>
-				<div>
-					<p>Start the quiz</p>
-					<button onClick={handleStart}>Start Quiz</button>
-				</div>
-			</Quiz.IntroPage>
+			{state(QuizState.START) && (
+				<Quiz.IntroPage>
+					<div>
+						<p>Start the quiz</p>
+						<button onClick={handleStart}>Start Quiz</button>
+					</div>
+				</Quiz.IntroPage>
+			)}
 			<Quiz.QuestionPage>
 				<h1>Question {currentQuestion + 1}</h1>
 				<p>{currentQuestionData.question}</p>

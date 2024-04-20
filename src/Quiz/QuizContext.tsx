@@ -11,9 +11,9 @@ export enum QuizType {
 }
 
 export enum QuizState {
-	START = "start",
-	QUESTION = "question",
-	RESULT = "result",
+	START = "START",
+	QUESTION = "QUESTION",
+	RESULT = "RESULT",
 }
 
 export type AnimationVariants = "slide" | "scale";
@@ -58,6 +58,7 @@ interface QuizContextProps {
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 	explainerVisible: boolean;
 	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	state: (state: QuizState) => boolean;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -82,6 +83,7 @@ const QuizContext = createContext<QuizContextProps>({
 	setAnswerButtonState: () => {},
 	explainerVisible: false,
 	setExplainerVisible: () => {},
+	state: () => false,
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -108,6 +110,10 @@ export const QuizProvider = ({
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	// console.log("QuizProvider: ", config);
+
+	function state(state: QuizState) {
+		return quizState === state;
+	}
 
 	const { evalCustom, nextButton, revealAnswer } = config || {};
 
@@ -200,6 +206,7 @@ export const QuizProvider = ({
 				setAnswerButtonState,
 				explainerVisible,
 				setExplainerVisible,
+				state,
 			}}
 		>
 			{children}
