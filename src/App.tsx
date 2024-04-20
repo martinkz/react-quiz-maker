@@ -10,6 +10,15 @@ import quizJson2 from "./quizData2.json";
 // 	return "Custom result";
 // }
 
+const MotionSlideSideProps = {
+	initial: { opacity: 0, x: "-100px" },
+	animate: { opacity: 1, x: 0 },
+	transition: {
+		duration: 0.5,
+	},
+	exit: { opacity: 0, x: "-100px" },
+};
+
 function App() {
 	return (
 		<>
@@ -25,14 +34,16 @@ function App() {
 			>
 				<MyQuiz />
 			</QuizProvider>
+
 			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: false,
 					revealAnswer: true,
-					animation: "scale",
-					showAnswerExplainer: true,
+					animation: "custom",
+					motionObject: MotionSlideSideProps,
+					// showAnswerExplainer: true,
 				}}
 			>
 				<Quiz />

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { UserAnswer, QuizResult } from "./Quiz";
 import { evaluateScore, evaluatePersonality } from "./utility";
+import { HTMLMotionProps } from "framer-motion";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 
@@ -16,7 +17,7 @@ export enum QuizState {
 	RESULT = "result",
 }
 
-export type AnimationVariants = "slide" | "scale";
+export type AnimationVariants = "slide" | "scale" | "custom";
 
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
@@ -24,6 +25,7 @@ export type QuizConfig = {
 	revealAnswer?: boolean;
 	showAnswerExplainer?: boolean;
 	animation?: AnimationVariants;
+	motionObject?: HTMLMotionProps<"div">;
 };
 
 export enum AnswerButtonState {
@@ -89,7 +91,7 @@ export const useQuiz = () => useContext(QuizContext);
 export const QuizProvider = ({
 	children,
 	quizData,
-	config = { animation: "scale" },
+	config = {},
 }: {
 	children: React.ReactNode;
 	quizData: any;
@@ -109,7 +111,9 @@ export const QuizProvider = ({
 	const quizType: QuizType = quizData.type;
 	// console.log("QuizProvider: ", config);
 
-	const { evalCustom, nextButton, revealAnswer } = config || {};
+	// config.animation = config?.animation || "scale"; // Provide config default
+
+	const { evalCustom, animation, motionObject, revealAnswer } = config || {};
 
 	// console.log("QuizProvider: ", nextButton);
 
@@ -125,6 +129,12 @@ export const QuizProvider = ({
 	if (evalCustom !== undefined && quizType !== QuizType.CUSTOM) {
 		throw new Error(
 			`You provided a custom evaluation function parameter, but your quiz is of type ${quizType}. Please set the quiz type to 'custom' if you'd like to use a custom evaluator.}`
+		);
+	}
+
+	if (animation === "custom" && !motionObject) {
+		throw new Error(
+			"You selected a custom animation but did not provide a motion object. Please add a motionObject property to the config object."
 		);
 	}
 
@@ -146,7 +156,7 @@ export const QuizProvider = ({
 			return;
 		}
 
-		const delay = revealAnswer ? 300 : 400;
+		const delay = revealAnswer ? 300 : 0;
 
 		setTimeout(() => {
 			console.log("------ Set Next question ------");
