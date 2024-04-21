@@ -2,7 +2,8 @@ import { forwardRef, ForwardedRef } from "react";
 // import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild, findIndexes } from "./utility";
-import { QuizType, QuizState, AnimationVariants, AnswerButtonState, useQuiz } from "./QuizContext";
+import { QuizType, QuizState, AnswerButtonState, useQuiz } from "./QuizContext";
+import { StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 
 export type QuizProps = {
 	children?: React.ReactNode;
@@ -16,7 +17,7 @@ export type UserAnswer = {
 export type QuizResult = number | string | null;
 
 export const Quiz = ({ children }: QuizProps) => {
-	const { quizState, currentQuestion, result, maxQuestions, handleStart, explainerVisible, config } = useQuiz();
+	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = useQuiz();
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -24,15 +25,12 @@ export const Quiz = ({ children }: QuizProps) => {
 
 	const { animation, answerExplainerOnNewPage } = config;
 
-	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
-
-	// console.log("Quiz: ", quizState);
-
 	const IntroChild = findReactChild(children, "IntroPage");
 	const QuestionChild = findReactChild(children, "QuestionPage");
 	const ExplainerChild = findReactChild(children, "ExplainerPage");
 	const ResultPage = findReactChild(children, "ResultPage");
 
+	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
 	return (
@@ -40,7 +38,7 @@ export const Quiz = ({ children }: QuizProps) => {
 			<AnimatePresence mode={animatePresenceMode}>
 				{quizState === QuizState.START && (
 					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
-					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage onStart={handleStart} />}</MotionWrapper>
+					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage />}</MotionWrapper>
 					// </motion.div>
 				)}
 
@@ -55,23 +53,25 @@ export const Quiz = ({ children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.RESULT && (
-					<MotionWrapper key={maxQuestions}>
-						{ResultPage || <Quiz.ResultPage result={result} onRestart={handleStart} />}
-					</MotionWrapper>
+					<MotionWrapper key={maxQuestions}>{ResultPage || <Quiz.ResultPage />}</MotionWrapper>
 				)}
 			</AnimatePresence>
 		</>
 	);
 };
 
-const IntroPage = ({ onStart, children }: { onStart?: () => void; children?: React.ReactNode }) => {
+Quiz.StartButton = StartButton;
+Quiz.QuestionNextButton = QuestionNextButton;
+Quiz.ExplainerNextButton = ExplainerNextButton;
+
+const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 	return (
 		<div>
 			{children || (
 				<>
 					<h1>Welcome to the Quiz</h1>
 					{/* <Quiz.Button onClick={onStart}>Start Quiz</Quiz.Button> */}
-					<button onClick={onStart}>Start Quiz</button>
+					<Quiz.StartButton>Start Quiz</Quiz.StartButton>
 				</>
 			)}
 		</div>
@@ -157,49 +157,12 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 	}
 
 	return (
-		<button style={{ background: bgColor }} onClick={answerBtnClick} disabled={btnDisabled}>
+		<button type="button" style={{ background: bgColor }} onClick={answerBtnClick} disabled={btnDisabled}>
 			{children}
 		</button>
 	);
 };
 Quiz.AnswerButton = AnswerButton;
-
-const QuestionNextButton = ({ children }: { children: React.ReactNode }) => {
-	const { config, currentAnswer, handleAnswer, setExplainerVisible, explainerVisible } = useQuiz();
-	const { showAnswerExplainer, answerExplainerOnNewPage } = config || {};
-
-	const cssVisibility = explainerVisible ? "hidden" : "visible";
-
-	function nextStep() {
-		if (currentAnswer) {
-			if (showAnswerExplainer && !explainerVisible) {
-				setExplainerVisible(true);
-			} else {
-				handleAnswer(currentAnswer);
-				setExplainerVisible(false);
-			}
-		}
-	}
-
-	return (
-		<button onClick={nextStep} disabled={!currentAnswer} style={{ visibility: cssVisibility }}>
-			{children}
-		</button>
-	);
-};
-Quiz.QuestionNextButton = QuestionNextButton;
-
-const ExplainerNextButton = ({ children }: { children: React.ReactNode }) => {
-	const { currentAnswer, handleAnswer, setExplainerVisible } = useQuiz();
-
-	function nextStep() {
-		handleAnswer(currentAnswer!);
-		setExplainerVisible(false);
-	}
-
-	return <button onClick={nextStep}>{children}</button>;
-};
-Quiz.ExplainerNextButton = ExplainerNextButton;
 
 const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
@@ -254,18 +217,17 @@ ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
 export type Result = {
-	result?: QuizResult;
-	onRestart?: () => void;
 	children?: React.ReactNode;
 };
 
-const ResultPage = ({ children, result, onRestart }: Result) => {
+const ResultPage = ({ children }: Result) => {
+	const { result } = useQuiz();
 	return (
 		<div>
 			{children || (
 				<>
 					<h1>Your results is: {result}</h1>
-					<button onClick={onRestart}>Play again</button>
+					<Quiz.StartButton>Play again</Quiz.StartButton>
 				</>
 			)}
 		</div>

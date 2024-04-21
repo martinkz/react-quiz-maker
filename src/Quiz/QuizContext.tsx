@@ -115,8 +115,15 @@ export const QuizProvider = ({
 	// config.animation = config?.animation || "scale"; // Provide config default
 	config.answerExplainerOnNewPage = config?.answerExplainerOnNewPage || false;
 
-	const { evalCustom, animation, motionObject, revealAnswer, showAnswerExplainer, answerExplainerOnNewPage } =
-		config || {};
+	const {
+		evalCustom,
+		nextButton,
+		animation,
+		motionObject,
+		revealAnswer,
+		showAnswerExplainer,
+		answerExplainerOnNewPage,
+	} = config || {};
 
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
@@ -158,12 +165,14 @@ export const QuizProvider = ({
 		const updatedUserAnswers = [...userAnswers, userAnswer];
 		setUserAnswers(updatedUserAnswers);
 
+		const delay =
+			// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && !nextButton)) ? 1500 : 0;
+			revealAnswer && !showAnswerExplainer && !nextButton ? 1500 : 0;
+
 		if (currentQuestion === maxQuestions - 1) {
-			endQuiz(updatedUserAnswers);
+			setTimeout(() => endQuiz(updatedUserAnswers), delay);
 			return;
 		}
-
-		const delay = revealAnswer && ((showAnswerExplainer && !explainerVisible) || !showAnswerExplainer) ? 1500 : 0;
 
 		setTimeout(() => setUpNextQuestion(), delay);
 	}

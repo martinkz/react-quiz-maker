@@ -2,15 +2,14 @@ import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
 export default function MyQuiz() {
-	const { handleStart, currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
-	// console.log("MyQuiz: ", currentQuestionData.answers);
+	const { currentQuestion, currentQuestionData, answerButtonState, result } = useQuiz();
 
 	return (
 		<Quiz>
 			<Quiz.IntroPage>
 				<div>
 					<p>Start the quiz</p>
-					<button onClick={handleStart}>Start Quiz</button>
+					<Quiz.StartButton>Start Quiz</Quiz.StartButton>
 				</div>
 			</Quiz.IntroPage>
 			<Quiz.QuestionPage>
@@ -23,9 +22,7 @@ export default function MyQuiz() {
 					</Quiz.AnswerButton>
 				))}
 				<p>
-					<Quiz.QuestionNextButton>
-						<div>Next</div>
-					</Quiz.QuestionNextButton>
+					<Quiz.QuestionNextButton>Next</Quiz.QuestionNextButton>
 				</p>
 			</Quiz.QuestionPage>
 			<Quiz.ExplainerPage>
@@ -39,7 +36,7 @@ export default function MyQuiz() {
 				<h1>
 					<em>Your results is: {result}</em>
 				</h1>
-				<button onClick={handleStart}>Play again</button>
+				<Quiz.StartButton>Play again</Quiz.StartButton>
 			</Quiz.ResultPage>
 			<p>this is ignored and not rendered yet</p>
 		</Quiz>
