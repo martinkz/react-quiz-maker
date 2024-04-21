@@ -22,7 +22,9 @@ export const Quiz = ({ children }: QuizProps) => {
 		throw new Error("No config object provided");
 	}
 
-	const { animation } = config;
+	const { animation, answerExplainerOnNewPage } = config;
+
+	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
 
 	// console.log("Quiz: ", quizState);
 
@@ -42,7 +44,7 @@ export const Quiz = ({ children }: QuizProps) => {
 					// </motion.div>
 				)}
 
-				{quizState === QuizState.QUESTION && (
+				{quizState === QuizState.QUESTION && !hideQuestionOnExplainer && (
 					<MotionWrapper key={currentQuestion}>{QuestionChild || <Quiz.QuestionPage />}</MotionWrapper>
 				)}
 
@@ -91,7 +93,7 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		explainerVisible,
 		setExplainerVisible,
 	} = useQuiz();
-	const { nextButton, revealAnswer, showAnswerExplainer } = config || {};
+	const { nextButton, revealAnswer, showAnswerExplainer, answerExplainerOnNewPage } = config || {};
 	const answers = quizData.questions[currentQuestion].answers;
 
 	// Sometimes the answer buttons re-render with the indexes of the previous question
@@ -126,8 +128,9 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 		if (!nextButton && !showAnswerExplainer) {
 			handleAnswer(theAnswer);
 		}
-		if (showAnswerExplainer && !explainerVisible) {
-			setExplainerVisible(true);
+		if (showAnswerExplainer && !explainerVisible && !nextButton) {
+			const delay = answerExplainerOnNewPage ? 1500 : 0;
+			setTimeout(() => setExplainerVisible(true), delay);
 		}
 	}
 
@@ -162,12 +165,21 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 Quiz.AnswerButton = AnswerButton;
 
 const NextButton = ({ children }: { children: React.ReactNode }) => {
-	const { currentAnswer, handleAnswer, setExplainerVisible } = useQuiz();
+	const { config, currentAnswer, handleAnswer, setExplainerVisible, explainerVisible } = useQuiz();
+	const { showAnswerExplainer, answerExplainerOnNewPage } = config || {};
+
+	// if (explainerVisible && !answerExplainerOnNewPage) {
+	// 	return null;
+	// }
 
 	function nextStep() {
 		if (currentAnswer) {
-			handleAnswer(currentAnswer);
-			setExplainerVisible(false);
+			if (showAnswerExplainer && !explainerVisible) {
+				setExplainerVisible(true);
+			} else {
+				handleAnswer(currentAnswer);
+				setExplainerVisible(false);
+			}
 		}
 	}
 
@@ -188,7 +200,7 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 		<div>
 			{children || (
 				<>
-					<h2>Question 1</h2>
+					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
 						// <button key={index} onClick={() => onAnswer({ index: index, result: item.result })}>

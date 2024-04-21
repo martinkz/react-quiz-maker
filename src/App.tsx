@@ -29,6 +29,7 @@ function App() {
 					nextButton: true,
 					revealAnswer: false,
 					showAnswerExplainer: true,
+					answerExplainerOnNewPage: false,
 					animation: "slide",
 				}}
 			>
@@ -39,11 +40,12 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					nextButton: true,
 					revealAnswer: true,
 					animation: "custom",
 					motionObject: MotionSlideSideProps,
-					// showAnswerExplainer: true,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<Quiz />

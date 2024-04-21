@@ -24,6 +24,7 @@ export type QuizConfig = {
 	nextButton?: boolean;
 	revealAnswer?: boolean;
 	showAnswerExplainer?: boolean;
+	answerExplainerOnNewPage?: boolean;
 	animation?: AnimationVariants;
 	motionObject?: HTMLMotionProps<"div">;
 };
@@ -112,8 +113,14 @@ export const QuizProvider = ({
 	// console.log("QuizProvider: ", config);
 
 	// config.animation = config?.animation || "scale"; // Provide config default
+	config.answerExplainerOnNewPage = config?.answerExplainerOnNewPage || false;
 
-	const { evalCustom, animation, motionObject, revealAnswer } = config || {};
+	const { evalCustom, animation, motionObject, revealAnswer, showAnswerExplainer, answerExplainerOnNewPage } =
+		config || {};
+
+	if (showAnswerExplainer && !answerExplainerOnNewPage) {
+		config.nextButton = false;
+	}
 
 	// console.log("QuizProvider: ", nextButton);
 
@@ -138,6 +145,12 @@ export const QuizProvider = ({
 		);
 	}
 
+	if (answerExplainerOnNewPage && !showAnswerExplainer) {
+		throw new Error(
+			"You set answerExplainerOnNewPage to true but showAnswerExplainer is false. Please set showAnswerExplainer to true to display it."
+		);
+	}
+
 	function handleStart() {
 		// console.log("handleStart: ", quizState);
 		setQuizState(QuizState.QUESTION);
@@ -156,12 +169,9 @@ export const QuizProvider = ({
 			return;
 		}
 
-		const delay = revealAnswer ? 300 : 0;
+		const delay = revealAnswer && ((showAnswerExplainer && !explainerVisible) || !showAnswerExplainer) ? 1500 : 0;
 
-		setTimeout(() => {
-			console.log("------ Set Next question ------");
-			setUpNextQuestion();
-		}, delay);
+		setTimeout(() => setUpNextQuestion(), delay);
 	}
 
 	function setUpNextQuestion() {
