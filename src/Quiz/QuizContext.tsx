@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import { UserAnswer, QuizResult } from "./Quiz";
 import { evaluateScore, evaluatePersonality } from "./utility";
 import { HTMLMotionProps } from "framer-motion";
 
@@ -38,6 +37,13 @@ export enum AnswerButtonState {
 	INCORRECT = "incorrect",
 	SELECTED = "selected",
 }
+
+export type UserAnswer = {
+	index: number;
+	result: string;
+};
+
+export type QuizResult = number | string | null;
 
 interface QuizContextProps {
 	quizState: QuizState;

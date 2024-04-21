@@ -1,22 +1,10 @@
-import { forwardRef, ForwardedRef } from "react";
-// import styles from "./styles.module.css";
-import { motion, AnimatePresence } from "framer-motion";
-import { findReactChild, findIndexes } from "./utility";
-import { QuizType, QuizState, AnswerButtonState, useQuiz } from "./QuizContext";
-import { StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
+import { AnimatePresence } from "framer-motion";
+import { findReactChild } from "./utility";
+import { QuizState, useQuiz } from "./QuizContext";
+import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
+import { MotionWrapper } from "./MotionWrapper";
 
-export type QuizProps = {
-	children?: React.ReactNode;
-};
-
-export type UserAnswer = {
-	index: number;
-	result: string;
-};
-
-export type QuizResult = number | string | null;
-
-export const Quiz = ({ children }: QuizProps) => {
+export const Quiz = ({ children }: { children?: React.ReactNode }) => {
 	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = useQuiz();
 
 	if (!config) {
@@ -63,6 +51,7 @@ export const Quiz = ({ children }: QuizProps) => {
 Quiz.StartButton = StartButton;
 Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
+Quiz.AnswerButton = AnswerButton;
 
 const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 	return (
@@ -80,89 +69,6 @@ const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
-
-const AnswerButton = ({ children, index }: { children: React.ReactNode; index: number }) => {
-	const {
-		config,
-		quizData,
-		currentQuestion,
-		setCurrentAnswer,
-		handleAnswer,
-		answerButtonState,
-		setAnswerButtonState,
-		explainerVisible,
-		setExplainerVisible,
-	} = useQuiz();
-	const { nextButton, revealAnswer, showAnswerExplainer, answerExplainerOnNewPage } = config || {};
-	const answers = quizData.questions[currentQuestion].answers;
-
-	// Sometimes the answer buttons re-render with the indexes of the previous question
-	// This is a workaround to prevent an error when the next question has fewer answers
-	// Currently not needed, but may be needed in the future
-	if (answers?.[index] === undefined) {
-		return null;
-	}
-
-	const quizType = quizData.type;
-	const theAnswer = { index: index, result: answers[index].result };
-	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
-	const btnStateIsSet = answerButtonState[index] !== AnswerButtonState.UNSET;
-	const btnDisabled = btnStateIsSet && (showCorrectAnswer || explainerVisible);
-
-	const colors = {
-		[AnswerButtonState.UNSET]: "#222",
-		[AnswerButtonState.DEFAULT]: "#222",
-		[AnswerButtonState.SELECTED]: "blue",
-		[AnswerButtonState.CORRECT]: "green",
-		[AnswerButtonState.INCORRECT]: "red",
-	};
-
-	const bgColor = colors[answerButtonState[index]];
-
-	function answerBtnClick() {
-		setCurrentAnswer(theAnswer);
-		const answerButtonsUpdatedState = getAnswerBtnsNewState(answers, theAnswer, showCorrectAnswer);
-		setAnswerButtonState(answerButtonsUpdatedState);
-		// Only handle the answer if we're not using a next button and not showing the explainer.
-		// Otherwise the answer will be handled by the next button
-		if (!nextButton && !showAnswerExplainer) {
-			handleAnswer(theAnswer);
-		}
-		if (showAnswerExplainer && !explainerVisible && !nextButton) {
-			const delay = answerExplainerOnNewPage ? 1500 : 0;
-			setTimeout(() => setExplainerVisible(true), delay);
-		}
-	}
-
-	// Update the state of all answer buttons based on the current answer and whether to show the correct answer
-	function getAnswerBtnsNewState(answers: any, currentAnswer: UserAnswer, showCorrectAnswer: boolean) {
-		const defaultAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
-		const newBtnStateAll = [...defaultAnswerButtonState];
-		if (showCorrectAnswer) {
-			const correctIndexes = findIndexes(
-				answers.map((item: any) => item.result),
-				"1"
-			);
-			const isCorrect = correctIndexes.includes(index);
-			const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
-			newBtnStateAll[index] = newBtnState;
-			correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
-		} else {
-			const isHighlightedForSelected = currentAnswer.index === index;
-			if (isHighlightedForSelected) {
-				newBtnStateAll[index] = AnswerButtonState.SELECTED;
-			}
-		}
-		return newBtnStateAll;
-	}
-
-	return (
-		<button type="button" style={{ background: bgColor }} onClick={answerBtnClick} disabled={btnDisabled}>
-			{children}
-		</button>
-	);
-};
-Quiz.AnswerButton = AnswerButton;
 
 const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
@@ -216,11 +122,7 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
-export type Result = {
-	children?: React.ReactNode;
-};
-
-const ResultPage = ({ children }: Result) => {
+const ResultPage = ({ children }: { children?: React.ReactNode }) => {
 	const { result } = useQuiz();
 	return (
 		<div>
@@ -236,55 +138,5 @@ const ResultPage = ({ children }: Result) => {
 
 ResultPage.displayName = "ResultPage";
 Quiz.ResultPage = ResultPage;
-
-// const motionVariants = {
-// 	initial: { opacity: 0, scale: 0 },
-// 	animate: { opacity: 1, scale: 1 },
-// 	transition: {
-// 		duration: 0.5,
-// 		ease: [0, 0.71, 0.2, 1.01],
-// 	},
-// 	exit: { opacity: 0, scale: 0 },
-// };
-
-const MotionWrapper = forwardRef(({ children }: { children: React.ReactNode }, ref: ForwardedRef<HTMLDivElement>) => {
-	const { config } = useQuiz();
-	if (!config) {
-		throw new Error("No config object provided");
-	}
-
-	const { animation, motionObject } = config;
-
-	const wrappers = {
-		slide: MotionSlideProps,
-		scale: MotionScaleProps,
-		custom: motionObject,
-	};
-	return (
-		<motion.div ref={ref} {...wrappers[animation!]}>
-			{children}
-		</motion.div>
-	);
-});
-
-const MotionSlideProps = {
-	style: { overflow: "hidden" },
-	initial: { height: 0 },
-	animate: { height: "auto" },
-	transition: {
-		duration: 0.5,
-	},
-	exit: { height: 0 },
-};
-
-const MotionScaleProps = {
-	initial: { opacity: 0, scale: 0, height: 0 },
-	animate: { opacity: 1, scale: 1, height: "auto" },
-	transition: {
-		duration: 0.4,
-		// ease: [0, 0.71, 0.2, 1.01],
-	},
-	exit: { opacity: 0, scale: 0, height: 0 },
-};
 
 export default Quiz;

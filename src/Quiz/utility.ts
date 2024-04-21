@@ -1,5 +1,5 @@
 import React from "react";
-import { UserAnswer } from "./Quiz";
+import { UserAnswer } from "./QuizContext";
 
 export function evaluateScore(userAnswers: UserAnswer[]) {
 	const score = userAnswers.filter((answer: any) => answer.result === "1").length;
