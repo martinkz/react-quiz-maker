@@ -67,7 +67,6 @@ export function AnswerButton({ children, index }: { children: React.ReactNode; i
 
 	// Sometimes the answer buttons re-render with the indexes of the previous question
 	// This is a workaround to prevent an error when the next question has fewer answers
-	// Currently not needed, but may be needed in the future
 	if (answers?.[index] === undefined) {
 		return null;
 	}
