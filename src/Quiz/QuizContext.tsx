@@ -118,12 +118,6 @@ export const QuizProvider = ({
 	const { evalCustom, animation, motionObject, revealAnswer, showAnswerExplainer, answerExplainerOnNewPage } =
 		config || {};
 
-	if (showAnswerExplainer && !answerExplainerOnNewPage) {
-		config.nextButton = false;
-	}
-
-	// console.log("QuizProvider: ", nextButton);
-
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
 	}

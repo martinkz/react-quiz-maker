@@ -164,13 +164,11 @@ const AnswerButton = ({ children, index }: { children: React.ReactNode; index: n
 };
 Quiz.AnswerButton = AnswerButton;
 
-const NextButton = ({ children }: { children: React.ReactNode }) => {
+const QuestionNextButton = ({ children }: { children: React.ReactNode }) => {
 	const { config, currentAnswer, handleAnswer, setExplainerVisible, explainerVisible } = useQuiz();
 	const { showAnswerExplainer, answerExplainerOnNewPage } = config || {};
 
-	// if (explainerVisible && !answerExplainerOnNewPage) {
-	// 	return null;
-	// }
+	const cssVisibility = explainerVisible ? "hidden" : "visible";
 
 	function nextStep() {
 		if (currentAnswer) {
@@ -184,12 +182,24 @@ const NextButton = ({ children }: { children: React.ReactNode }) => {
 	}
 
 	return (
-		<button onClick={nextStep} disabled={!currentAnswer}>
+		<button onClick={nextStep} disabled={!currentAnswer} style={{ visibility: cssVisibility }}>
 			{children}
 		</button>
 	);
 };
-Quiz.NextButton = NextButton;
+Quiz.QuestionNextButton = QuestionNextButton;
+
+const ExplainerNextButton = ({ children }: { children: React.ReactNode }) => {
+	const { currentAnswer, handleAnswer, setExplainerVisible } = useQuiz();
+
+	function nextStep() {
+		handleAnswer(currentAnswer!);
+		setExplainerVisible(false);
+	}
+
+	return <button onClick={nextStep}>{children}</button>;
+};
+Quiz.ExplainerNextButton = ExplainerNextButton;
 
 const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
@@ -212,7 +222,7 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 					))}
 					{nextButton && (
 						<p>
-							<Quiz.NextButton>Next</Quiz.NextButton>
+							<Quiz.QuestionNextButton>Next</Quiz.QuestionNextButton>
 						</p>
 					)}
 				</>
@@ -232,7 +242,7 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 					<h1>Explainer</h1>
 					<p>Explanation of the answer</p>
 					<p>
-						<Quiz.NextButton>Next</Quiz.NextButton>
+						<Quiz.ExplainerNextButton>Next</Quiz.ExplainerNextButton>
 					</p>
 				</>
 			)}

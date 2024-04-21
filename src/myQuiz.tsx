@@ -23,14 +23,16 @@ export default function MyQuiz() {
 					</Quiz.AnswerButton>
 				))}
 				<p>
-					<Quiz.NextButton>Next</Quiz.NextButton>
+					<Quiz.QuestionNextButton>
+						<div>Next</div>
+					</Quiz.QuestionNextButton>
 				</p>
 			</Quiz.QuestionPage>
 			<Quiz.ExplainerPage>
 				<h1>Explainer Custom</h1>
 				<p>{currentQuestionData.question}</p>
 				<p>
-					<Quiz.NextButton>Next</Quiz.NextButton>
+					<Quiz.ExplainerNextButton>Next</Quiz.ExplainerNextButton>
 				</p>
 			</Quiz.ExplainerPage>
 			<Quiz.ResultPage>

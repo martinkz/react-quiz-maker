@@ -28,9 +28,9 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: false,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: false,
 					animation: "slide",
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<MyQuiz />
