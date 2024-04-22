@@ -29,8 +29,8 @@ function App() {
 					nextButton: false,
 					revealAnswer: false,
 					animation: "slide",
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					// showAnswerExplainer: true,
+					// answerExplainerOnNewPage: true,
 				}}
 			>
 				<MyQuiz />
@@ -44,8 +44,8 @@ function App() {
 					revealAnswer: true,
 					animation: "custom",
 					motionObject: MotionSlideSideProps,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					// showAnswerExplainer: true,
+					// answerExplainerOnNewPage: true,
 				}}
 			>
 				<Quiz />

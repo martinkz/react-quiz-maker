@@ -1,3 +1,4 @@
+import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
 import { findReactChild } from "./utility";
 import { QuizState, useQuiz } from "./QuizContext";
@@ -60,12 +61,13 @@ Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
 
 const Header = ({ children }: { children?: React.ReactNode }) => {
+	const { progress } = useQuiz();
 	return (
 		<div>
 			{children || (
 				<>
 					<div>
-						<Quiz.ProgressBar />
+						<progress className={styles.progress} max="100" value={progress}></progress>
 					</div>
 				</>
 			)}

@@ -1,16 +1,16 @@
+import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
 export default function MyQuiz() {
-	const { currentQuestion, maxQuestions, currentQuestionData, answerButtonState, result } = useQuiz();
+	const { currentQuestion, maxQuestions, currentQuestionData, answerButtonState, progress, result } = useQuiz();
 
 	return (
-		<div className="quiz-wrap">
-			{currentQuestion}
+		<div>
 			<Quiz>
 				<Quiz.Header>
-					<h4>{`${currentQuestion + 1} / ${maxQuestions}`}</h4>
-					<Quiz.ProgressBar />
+					<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
+					<progress className={styles.progress} max="100" value={progress}></progress>
 				</Quiz.Header>
 				<Quiz.IntroPage>
 					<div>

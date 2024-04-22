@@ -67,6 +67,7 @@ interface QuizContextProps {
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 	explainerVisible: boolean;
 	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	progress: number;
 }
 
 const QuizContext = createContext<QuizContextProps>({
@@ -91,6 +92,7 @@ const QuizContext = createContext<QuizContextProps>({
 	setAnswerButtonState: () => {},
 	explainerVisible: false,
 	setExplainerVisible: () => {},
+	progress: 0,
 });
 
 export const useQuiz = () => useContext(QuizContext);
@@ -116,6 +118,7 @@ export const QuizProvider = ({
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
+	const progress = Math.round((100 / maxQuestions) * (currentQuestion + 1));
 	// console.log("QuizProvider: ", config);
 
 	// config.animation = config?.animation || "scale"; // Provide config default
@@ -173,7 +176,7 @@ export const QuizProvider = ({
 
 		const delay =
 			// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && !nextButton)) ? 1500 : 0;
-			revealAnswer && !showAnswerExplainer && !nextButton ? 1500 : 0;
+			!showAnswerExplainer && !nextButton ? 1500 : 0;
 
 		if (currentQuestion === maxQuestions - 1) {
 			setTimeout(() => endQuiz(updatedUserAnswers), delay);
@@ -229,6 +232,7 @@ export const QuizProvider = ({
 				setAnswerButtonState,
 				explainerVisible,
 				setExplainerVisible,
+				progress,
 			}}
 		>
 			{children}
