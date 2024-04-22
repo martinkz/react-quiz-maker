@@ -1,3 +1,15 @@
 .quiz {
 	background-color: #333;
 }
+
+.progress {
+	background-color: transparent;
+	border-radius: 100px;
+	overflow: hidden;
+}
+
+.progress::-webkit-progress-value {
+	transition: all 1s ease;
+	background-color: orange;
+	border-radius: 100px;
+}

@@ -3,6 +3,7 @@ import { findReactChild } from "./utility";
 import { QuizState, useQuiz } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper } from "./MotionWrapper";
+import { ProgressBar } from "./QuizProgressBar";
 
 export const Quiz = ({ children }: { children?: React.ReactNode }) => {
 	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = useQuiz();
@@ -13,6 +14,7 @@ export const Quiz = ({ children }: { children?: React.ReactNode }) => {
 
 	const { animation, answerExplainerOnNewPage } = config;
 
+	const HeaderChild = findReactChild(children, "Header");
 	const IntroChild = findReactChild(children, "IntroPage");
 	const QuestionChild = findReactChild(children, "QuestionPage");
 	const ExplainerChild = findReactChild(children, "ExplainerPage");
@@ -24,6 +26,8 @@ export const Quiz = ({ children }: { children?: React.ReactNode }) => {
 	return (
 		<>
 			<AnimatePresence mode={animatePresenceMode}>
+				{quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{HeaderChild || <Quiz.Header />}</MotionWrapper>}
+
 				{quizState === QuizState.START && (
 					// <motion.div key={0} style={{ display: "flex" }} variants={motionVariants} initial="initial" animate="animate" transition="transition" exit="exit">
 					<MotionWrapper key={-1}>{IntroChild || <Quiz.IntroPage />}</MotionWrapper>
@@ -48,10 +52,29 @@ export const Quiz = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
+Quiz.ProgressBar = ProgressBar;
+
 Quiz.StartButton = StartButton;
 Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
+
+const Header = ({ children }: { children?: React.ReactNode }) => {
+	return (
+		<div>
+			{children || (
+				<>
+					<div>
+						<Quiz.ProgressBar />
+					</div>
+				</>
+			)}
+		</div>
+	);
+};
+
+Header.displayName = "Header";
+Quiz.Header = Header;
 
 const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 	return (
