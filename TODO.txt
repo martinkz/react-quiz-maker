@@ -16,3 +16,9 @@
 - Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop
 - Figure out how to set the explainer to be displayed below the question, or on a new page alternatively
 - If explainer is shown on a new page, nextButton needs to go to explainer page instead of next question
+- Create separate context that deals with answers ? 
+https://frontendmastery.com/posts/advanced-react-component-composition-guide/
+- Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
+- Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion)
+- Create useAnswerButton so that users can use a regular button instead of <AnswerButton>
+- Rename nextButton setting to autoResume
