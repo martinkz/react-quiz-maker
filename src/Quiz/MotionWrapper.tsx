@@ -26,7 +26,7 @@ export const MotionWrapper = forwardRef(function (
 	);
 });
 
-const MotionSlideProps = {
+export const MotionSlideProps = {
 	style: { overflow: "hidden" },
 	initial: { height: 0 },
 	animate: { height: "auto" },
@@ -36,7 +36,8 @@ const MotionSlideProps = {
 	exit: { height: 0 },
 };
 
-const MotionScaleProps = {
+export const MotionScaleProps = {
+	// style: { display: "contents" },
 	initial: { opacity: 0, scale: 0, height: 0 },
 	animate: { opacity: 1, scale: 1, height: "auto" },
 	transition: {

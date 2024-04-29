@@ -1,27 +1,43 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
-
-interface QuestionProps {
-	children: React.ReactNode;
-	QuestionHeader?: React.ReactNode;
-	QuestionBody: React.ReactNode;
-	ExplainerPage?: React.ReactNode;
-}
+import { forwardRef, ForwardedRef } from "react";
 
 function QuestionWrapper({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
 }
 
-export default function MyQuiz() {
-	const { currentQuestion, maxQuestions, currentQuestionData, answerButtonState, progress, result } = useQuiz();
+function QuestionHeader({ className }: { className: string }) {
+	const { currentQuestion, maxQuestions, progress } = useQuiz();
 
-	const QuestionHeader = (
+	return (
 		<div>
 			<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
 			<progress className={styles.progress} max="100" value={progress}></progress>
 		</div>
 	);
+}
+// This component re-renders when the progress changes and thus the animation will replay, which is undesired
+const QuestionHeader2 = forwardRef((props: any, ref: ForwardedRef<HTMLDivElement>) => {
+	const { currentQuestion, maxQuestions, progress } = useQuiz();
+
+	return (
+		<div ref={ref}>
+			<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
+			<progress className={styles.progress} max="100" value={progress}></progress>
+		</div>
+	);
+});
+
+export default function MyQuiz() {
+	const { currentQuestion, maxQuestions, currentQuestionData, answerButtonState, progress, result } = useQuiz();
+
+	// const QuestionHeader = (
+	// 	<div>
+	// 		<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
+	// 		<progress className={styles.progress} max="100" value={progress}></progress>
+	// 	</div>
+	// );
 
 	const QuizIntro = (
 		<div>
@@ -60,7 +76,8 @@ export default function MyQuiz() {
 			<Quiz
 				IntroPage={QuizIntro}
 				QuestionWrapper={QuestionWrapper}
-				QuestionHeader={QuestionHeader}
+				QuestionHeader={<QuestionHeader className="test-class" />}
+				QuestionHeader2={QuestionHeader2}
 				QuestionBody={QuestionBody}
 				ResultPage={ResultPage}
 			></Quiz>

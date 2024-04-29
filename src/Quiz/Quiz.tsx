@@ -1,14 +1,15 @@
 import styles from "./styles.module.css";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { findReactChild } from "./utility";
 import { QuizState, useQuiz } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
-import { MotionWrapper } from "./MotionWrapper";
+import { MotionScaleProps, MotionWrapper } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 
 interface QuizProps {
 	IntroPage?: React.ReactNode;
 	QuestionHeader?: React.ReactNode;
+	QuestionHeader2?: React.FC<Record<string, unknown>>;
 	QuestionBody?: React.ReactNode;
 	QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
 	ExplainerPage?: React.ReactNode;
@@ -18,6 +19,7 @@ interface QuizProps {
 export const Quiz = ({
 	IntroPage,
 	QuestionHeader,
+	QuestionHeader2,
 	QuestionBody,
 	QuestionWrapper,
 	ExplainerPage,
@@ -41,6 +43,11 @@ export const Quiz = ({
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
 	const QuestionWrapperComponent = QuestionWrapper || QuestionWrapperDefault;
+	// const QuestionHeaderComponent = QuestionHeader || Quiz.Header;
+
+	const MotionQuestionHeader = motion(QuestionHeader2!);
+
+	// console.log(QuestionHeader?.props);
 
 	return (
 		<>
@@ -53,7 +60,8 @@ export const Quiz = ({
 					<MotionWrapper key={-5}>
 						<QuestionWrapperComponent>
 							<AnimatePresence mode={animatePresenceMode}>
-								<MotionWrapper key={-2}>{QuestionHeader || <Quiz.Header />}</MotionWrapper>
+								<MotionWrapper key={-444}>{QuestionHeader}</MotionWrapper>
+								<MotionQuestionHeader key={-2} {...MotionScaleProps} />
 								{!hideQuestionOnExplainer && (
 									<MotionWrapper key={currentQuestion + maxQuestions + 1}>
 										{QuestionBody || <Quiz.QuestionPage />}
