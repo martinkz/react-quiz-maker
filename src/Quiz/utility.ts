@@ -29,10 +29,6 @@ export function evaluatePersonality(userAnswers: UserAnswer[]) {
 	return randomType;
 }
 
-export function findReactChild(children: React.ReactNode, type: string) {
-	return React.Children.toArray(children).find((child: any) => child.type.displayName === type);
-}
-
 export function findIndexes<T>(arr: Array<T>, value: T): number[] {
 	return arr.flatMap((el, i) => (el === value ? i : []));
 }

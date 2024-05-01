@@ -30,7 +30,7 @@ function App() {
 					revealAnswer: false,
 					animation: "slide",
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: false,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<MyQuiz />

@@ -2,38 +2,27 @@ import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
-interface QuestionProps {
-	children: React.ReactNode;
-	QuestionHeader?: React.ReactNode;
-	QuestionBody: React.ReactNode;
-	ExplainerPage?: React.ReactNode;
-}
-
 function QuestionWrapper({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
 }
 
-export default function MyQuiz() {
-	const { currentQuestion, maxQuestions, currentQuestionData, answerButtonState, progress, result } = useQuiz();
+function QuestionHeader() {
+	const { currentQuestion, maxQuestions, progress } = useQuiz();
 
-	const QuestionHeader = (
-		<div>
+	return (
+		<div className="question-header">
 			<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
 			<progress className={styles.progress} max="100" value={progress}></progress>
 		</div>
 	);
+}
 
-	const QuizIntro = (
-		<div>
-			<p>Start the quiz</p>
-			<Quiz.StartButton>Start Quiz</Quiz.StartButton>
-		</div>
-	);
+function QuestionBody() {
+	const { currentQuestionData, answerButtonState } = useQuiz();
 
-	const QuestionBody = (
-		<div>
-			<h1>Question {currentQuestion + 1}</h1>
-			<p>{currentQuestionData.question}</p>
+	return (
+		<div className="question-body">
+			<h2>Question {currentQuestionData.question}</h2>
 			{currentQuestionData.answers.map((item: any, index: number) => (
 				<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 					{item.answer}
@@ -45,25 +34,51 @@ export default function MyQuiz() {
 			</p>
 		</div>
 	);
+}
 
-	const ResultPage = (
-		<div>
+function ExplainerPage() {
+	const { currentQuestionData } = useQuiz();
+
+	return (
+		<div className="quiz-explainer">
+			<h1>Explainer</h1>
+			<p>{currentQuestionData.explanation}</p>
+			<Quiz.ExplainerNextButton>Next</Quiz.ExplainerNextButton>
+		</div>
+	);
+}
+
+function IntroPage() {
+	return (
+		<div className="quiz-intro">
+			<p>Start the quiz</p>
+			<Quiz.StartButton>Start Quiz</Quiz.StartButton>
+		</div>
+	);
+}
+
+function ResultPage() {
+	const { result } = useQuiz();
+
+	return (
+		<div className="quiz-result">
 			<h1>
 				<em>Your results is: {result}</em>
 			</h1>
 			<Quiz.StartButton>Play again</Quiz.StartButton>
 		</div>
 	);
+}
 
+export default function MyQuiz() {
 	return (
-		<div>
-			<Quiz
-				IntroPage={QuizIntro}
-				QuestionWrapper={QuestionWrapper}
-				QuestionHeader={QuestionHeader}
-				QuestionBody={QuestionBody}
-				ResultPage={ResultPage}
-			></Quiz>
-		</div>
+		<Quiz
+			IntroPage={IntroPage}
+			QuestionWrapper={QuestionWrapper}
+			QuestionHeader={QuestionHeader}
+			QuestionBody={QuestionBody}
+			ExplainerPage={ExplainerPage}
+			ResultPage={ResultPage}
+		></Quiz>
 	);
 }
