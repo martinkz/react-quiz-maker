@@ -1,5 +1,6 @@
 import MyQuiz from "./myQuiz";
 import Quiz from "./Quiz/Quiz";
+import MyQuizComposed from "./myQuizComposed";
 import { QuizProvider } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
@@ -22,6 +23,21 @@ const MotionSlideSideProps = {
 function App() {
 	return (
 		<>
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					// evalCustom: customAnswerEval,
+					nextButton: false,
+					// revealAnswer: true,
+					animation: "custom",
+					motionObject: MotionSlideSideProps,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
+				}}
+			>
+				<MyQuizComposed />
+			</QuizProvider>
+
 			<QuizProvider
 				quizData={quizJson2}
 				config={{

@@ -13,7 +13,8 @@
   * personality quiz type && revealAnswer: true
   * showAnswerExplainer: true && nextButton: true
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything)
-- Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop
+- Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. 
+This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop.
 - Figure out how to set the explainer to be displayed below the question, or on a new page alternatively
 - If explainer is shown on a new page, nextButton needs to go to explainer page instead of next question
 - Create separate context that deals with answers ? 
