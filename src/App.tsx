@@ -38,6 +38,8 @@ function App() {
 				<MyQuizComposed />
 			</QuizProvider>
 
+			<div style={{ margin: "80px 0" }}></div>
+
 			<QuizProvider
 				quizData={quizJson2}
 				config={{
@@ -52,14 +54,16 @@ function App() {
 				<MyQuiz />
 			</QuizProvider>
 
+			<div style={{ margin: "80px 0" }}></div>
+
 			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: false,
 					revealAnswer: true,
-					animation: "custom",
-					motionObject: MotionSlideSideProps,
+					animation: "scale",
+					// motionObject: MotionSlideSideProps,
 					// showAnswerExplainer: true,
 					// answerExplainerOnNewPage: true,
 				}}

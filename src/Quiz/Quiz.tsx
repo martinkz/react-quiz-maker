@@ -37,16 +37,12 @@ export const Quiz = ({
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
 	const IntroChild = findReactChild(children, "IntroPage");
-	const QuestionWrapperChild = findReactChild(children, "QuestionWrapper");
 	const ResultChild = findReactChild(children, "ResultPage");
+	const QuestionWrapperChild = findReactChild(children, "QuestionWrapper");
 	const questionWrapperChildren = QuestionWrapperChild?.props?.children;
-	const HeaderChild = questionWrapperChildren ? findReactChild(questionWrapperChildren, "Header") : null;
-	const QuestionBodyChild = questionWrapperChildren ? findReactChild(questionWrapperChildren, "QuestionPage") : null;
-	const QuestionExplainerChild = questionWrapperChildren
-		? findReactChild(questionWrapperChildren, "ExplainerPage")
-		: null;
-
-	// console.log(HeaderChild);
+	const HeaderChild = findReactChild(questionWrapperChildren, "Header");
+	const QuestionBodyChild = findReactChild(questionWrapperChildren, "QuestionPage");
+	const QuestionExplainerChild = findReactChild(questionWrapperChildren, "ExplainerPage");
 
 	const IntroPageComponent = IntroPage || Quiz.IntroPage;
 	const QuestionWrapperComponent = QuestionWrapper || Quiz.QuestionWrapper;
