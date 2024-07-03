@@ -44,6 +44,7 @@ export const Quiz = ({
 	const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
 	const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
 
+	// Component function props or local component
 	const IntroPageComponent = IntroPage || Quiz.IntroPage;
 	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
 	const QuestionHeaderComponent = QuestionHeader || Quiz.QuestionHeader;
@@ -51,36 +52,35 @@ export const Quiz = ({
 	const ExplainerPageComponent = ExplainerPage || Quiz.ExplainerPage;
 	const ResultPageComponent = ResultPage || Quiz.ResultPage;
 
+	// Children components or components from props
+	const Intro = IntroChild || <IntroPageComponent />;
+	const Header = QuestionHeaderChild || <QuestionHeaderComponent />;
+	const Body = QuestionBodyChild || <QuestionBodyComponent />;
+	const Explainer = QuestionExplainerChild || <ExplainerPageComponent />;
+	const Result = ResultChild || <ResultPageComponent />;
+
 	return (
 		<>
 			<AnimatePresence mode={animatePresenceMode}>
 				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{QuestionHeaderChild || <Quiz.QuestionHeader />}</MotionWrapper>} */}
 
-				{quizState === QuizState.START && (
-					<MotionWrapper key={-1}>{IntroChild || <IntroPageComponent />}</MotionWrapper>
-				)}
+				{quizState === QuizState.START && <MotionWrapper key={-1}>{Intro}</MotionWrapper>}
 
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={-2}>
 						<QuestionPageComponent>
 							<AnimatePresence mode={animatePresenceMode}>
-								<MotionWrapper key={-3}>{QuestionHeaderChild || <QuestionHeaderComponent />}</MotionWrapper>
+								<MotionWrapper key={-3}>{Header}</MotionWrapper>
 								{!hideQuestionOnExplainer && (
-									<MotionWrapper key={currentQuestion + maxQuestions + 1}>
-										{QuestionBodyChild || <QuestionBodyComponent />}
-									</MotionWrapper>
+									<MotionWrapper key={currentQuestion + maxQuestions + 1}>{Body}</MotionWrapper>
 								)}
-								{explainerVisible && (
-									<MotionWrapper key={-4}>{QuestionExplainerChild || <ExplainerPageComponent />}</MotionWrapper>
-								)}
+								{explainerVisible && <MotionWrapper key={-4}>{Explainer}</MotionWrapper>}
 							</AnimatePresence>
 						</QuestionPageComponent>
 					</MotionWrapper>
 				)}
 
-				{quizState === QuizState.RESULT && (
-					<MotionWrapper key={maxQuestions}>{ResultChild || <ResultPageComponent />}</MotionWrapper>
-				)}
+				{quizState === QuizState.RESULT && <MotionWrapper key={maxQuestions}>{Result}</MotionWrapper>}
 			</AnimatePresence>
 		</>
 	);

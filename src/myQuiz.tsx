@@ -2,6 +2,8 @@ import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
+// If you want to omit a component, you can create a component returning null
+
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
 }
