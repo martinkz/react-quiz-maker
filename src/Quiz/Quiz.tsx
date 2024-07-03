@@ -6,13 +6,14 @@ import { MotionWrapper } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
 
+type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
-	IntroPage?: React.FC<Record<string, never>>;
-	QuestionHeader?: React.FC<Record<string, never>>;
-	QuestionBody?: React.FC<Record<string, never>>;
+	IntroPage?: NoPropsFC;
+	QuestionHeader?: NoPropsFC;
+	QuestionBody?: NoPropsFC;
 	QuestionPage?: React.FC<{ children: React.ReactNode }>;
-	ExplainerPage?: React.FC<Record<string, never>>;
-	ResultPage?: React.FC<Record<string, never>>;
+	ExplainerPage?: NoPropsFC;
+	ResultPage?: NoPropsFC;
 	children?: React.ReactNode;
 }
 
