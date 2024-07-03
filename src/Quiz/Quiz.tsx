@@ -10,7 +10,7 @@ interface QuizProps {
 	IntroPage?: React.FC<Record<string, never>>;
 	QuestionHeader?: React.FC<Record<string, never>>;
 	QuestionBody?: React.FC<Record<string, never>>;
-	QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
+	QuestionPage?: React.FC<{ children: React.ReactNode }>;
 	ExplainerPage?: React.FC<Record<string, never>>;
 	ResultPage?: React.FC<Record<string, never>>;
 	children?: React.ReactNode;
@@ -20,7 +20,7 @@ export const Quiz = ({
 	IntroPage,
 	QuestionHeader,
 	QuestionBody,
-	QuestionWrapper,
+	QuestionPage,
 	ExplainerPage,
 	ResultPage,
 	children,
@@ -38,23 +38,23 @@ export const Quiz = ({
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
-	const QuestionWrapperChild = findReactChild(children, "QuestionWrapper");
-	const questionWrapperChildren = QuestionWrapperChild?.props?.children;
-	const HeaderChild = findReactChild(questionWrapperChildren, "Header");
-	const QuestionBodyChild = findReactChild(questionWrapperChildren, "QuestionPage");
-	const QuestionExplainerChild = findReactChild(questionWrapperChildren, "ExplainerPage");
+	const QuestionPageChild = findReactChild(children, "QuestionPage");
+	const QuestionPageChildren = QuestionPageChild?.props?.children;
+	const QuestionHeaderChild = findReactChild(QuestionPageChildren, "QuestionHeader");
+	const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
+	const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
 
 	const IntroPageComponent = IntroPage || Quiz.IntroPage;
-	const QuestionWrapperComponent = QuestionWrapper || Quiz.QuestionWrapper;
-	const QuestionHeaderComponent = QuestionHeader || Quiz.Header;
-	const QuestionBodyComponent = QuestionBody || Quiz.QuestionPage;
+	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
+	const QuestionHeaderComponent = QuestionHeader || Quiz.QuestionHeader;
+	const QuestionBodyComponent = QuestionBody || Quiz.QuestionBody;
 	const ExplainerPageComponent = ExplainerPage || Quiz.ExplainerPage;
 	const ResultPageComponent = ResultPage || Quiz.ResultPage;
 
 	return (
 		<>
 			<AnimatePresence mode={animatePresenceMode}>
-				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{HeaderChild || <Quiz.Header />}</MotionWrapper>} */}
+				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{QuestionHeaderChild || <Quiz.QuestionHeader />}</MotionWrapper>} */}
 
 				{quizState === QuizState.START && (
 					<MotionWrapper key={-1}>{IntroChild || <IntroPageComponent />}</MotionWrapper>
@@ -62,9 +62,9 @@ export const Quiz = ({
 
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={-2}>
-						<QuestionWrapperComponent>
+						<QuestionPageComponent>
 							<AnimatePresence mode={animatePresenceMode}>
-								<MotionWrapper key={-3}>{HeaderChild || <QuestionHeaderComponent />}</MotionWrapper>
+								<MotionWrapper key={-3}>{QuestionHeaderChild || <QuestionHeaderComponent />}</MotionWrapper>
 								{!hideQuestionOnExplainer && (
 									<MotionWrapper key={currentQuestion + maxQuestions + 1}>
 										{QuestionBodyChild || <QuestionBodyComponent />}
@@ -74,7 +74,7 @@ export const Quiz = ({
 									<MotionWrapper key={-4}>{QuestionExplainerChild || <ExplainerPageComponent />}</MotionWrapper>
 								)}
 							</AnimatePresence>
-						</QuestionWrapperComponent>
+						</QuestionPageComponent>
 					</MotionWrapper>
 				)}
 
@@ -93,14 +93,14 @@ Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
 
-function QuestionWrapper({ children }: { children: React.ReactNode }) {
+function QuestionPage({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
 }
 
-QuestionWrapper.displayName = "QuestionWrapper";
-Quiz.QuestionWrapper = QuestionWrapper;
+QuestionPage.displayName = "QuestionPage";
+Quiz.QuestionPage = QuestionPage;
 
-const Header = ({ children }: { children?: React.ReactNode }) => {
+const QuestionHeader = ({ children }: { children?: React.ReactNode }) => {
 	const { progress } = useQuiz();
 	return (
 		<div>
@@ -115,8 +115,8 @@ const Header = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-Header.displayName = "Header";
-Quiz.Header = Header;
+QuestionHeader.displayName = "QuestionHeader";
+Quiz.QuestionHeader = QuestionHeader;
 
 const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 	return (
@@ -135,7 +135,7 @@ const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
+const QuestionBody = ({ children }: { children?: React.ReactNode }) => {
 	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
@@ -162,8 +162,8 @@ const QuestionPage = ({ children }: { children?: React.ReactNode }) => {
 	);
 };
 
-QuestionPage.displayName = "QuestionPage";
-Quiz.QuestionPage = QuestionPage;
+QuestionBody.displayName = "QuestionBody";
+Quiz.QuestionBody = QuestionBody;
 
 const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 	return (

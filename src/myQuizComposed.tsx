@@ -13,14 +13,14 @@ export default function MyQuizComposed() {
 					<Quiz.StartButton>Start Quiz</Quiz.StartButton>
 				</div>
 			</Quiz.IntroPage>
-			<Quiz.QuestionWrapper>
-				<Quiz.Header>
+			<Quiz.QuestionPage>
+				<Quiz.QuestionHeader>
 					<div className="question-header">
 						<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`} - Header child</h4>
 						<progress className={styles.progress} max="100" value={progress}></progress>
 					</div>
-				</Quiz.Header>
-				<Quiz.QuestionPage>
+				</Quiz.QuestionHeader>
+				<Quiz.QuestionBody>
 					<h1>Question {currentQuestion + 1} - Question body child</h1>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
@@ -32,7 +32,7 @@ export default function MyQuizComposed() {
 					<p>
 						<Quiz.QuestionNextButton>Next</Quiz.QuestionNextButton>
 					</p>
-				</Quiz.QuestionPage>
+				</Quiz.QuestionBody>
 				<Quiz.ExplainerPage>
 					<h1>Explainer Child</h1>
 					<p>{currentQuestionData.question}</p>
@@ -40,7 +40,7 @@ export default function MyQuizComposed() {
 						<Quiz.ExplainerNextButton>Next</Quiz.ExplainerNextButton>
 					</p>
 				</Quiz.ExplainerPage>
-			</Quiz.QuestionWrapper>
+			</Quiz.QuestionPage>
 			<Quiz.ResultPage>
 				<h1>
 					<em>Your results is: {result} - Result child</em>
