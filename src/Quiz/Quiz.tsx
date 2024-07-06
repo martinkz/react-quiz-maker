@@ -25,8 +25,8 @@ export const Quiz = ({
 	QuestionPage,
 	ExplainerPage,
 	ResultPage,
-	children,
-}: QuizProps) => {
+}: // children,
+QuizProps) => {
 	const state = useQuiz();
 	const { quizState, currentQuestion, currentQuestionData, answerButtonState, maxQuestions, explainerVisible, config } =
 		state;
@@ -50,8 +50,6 @@ export const Quiz = ({
 
 	const IntroChild = null;
 	const ResultChild = null;
-	const QuestionPageChild = null;
-	const QuestionPageChildren = null;
 	const QuestionHeaderChild = null;
 	const QuestionBodyChild = null;
 	const QuestionExplainerChild = null;
