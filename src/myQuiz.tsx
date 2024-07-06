@@ -105,13 +105,15 @@ function ResultPage() {
 
 export default function MyQuiz() {
 	return (
-		<Quiz
-			IntroPage={IntroPage}
-			QuestionPage={QuestionPage}
-			QuestionHeader={QuestionHeader}
-			QuestionBody={QuestionBody}
-			ExplainerPage={ExplainerPage}
-			ResultPage={ResultPage}
-		></Quiz>
+		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
+			<Quiz
+				IntroPage={IntroPage}
+				QuestionPage={QuestionPage}
+				QuestionHeader={QuestionHeader}
+				QuestionBody={QuestionBody}
+				ExplainerPage={ExplainerPage}
+				ResultPage={ResultPage}
+			></Quiz>
+		</div>
 	);
 }

@@ -52,20 +52,18 @@ export function getAnswerBtnsNewState(
 	showCorrectAnswer: boolean
 ) {
 	const defaultAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
-	// Set all answers to 'default' which allows us to infer that the user has selected an answer
-	let newBtnStateAll = [...defaultAnswerButtonState];
+	// Set all answers to 'default' state instead of the initial 'unset' state
+	const newBtnStateAll = [...defaultAnswerButtonState];
 	if (showCorrectAnswer) {
-		newBtnStateAll = newBtnStateAll.map((_, index) =>
-			answers[index].result === "1" ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT
+		// If the chosen answer is correct, highlight it and all other correct answers, otherwise highlight the chosen incorrect answer and all correct answers
+		const correctIndexes = findIndexes(
+			answers.map((item: any) => item.result),
+			"1"
 		);
-		// const correctIndexes = findIndexes(
-		// 	answers.map((item: any) => item.result),
-		// 	"1"
-		// );
-		// const isCorrect = correctIndexes.includes(index);
-		// const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
-		// newBtnStateAll[index] = newBtnState;
-		// correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
+		const isCorrect = correctIndexes.includes(index);
+		const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
+		newBtnStateAll[index] = newBtnState;
+		correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
 	} else {
 		const isHighlightedForSelected = currentAnswer.index === index;
 		if (isHighlightedForSelected) {

@@ -29,3 +29,5 @@ https://frontendmastery.com/posts/advanced-react-component-composition-guide/
 - Bug(?): if you answer the question while the enter animation is playing, the quiz bugs out
 - Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
 - If you click too quickly (during the transition between questions/explainer), the quiz bugs out. Add state to disable actions while in transition?
+- Bug: potential bug when moving from explainer (on a new page) after the last question, to the Result slide. The explainer gets pushed down for some reason
+

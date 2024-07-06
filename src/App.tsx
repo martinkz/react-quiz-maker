@@ -47,11 +47,11 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					// animation: "slide",
-					animation: "custom",
+					animation: "slide",
+					// animation: "custom",
 					motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<MyQuiz />
@@ -68,7 +68,7 @@ function App() {
 					animation: "scale",
 					// motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<Quiz />
