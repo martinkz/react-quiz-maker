@@ -13,14 +13,15 @@
   * personality quiz type && revealAnswer: true
   * showAnswerExplainer: true && nextButton: true
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
-Next button seems to be buggy, when autoResumeOnAnswer/nextButton is true, it advances the question but the quiz bugs out
 - Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. 
 This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop.
-- Figure out how to set the explainer to be displayed below the question, or on a new page alternatively
-- If explainer is shown on a new page, nextButton needs to go to explainer page instead of next question
+- Figure out how to set the explainer to be displayed below the question, or on a new page alternatively - already done?
+- If explainer is shown on a new page, nextButton needs to go to explainer page instead of next question - done?
 - Create separate context that deals with answers ? 
 https://frontendmastery.com/posts/advanced-react-component-composition-guide/
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion)
 - Create useAnswerButton so that users can use a regular button instead of <AnswerButton>
 - Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
+- Explainer Next button seems to be buggy, when autoResumeOnAnswer/nextButton is true, it advances the question but the quiz bugs out
+- Bug: question changes before animation has played. Animation plays for new questions only

@@ -31,7 +31,7 @@ const MotionSlideProps = {
 	initial: { height: 0 },
 	animate: { height: "auto" },
 	transition: {
-		duration: 0.5,
+		duration: 1.5,
 	},
 	exit: { height: 0 },
 };
@@ -40,7 +40,7 @@ const MotionScaleProps = {
 	initial: { opacity: 0, scale: 0, height: 0 },
 	animate: { opacity: 1, scale: 1, height: "auto" },
 	transition: {
-		duration: 0.4,
+		duration: 1.4,
 		// ease: [0, 0.71, 0.2, 1.01],
 	},
 	exit: { opacity: 0, scale: 0, height: 0 },

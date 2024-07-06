@@ -1,16 +1,17 @@
 import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
-import { QuizState, useQuiz } from "./QuizContext";
+import { AnswerButtonState, QuizState, useQuiz, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
+import React from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
 	IntroPage?: NoPropsFC;
 	QuestionHeader?: NoPropsFC;
-	QuestionBody?: NoPropsFC;
+	QuestionBody: React.FC<QuizContextProps>;
 	QuestionPage?: React.FC<{ children: React.ReactNode }>;
 	ExplainerPage?: NoPropsFC;
 	ResultPage?: NoPropsFC;
@@ -26,7 +27,9 @@ export const Quiz = ({
 	ResultPage,
 	children,
 }: QuizProps) => {
-	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = useQuiz();
+	const state = useQuiz();
+	const { quizState, currentQuestion, currentQuestionData, answerButtonState, maxQuestions, explainerVisible, config } =
+		state;
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -37,13 +40,21 @@ export const Quiz = ({
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
-	const IntroChild = findReactChild(children, "IntroPage");
-	const ResultChild = findReactChild(children, "ResultPage");
-	const QuestionPageChild = findReactChild(children, "QuestionPage");
-	const QuestionPageChildren = QuestionPageChild?.props?.children;
-	const QuestionHeaderChild = findReactChild(QuestionPageChildren, "QuestionHeader");
-	const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
-	const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
+	// const IntroChild = findReactChild(children, "IntroPage");
+	// const ResultChild = findReactChild(children, "ResultPage");
+	// const QuestionPageChild = findReactChild(children, "QuestionPage");
+	// const QuestionPageChildren = QuestionPageChild?.props?.children;
+	// const QuestionHeaderChild = findReactChild(QuestionPageChildren, "QuestionHeader");
+	// const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
+	// const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
+
+	const IntroChild = null;
+	const ResultChild = null;
+	const QuestionPageChild = null;
+	const QuestionPageChildren = null;
+	const QuestionHeaderChild = null;
+	const QuestionBodyChild = null;
+	const QuestionExplainerChild = null;
 
 	// Component function props or local component
 	const IntroPageComponent = IntroPage || Quiz.IntroPage;
@@ -56,7 +67,7 @@ export const Quiz = ({
 	// Children components or components from props
 	const Intro = IntroChild || <IntroPageComponent />;
 	const Header = QuestionHeaderChild || <QuestionHeaderComponent />;
-	const Body = QuestionBodyChild || <QuestionBodyComponent />;
+	const Body = QuestionBodyChild || <QuestionBodyComponent {...state} />;
 	const Explainer = QuestionExplainerChild || <ExplainerPageComponent />;
 	const Result = ResultChild || <ResultPageComponent />;
 
@@ -136,7 +147,7 @@ const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const QuestionBody = ({ children }: { children?: React.ReactNode }) => {
+const QuestionBody = ({ children, currentQuestion2 }: { children?: React.ReactNode; currentQuestion2: number }) => {
 	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
@@ -145,7 +156,7 @@ const QuestionBody = ({ children }: { children?: React.ReactNode }) => {
 		<div>
 			{children || (
 				<>
-					<h2>Question {currentQuestion + 1}</h2>
+					<h2>Question {currentQuestion2 + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
 						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>

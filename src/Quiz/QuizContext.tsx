@@ -45,7 +45,7 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-interface QuizContextProps {
+export interface QuizContextProps {
 	quizState: QuizState;
 	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
 	currentQuestion: number;
@@ -69,6 +69,8 @@ interface QuizContextProps {
 	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 	progress: number;
 }
+
+// export type OptionalContextProps = Partial<QuizContextProps>;
 
 const QuizContext = createContext<QuizContextProps>({
 	quizState: QuizState.START,

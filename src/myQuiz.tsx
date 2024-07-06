@@ -1,6 +1,6 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { useQuiz } from "./Quiz/QuizContext";
+import { useQuiz, QuizContextProps } from "./Quiz/QuizContext";
 
 // If you want to omit a component, you can create a component returning null
 
@@ -19,12 +19,14 @@ function QuestionHeader() {
 	);
 }
 
-function QuestionBody() {
-	const { currentQuestionData, answerButtonState } = useQuiz();
+function QuestionBody({ currentQuestion, currentQuestionData, answerButtonState }: QuizContextProps) {
+	// const { currentQuestionData, answerButtonState } = useQuiz();
 
 	return (
 		<div className="question-body">
-			<h2>Question {currentQuestionData.question}</h2>
+			<h2>
+				Question {currentQuestionData.question} - {currentQuestion}
+			</h2>
 			{currentQuestionData.answers.map((item: any, index: number) => (
 				<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 					{item.answer}
