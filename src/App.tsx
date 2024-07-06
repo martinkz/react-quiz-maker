@@ -56,7 +56,7 @@ function App() {
 
 			<div style={{ margin: "80px 0" }}></div>
 
-			{/* <QuizProvider
+			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
@@ -69,7 +69,7 @@ function App() {
 				}}
 			>
 				<Quiz />
-			</QuizProvider> */}
+			</QuizProvider>
 		</>
 	);
 }

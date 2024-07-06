@@ -11,7 +11,7 @@ type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
 	IntroPage?: NoPropsFC;
 	QuestionHeader?: NoPropsFC;
-	QuestionBody: React.FC<QuizContextProps>;
+	QuestionBody?: React.FC<QuizContextProps>;
 	QuestionPage?: React.FC<{ children: React.ReactNode }>;
 	ExplainerPage?: NoPropsFC;
 	ResultPage?: NoPropsFC;
@@ -58,14 +58,15 @@ QuizProps) => {
 	const IntroPageComponent = IntroPage || Quiz.IntroPage;
 	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
 	const QuestionHeaderComponent = QuestionHeader || Quiz.QuestionHeader;
-	const QuestionBodyComponent = QuestionBody || Quiz.QuestionBody;
+	const QuestionBodyComponent =
+		(QuestionBody && <QuestionBody {...state} />) || (Quiz.QuestionBody && <Quiz.QuestionBody state={state} />);
 	const ExplainerPageComponent = ExplainerPage || Quiz.ExplainerPage;
 	const ResultPageComponent = ResultPage || Quiz.ResultPage;
 
 	// Children components or components from props
 	const Intro = IntroChild || <IntroPageComponent />;
 	const Header = QuestionHeaderChild || <QuestionHeaderComponent />;
-	const Body = QuestionBodyChild || <QuestionBodyComponent {...state} />;
+	const Body = QuestionBodyChild || QuestionBodyComponent;
 	const Explainer = QuestionExplainerChild || <ExplainerPageComponent />;
 	const Result = ResultChild || <ResultPageComponent />;
 
@@ -145,8 +146,8 @@ const IntroPage = ({ children }: { children?: React.ReactNode }) => {
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const QuestionBody = ({ children, currentQuestion2 }: { children?: React.ReactNode; currentQuestion2: number }) => {
-	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = useQuiz();
+const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = state;
 	const { nextButton, revealAnswer } = config || {};
 	// console.log(nextButton, revealAnswer);
 
@@ -154,7 +155,7 @@ const QuestionBody = ({ children, currentQuestion2 }: { children?: React.ReactNo
 		<div>
 			{children || (
 				<>
-					<h2>Question {currentQuestion2 + 1}</h2>
+					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
 						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
