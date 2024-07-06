@@ -1,8 +1,16 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { useQuiz, QuizContextProps } from "./Quiz/QuizContext";
+import { useQuiz, type QuizContextProps } from "./Quiz/QuizContext";
 
 // If you want to omit a component, you can create a component returning null
+
+export const btnColors = {
+	unset: "#222",
+	default: "#222",
+	selected: "blue",
+	correct: "green",
+	incorrect: "red",
+};
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
@@ -19,8 +27,17 @@ function QuestionHeader() {
 	);
 }
 
-function QuestionBody({ currentQuestion, currentQuestionData, answerButtonState }: QuizContextProps) {
+function QuestionBody({
+	currentQuestion,
+	currentQuestionData,
+	answerButtonState, // group answer button props?
+	handleAnswerBtnClick,
+	answerBtnRequiredProps,
+	handleQuestionNextBtnClick,
+	questionNextBtnRequiredProps,
+}: QuizContextProps) {
 	// const { currentQuestionData, answerButtonState } = useQuiz();
+	// const { currentQuestion, currentQuestionData, answerButtonState, handleAnswerBtnClick, isAnswerBtnDisabled } = state;
 
 	return (
 		<div className="question-body">
@@ -28,13 +45,25 @@ function QuestionBody({ currentQuestion, currentQuestionData, answerButtonState 
 				Question {currentQuestionData.question} - {currentQuestion}
 			</h2>
 			{currentQuestionData.answers.map((item: any, index: number) => (
-				<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
+				// <Quiz.AnswerButton key={currentQuestionData.question + index} index={index} state={state}>
+				// 	{item.answer}
+				// 	{answerButtonState[index] === "correct" && <span> ✔</span>}
+				// </Quiz.AnswerButton>
+				<button
+					type="button"
+					key={currentQuestionData.question + index}
+					onClick={() => handleAnswerBtnClick(index)}
+					style={{ background: btnColors[answerButtonState[index]] }}
+					{...answerBtnRequiredProps}
+				>
 					{item.answer}
 					{answerButtonState[index] === "correct" && <span> ✔</span>}
-				</Quiz.AnswerButton>
+				</button>
 			))}
 			<p>
-				<Quiz.QuestionNextButton>Next</Quiz.QuestionNextButton>
+				<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
+					Next
+				</button>
 			</p>
 		</div>
 	);

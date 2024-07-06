@@ -1,5 +1,5 @@
 import React, { ReactElement, ComponentType } from "react";
-import { UserAnswer } from "./QuizContext";
+import { UserAnswer, AnswerButtonState } from "./QuizContext";
 
 export function evaluateScore(userAnswers: UserAnswer[]) {
 	const score = userAnswers.filter((answer: any) => answer.result === "1").length;
@@ -42,4 +42,35 @@ export function findReactChild(children: React.ReactNode, name: string): React.R
 		(child): child is React.ReactElement =>
 			React.isValidElement(child) && typeof child.type !== "string" && (child.type as any).displayName === name
 	);
+}
+
+// Update the state of all answer buttons based on the current answer and whether to show the correct answer
+export function getAnswerBtnsNewState(
+	index: number,
+	answers: any,
+	currentAnswer: UserAnswer,
+	showCorrectAnswer: boolean
+) {
+	const defaultAnswerButtonState = Array(answers.length).fill(AnswerButtonState.DEFAULT);
+	// Set all answers to 'default' which allows us to infer that the user has selected an answer
+	let newBtnStateAll = [...defaultAnswerButtonState];
+	if (showCorrectAnswer) {
+		newBtnStateAll = newBtnStateAll.map((_, index) =>
+			answers[index].result === "1" ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT
+		);
+		// const correctIndexes = findIndexes(
+		// 	answers.map((item: any) => item.result),
+		// 	"1"
+		// );
+		// const isCorrect = correctIndexes.includes(index);
+		// const newBtnState = isCorrect ? AnswerButtonState.CORRECT : AnswerButtonState.INCORRECT;
+		// newBtnStateAll[index] = newBtnState;
+		// correctIndexes.forEach((index) => (newBtnStateAll[index] = AnswerButtonState.CORRECT));
+	} else {
+		const isHighlightedForSelected = currentAnswer.index === index;
+		if (isHighlightedForSelected) {
+			newBtnStateAll[index] = AnswerButtonState.SELECTED;
+		}
+	}
+	return newBtnStateAll;
 }

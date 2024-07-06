@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
-import { evaluateScore, evaluatePersonality } from "./utility";
+import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState } from "./utility";
 import { HTMLMotionProps } from "framer-motion";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
+
+type EmptyObject = Record<string, never>;
 
 export enum QuizType {
 	SCORED = "scored",
@@ -30,7 +32,7 @@ export type QuizConfig = {
 
 export enum AnswerButtonState {
 	// UNSET is an initial value only, once clicked, the button will be set to one of the other values
-	// This is to distinguish between the initial state and the state after the user has clicked an answer
+	// This is to distinguish between the initial state and the state after the user has clicked an answer, for styling purposes
 	UNSET = "unset",
 	DEFAULT = "default",
 	CORRECT = "correct",
@@ -44,6 +46,14 @@ export type UserAnswer = {
 };
 
 export type QuizResult = number | string | null;
+
+export const btnColors = {
+	[AnswerButtonState.UNSET]: "#222",
+	[AnswerButtonState.DEFAULT]: "#222",
+	[AnswerButtonState.SELECTED]: "blue",
+	[AnswerButtonState.CORRECT]: "green",
+	[AnswerButtonState.INCORRECT]: "red",
+};
 
 export interface QuizContextProps {
 	quizState: QuizState;
@@ -60,6 +70,11 @@ export interface QuizContextProps {
 	quizType: QuizType;
 	handleStart: () => void;
 	handleAnswer: (userAnswer: UserAnswer) => void;
+	handleAnswerBtnClick: (index: number) => void;
+	// The below type needs to be updated to hold attributes for HTML elements through passing a generic type
+	answerBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
+	handleQuestionNextBtnClick: () => void;
+	questionNextBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
 	currentQuestionData: any;
 	quizData: any;
 	config?: QuizConfig;
@@ -67,6 +82,8 @@ export interface QuizContextProps {
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 	explainerVisible: boolean;
 	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	explainerClosed: boolean;
+	setExplainerClosed: React.Dispatch<React.SetStateAction<boolean>>;
 	progress: number;
 }
 
@@ -87,6 +104,10 @@ const QuizContext = createContext<QuizContextProps>({
 	quizType: QuizType.SCORED,
 	handleStart: () => {},
 	handleAnswer: () => {},
+	handleAnswerBtnClick: () => {},
+	answerBtnRequiredProps: {},
+	handleQuestionNextBtnClick: () => {},
+	questionNextBtnRequiredProps: {},
 	currentQuestionData: null,
 	quizData: null,
 	config: {},
@@ -94,6 +115,8 @@ const QuizContext = createContext<QuizContextProps>({
 	setAnswerButtonState: () => {},
 	explainerVisible: false,
 	setExplainerVisible: () => {},
+	explainerClosed: false,
+	setExplainerClosed: () => {},
 	progress: 0,
 });
 
@@ -117,6 +140,9 @@ export const QuizProvider = ({
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const [explainerVisible, setExplainerVisible] = useState(false);
+	// explainerClosed is used ot distinguish between the explainer not yet having been opened and the explainer already been closed,
+	// which is needed to decide whether to show the Next button for the question
+	const [explainerClosed, setExplainerClosed] = useState(false);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
@@ -135,6 +161,17 @@ export const QuizProvider = ({
 		showAnswerExplainer,
 		answerExplainerOnNewPage,
 	} = config || {};
+
+	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
+	const answerBtnStateIsSet = currentAnswer !== undefined;
+	const isAnswerBtnDisabled = answerBtnStateIsSet && (showCorrectAnswer || explainerVisible);
+	const answerBtnRequiredProps = {
+		disabled: isAnswerBtnDisabled,
+	};
+	const questionNextBtnRequiredProps = {
+		disabled: currentAnswer === undefined,
+		style: { visibility: explainerVisible || explainerClosed ? "hidden" : "visible" },
+	};
 
 	if (!Object.values(QuizType).includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
@@ -164,12 +201,41 @@ export const QuizProvider = ({
 	}
 
 	function handleStart() {
-		// console.log("handleStart: ", quizState);
 		setQuizState(QuizState.QUESTION);
 		setCurrentQuestion(0);
 		setUserAnswers([]);
 		setCurrentAnswer(undefined);
 		setAnswerButtonState(initialAnswerButtonState);
+		setResult(null);
+		setExplainerClosed(false);
+	}
+
+	function handleAnswerBtnClick(index: number) {
+		const answers = quizData.questions[currentQuestion].answers;
+		const theAnswer = { index: index, result: answers[index].result };
+		const answerButtonsUpdatedState = getAnswerBtnsNewState(index, answers, theAnswer, showCorrectAnswer);
+		setCurrentAnswer(theAnswer);
+		setAnswerButtonState(answerButtonsUpdatedState);
+		// Only handle the answer if we're not using a next button and not showing the explainer.
+		// Otherwise the answer will be handled by the next button
+		if (!nextButton && !showAnswerExplainer) {
+			handleAnswer(theAnswer);
+		}
+		if (showAnswerExplainer && !explainerVisible && !nextButton) {
+			const delay = answerExplainerOnNewPage ? 1500 : 0;
+			setTimeout(() => setExplainerVisible(true), delay);
+		}
+	}
+
+	function handleQuestionNextBtnClick() {
+		if (currentAnswer) {
+			if (showAnswerExplainer && !explainerVisible) {
+				setExplainerVisible(true);
+			} else {
+				handleAnswer(currentAnswer);
+				setExplainerVisible(false);
+			}
+		}
 	}
 
 	function handleAnswer(userAnswer: UserAnswer) {
@@ -192,6 +258,7 @@ export const QuizProvider = ({
 		const nextQuestion = currentQuestion + 1;
 		setCurrentQuestion(nextQuestion);
 		setCurrentAnswer(undefined);
+		setExplainerClosed(false);
 		const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
 			AnswerButtonState.UNSET
 		);
@@ -229,11 +296,17 @@ export const QuizProvider = ({
 				setResult,
 				handleStart,
 				handleAnswer,
+				handleAnswerBtnClick,
+				answerBtnRequiredProps,
+				handleQuestionNextBtnClick,
+				questionNextBtnRequiredProps,
 				config,
 				answerButtonState,
 				setAnswerButtonState,
 				explainerVisible,
 				setExplainerVisible,
+				explainerClosed,
+				setExplainerClosed,
 				progress,
 			}}
 		>

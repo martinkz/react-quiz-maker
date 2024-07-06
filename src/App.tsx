@@ -15,9 +15,10 @@ const MotionSlideSideProps = {
 	initial: { opacity: 0, x: "-100px" },
 	animate: { opacity: 1, x: 0 },
 	transition: {
-		duration: 1.5,
+		duration: 0.9,
 	},
-	exit: { opacity: 0, x: "-100px" },
+	exit: { opacity: 0.5, x: "-100px" },
+	// transitionEnd: { visibility: "hidden" },
 };
 
 function App() {
@@ -46,9 +47,11 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "slide",
-					showAnswerExplainer: false,
-					answerExplainerOnNewPage: false,
+					// animation: "slide",
+					animation: "custom",
+					motionObject: MotionSlideSideProps,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<MyQuiz />
@@ -60,12 +63,12 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					nextButton: true,
 					revealAnswer: true,
 					animation: "scale",
 					// motionObject: MotionSlideSideProps,
-					showAnswerExplainer: false,
-					answerExplainerOnNewPage: false,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<Quiz />

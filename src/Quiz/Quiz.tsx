@@ -1,6 +1,6 @@
 import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
-import { AnswerButtonState, QuizState, useQuiz, type QuizContextProps } from "./QuizContext";
+import { AnswerButtonState, QuizState, useQuiz, btnColors, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
@@ -28,8 +28,7 @@ export const Quiz = ({
 }: // children,
 QuizProps) => {
 	const state = useQuiz();
-	const { quizState, currentQuestion, currentQuestionData, answerButtonState, maxQuestions, explainerVisible, config } =
-		state;
+	const { quizState, currentQuestion, maxQuestions, explainerVisible, explainerClosed, config } = state;
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -37,7 +36,7 @@ QuizProps) => {
 
 	const { animation, answerExplainerOnNewPage } = config;
 
-	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
+	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
 	// const IntroChild = findReactChild(children, "IntroPage");
@@ -147,9 +146,17 @@ IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
-	const { quizData, config, currentQuestion, currentQuestionData, explainerVisible } = state;
-	const { nextButton, revealAnswer } = config || {};
-	// console.log(nextButton, revealAnswer);
+	const {
+		config,
+		currentQuestion,
+		currentQuestionData,
+		answerButtonState,
+		handleAnswerBtnClick,
+		handleQuestionNextBtnClick,
+		questionNextBtnRequiredProps,
+		answerBtnRequiredProps,
+	} = state;
+	const { nextButton } = config || {};
 
 	return (
 		<div>
@@ -158,13 +165,24 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
-						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
+						// <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
+						// 	{item.answer}
+						// </Quiz.AnswerButton>
+						<button
+							type="button"
+							key={currentQuestionData.question + index}
+							onClick={() => handleAnswerBtnClick(index)}
+							style={{ background: btnColors[answerButtonState[index]] }}
+							{...answerBtnRequiredProps}
+						>
 							{item.answer}
-						</Quiz.AnswerButton>
+						</button>
 					))}
 					{nextButton && (
 						<p>
-							<Quiz.QuestionNextButton>Next</Quiz.QuestionNextButton>
+							<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
+								Next
+							</button>
 						</p>
 					)}
 				</>
