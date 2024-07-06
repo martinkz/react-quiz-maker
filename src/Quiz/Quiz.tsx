@@ -9,24 +9,23 @@ import React from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
-	IntroPage?: NoPropsFC;
-	QuestionHeader?: NoPropsFC;
-	QuestionBody?: React.FC<QuizContextProps>;
-	QuestionPage?: React.FC<{ children: React.ReactNode }>;
-	ExplainerPage?: NoPropsFC;
-	ResultPage?: NoPropsFC;
+	components?: {
+		IntroPage?: React.FC<QuizContextProps>;
+		QuestionHeader?: React.FC<QuizContextProps>;
+		QuestionBody?: React.FC<QuizContextProps>;
+		QuestionPage?: React.FC<{ children: React.ReactNode }>;
+		ExplainerPage?: React.FC<QuizContextProps>;
+		ResultPage?: React.FC<QuizContextProps>;
+	};
 	children?: React.ReactNode;
 }
 
 export const Quiz = ({
-	IntroPage,
-	QuestionHeader,
-	QuestionBody,
-	QuestionPage,
-	ExplainerPage,
-	ResultPage,
+	components,
 }: // children,
 QuizProps) => {
+	const { IntroPage, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } = components || {};
+
 	const state = useQuiz();
 	const { quizState, currentQuestion, maxQuestions, explainerVisible, explainerClosed, config } = state;
 
@@ -54,20 +53,23 @@ QuizProps) => {
 	const QuestionExplainerChild = null;
 
 	// Component function props or local component
-	const IntroPageComponent = IntroPage || Quiz.IntroPage;
+	const IntroPageComponent = (IntroPage && <IntroPage {...state} />) || <Quiz.IntroPage state={state} />;
 	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
-	const QuestionHeaderComponent = QuestionHeader || Quiz.QuestionHeader;
-	const QuestionBodyComponent =
-		(QuestionBody && <QuestionBody {...state} />) || (Quiz.QuestionBody && <Quiz.QuestionBody state={state} />);
-	const ExplainerPageComponent = ExplainerPage || Quiz.ExplainerPage;
-	const ResultPageComponent = ResultPage || Quiz.ResultPage;
+	const QuestionHeaderComponent = (QuestionHeader && <QuestionHeader {...state} />) || (
+		<Quiz.QuestionHeader state={state} />
+	);
+	const QuestionBodyComponent = (QuestionBody && <QuestionBody {...state} />) || <Quiz.QuestionBody state={state} />;
+	const ExplainerPageComponent = (ExplainerPage && <ExplainerPage {...state} />) || (
+		<Quiz.ExplainerPage state={state} />
+	);
+	const ResultPageComponent = (ResultPage && <ResultPage {...state} />) || <Quiz.ResultPage state={state} />;
 
 	// Children components or components from props
-	const Intro = IntroChild || <IntroPageComponent />;
-	const Header = QuestionHeaderChild || <QuestionHeaderComponent />;
+	const Intro = IntroChild || IntroPageComponent;
+	const Header = QuestionHeaderChild || QuestionHeaderComponent;
 	const Body = QuestionBodyChild || QuestionBodyComponent;
-	const Explainer = QuestionExplainerChild || <ExplainerPageComponent />;
-	const Result = ResultChild || <ResultPageComponent />;
+	const Explainer = QuestionExplainerChild || ExplainerPageComponent;
+	const Result = ResultChild || ResultPageComponent;
 
 	return (
 		<>
@@ -110,8 +112,8 @@ function QuestionPage({ children }: { children: React.ReactNode }) {
 QuestionPage.displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
-const QuestionHeader = ({ children }: { children?: React.ReactNode }) => {
-	const { progress } = useQuiz();
+const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+	const { progress } = state;
 	return (
 		<div>
 			{children || (
@@ -128,14 +130,13 @@ const QuestionHeader = ({ children }: { children?: React.ReactNode }) => {
 QuestionHeader.displayName = "QuestionHeader";
 Quiz.QuestionHeader = QuestionHeader;
 
-const IntroPage = ({ children }: { children?: React.ReactNode }) => {
+const IntroPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
 	return (
 		<div>
 			{children || (
 				<>
 					<h1>Welcome to the Quiz</h1>
-					{/* <Quiz.Button onClick={onStart}>Start Quiz</Quiz.Button> */}
-					<Quiz.StartButton>Start Quiz</Quiz.StartButton>
+					<Quiz.StartButton state={state}>Start Quiz</Quiz.StartButton>
 				</>
 			)}
 		</div>
@@ -146,16 +147,7 @@ IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
-	const {
-		config,
-		currentQuestion,
-		currentQuestionData,
-		answerButtonState,
-		handleAnswerBtnClick,
-		handleQuestionNextBtnClick,
-		questionNextBtnRequiredProps,
-		answerBtnRequiredProps,
-	} = state;
+	const { config, currentQuestion, currentQuestionData } = state;
 	const { nextButton } = config || {};
 
 	return (
@@ -165,24 +157,13 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
-						// <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
-						// 	{item.answer}
-						// </Quiz.AnswerButton>
-						<button
-							type="button"
-							key={currentQuestionData.question + index}
-							onClick={() => handleAnswerBtnClick(index)}
-							style={{ background: btnColors[answerButtonState[index]] }}
-							{...answerBtnRequiredProps}
-						>
+						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index} state={state}>
 							{item.answer}
-						</button>
+						</Quiz.AnswerButton>
 					))}
 					{nextButton && (
 						<p>
-							<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
-								Next
-							</button>
+							<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 						</p>
 					)}
 				</>
@@ -194,7 +175,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 QuestionBody.displayName = "QuestionBody";
 Quiz.QuestionBody = QuestionBody;
 
-const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
+const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
 	return (
 		<div>
 			{children || (
@@ -202,7 +183,7 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 					<h1>Explainer</h1>
 					<p>Explanation of the answer</p>
 					<p>
-						<Quiz.ExplainerNextButton>Next</Quiz.ExplainerNextButton>
+						<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
 					</p>
 				</>
 			)}
@@ -213,14 +194,14 @@ const ExplainerPage = ({ children }: { children?: React.ReactNode }) => {
 ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
-const ResultPage = ({ children }: { children?: React.ReactNode }) => {
-	const { result } = useQuiz();
+const ResultPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+	const { result } = state;
 	return (
 		<div>
 			{children || (
 				<>
 					<h1>Your results is: {result}</h1>
-					<Quiz.StartButton>Play again</Quiz.StartButton>
+					<Quiz.StartButton state={state}>Play again</Quiz.StartButton>
 				</>
 			)}
 		</div>

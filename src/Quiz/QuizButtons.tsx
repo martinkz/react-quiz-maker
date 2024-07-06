@@ -1,50 +1,30 @@
-import { useQuiz, btnColors, type QuizContextProps } from "./QuizContext";
+import { btnColors, type QuizContextProps } from "./QuizContext";
 
-export function QuestionNextButton({ children }: { children: React.ReactNode }) {
-	const { config, currentAnswer, handleAnswer, setExplainerVisible, explainerVisible } = useQuiz();
-	const { showAnswerExplainer } = config || {};
-
-	const cssVisibility = explainerVisible ? "hidden" : "visible";
-
-	function nextStep() {
-		if (currentAnswer) {
-			if (showAnswerExplainer && !explainerVisible) {
-				setExplainerVisible(true);
-			} else {
-				handleAnswer(currentAnswer);
-				setExplainerVisible(false);
-			}
-		}
-	}
+export function QuestionNextButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps } = state;
 
 	return (
-		<button type="button" onClick={nextStep} disabled={!currentAnswer} style={{ visibility: cssVisibility }}>
+		<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
 			{children}
 		</button>
 	);
 }
 
-export function ExplainerNextButton({ children }: { children: React.ReactNode }) {
-	const { currentAnswer, handleAnswer, setExplainerVisible, setExplainerClosed } = useQuiz();
-
-	function nextStep() {
-		handleAnswer(currentAnswer!);
-		setExplainerVisible(false);
-		setExplainerClosed(true);
-	}
+export function ExplainerNextButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+	const { handleExplainerNextBtnClick } = state;
 
 	return (
-		<button type="button" onClick={nextStep}>
+		<button type="button" onClick={handleExplainerNextBtnClick}>
 			{children}
 		</button>
 	);
 }
 
-export function StartButton({ children }: { children: React.ReactNode }) {
-	const { handleStart } = useQuiz();
+export function StartButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+	const { handleStartBtnClick } = state;
 
 	return (
-		<button type="button" onClick={handleStart}>
+		<button type="button" onClick={handleStartBtnClick}>
 			{children}
 		</button>
 	);

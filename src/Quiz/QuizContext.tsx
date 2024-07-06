@@ -68,13 +68,14 @@ export interface QuizContextProps {
 	setResult: React.Dispatch<React.SetStateAction<QuizResult>>;
 	maxQuestions: number;
 	quizType: QuizType;
-	handleStart: () => void;
 	handleAnswer: (userAnswer: UserAnswer) => void;
 	handleAnswerBtnClick: (index: number) => void;
 	// The below type needs to be updated to hold attributes for HTML elements through passing a generic type
 	answerBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
 	handleQuestionNextBtnClick: () => void;
 	questionNextBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
+	handleExplainerNextBtnClick: () => void;
+	handleStartBtnClick: () => void;
 	currentQuestionData: any;
 	quizData: any;
 	config?: QuizConfig;
@@ -102,12 +103,13 @@ const QuizContext = createContext<QuizContextProps>({
 	setResult: () => {},
 	maxQuestions: 0,
 	quizType: QuizType.SCORED,
-	handleStart: () => {},
 	handleAnswer: () => {},
 	handleAnswerBtnClick: () => {},
 	answerBtnRequiredProps: {},
 	handleQuestionNextBtnClick: () => {},
 	questionNextBtnRequiredProps: {},
+	handleExplainerNextBtnClick: () => {},
+	handleStartBtnClick: () => {},
 	currentQuestionData: null,
 	quizData: null,
 	config: {},
@@ -200,7 +202,7 @@ export const QuizProvider = ({
 		);
 	}
 
-	function handleStart() {
+	function handleStartBtnClick() {
 		setQuizState(QuizState.QUESTION);
 		setCurrentQuestion(0);
 		setUserAnswers([]);
@@ -265,6 +267,12 @@ export const QuizProvider = ({
 		setAnswerButtonState(initialAnswerButtonState);
 	}
 
+	function handleExplainerNextBtnClick() {
+		handleAnswer(currentAnswer!);
+		setExplainerVisible(false);
+		setExplainerClosed(true);
+	}
+
 	function endQuiz(userAnswers: UserAnswer[]) {
 		const evalFunctions = {
 			[QuizType.SCORED]: evaluateScore,
@@ -294,12 +302,13 @@ export const QuizProvider = ({
 				setCurrentAnswer,
 				result,
 				setResult,
-				handleStart,
 				handleAnswer,
 				handleAnswerBtnClick,
 				answerBtnRequiredProps,
 				handleQuestionNextBtnClick,
 				questionNextBtnRequiredProps,
+				handleExplainerNextBtnClick,
+				handleStartBtnClick,
 				config,
 				answerButtonState,
 				setAnswerButtonState,
