@@ -70,8 +70,8 @@ function QuestionBody({
 function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: QuizContextProps) {
 	return (
 		<div className="explainer">
-			<div>Explainer</div>
-			<div>{currentQuestionData.explanation}</div>
+			<h2>Explainer</h2>
+			<p>{currentQuestionData.explanation}</p>
 			<button type="button" onClick={handleExplainerNextBtnClick}>
 				Next
 			</button>

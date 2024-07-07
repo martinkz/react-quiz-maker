@@ -173,12 +173,13 @@ QuestionBody.displayName = "QuestionBody";
 Quiz.QuestionBody = QuestionBody;
 
 const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+	const { currentQuestionData } = state;
 	return (
 		<div>
 			{children || (
 				<>
 					<h1>Explainer</h1>
-					<p>Explanation of the answer</p>
+					<p>{currentQuestionData.explanation}</p>
 					<p>
 						<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
 					</p>
