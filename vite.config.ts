@@ -16,8 +16,8 @@ export default defineConfig({
 		copyPublicDir: false,
 		lib: {
 			entry: resolve(__dirname, "src/Quiz/index.ts"),
-			name: "quizmaker",
-			fileName: "quizmaker",
+			name: "react-quiz-maker",
+			fileName: "react-quiz-maker",
 			formats: ["es", "umd"],
 		},
 		rollupOptions: {
