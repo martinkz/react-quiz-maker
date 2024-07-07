@@ -20,10 +20,7 @@ interface QuizProps {
 	children?: React.ReactNode;
 }
 
-export const Quiz = ({
-	components,
-}: // children,
-QuizProps) => {
+export const Quiz = ({ components, children }: QuizProps) => {
 	const { IntroPage, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } = components || {};
 
 	const state = useQuiz();
@@ -38,19 +35,19 @@ QuizProps) => {
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
 	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
 
-	// const IntroChild = findReactChild(children, "IntroPage");
-	// const ResultChild = findReactChild(children, "ResultPage");
-	// const QuestionPageChild = findReactChild(children, "QuestionPage");
-	// const QuestionPageChildren = QuestionPageChild?.props?.children;
-	// const QuestionHeaderChild = findReactChild(QuestionPageChildren, "QuestionHeader");
-	// const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
-	// const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
+	const IntroChild = findReactChild(children, "IntroPage");
+	const ResultChild = findReactChild(children, "ResultPage");
+	const QuestionPageChild = findReactChild(children, "QuestionPage");
+	const QuestionPageChildren = QuestionPageChild?.props?.children;
+	const QuestionHeaderChild = findReactChild(QuestionPageChildren, "QuestionHeader");
+	const QuestionBodyChild = findReactChild(QuestionPageChildren, "QuestionPage");
+	const QuestionExplainerChild = findReactChild(QuestionPageChildren, "ExplainerPage");
 
-	const IntroChild = null;
-	const ResultChild = null;
-	const QuestionHeaderChild = null;
-	const QuestionBodyChild = null;
-	const QuestionExplainerChild = null;
+	// const IntroChild = null;
+	// const ResultChild = null;
+	// const QuestionHeaderChild = null;
+	// const QuestionBodyChild = null;
+	// const QuestionExplainerChild = null;
 
 	// Component function props or local component
 	const IntroPageComponent = (IntroPage && <IntroPage {...state} />) || <Quiz.IntroPage state={state} />;

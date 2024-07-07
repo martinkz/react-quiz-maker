@@ -15,16 +15,16 @@ const MotionSlideSideProps = {
 	initial: { opacity: 0, x: "-100px" },
 	animate: { opacity: 1, x: 0 },
 	transition: {
-		duration: 0.9,
+		duration: 0.6,
 	},
-	exit: { opacity: 0.5, x: "-100px" },
+	exit: { opacity: 0, x: "-100px" },
 	// transitionEnd: { visibility: "hidden" },
 };
 
 function App() {
 	return (
 		<>
-			{/* <QuizProvider
+			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
@@ -37,7 +37,7 @@ function App() {
 				}}
 			>
 				<MyQuizComposed />
-			</QuizProvider> */}
+			</QuizProvider>
 
 			<div style={{ margin: "80px 0" }}></div>
 

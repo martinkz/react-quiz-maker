@@ -2,6 +2,7 @@
 - Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
 - Document the various ways to configure the quiz - config object / quiz json
 - Add timer
+- Add shuffling of Questions / Answers
 - Add option to keep trying answers till you get the correct one (i.e. only show the correct value for the current answer, not all)
 - Add delay config option
 - Warn about weird combinations of config options ? explain default behavior in docs?
