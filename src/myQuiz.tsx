@@ -13,7 +13,14 @@ export const btnColors = {
 // If you want to omit a component, you can create a component returning null
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
-	return <div className="question-wrap">{children}</div>;
+	return (
+		<div
+			className="question-wrap"
+			// style={{ display: "flex", flexDirection: "column", minHeight: "600px", justifyContent: "stretch" }}
+		>
+			{children}
+		</div>
+	);
 }
 
 function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContextProps) {
@@ -63,8 +70,8 @@ function QuestionBody({
 function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: QuizContextProps) {
 	return (
 		<div className="explainer">
-			<h1>Explainer</h1>
-			<p>{currentQuestionData.explanation}</p>
+			<div>Explainer</div>
+			<div>{currentQuestionData.explanation}</div>
 			<button type="button" onClick={handleExplainerNextBtnClick}>
 				Next
 			</button>

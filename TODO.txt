@@ -1,11 +1,7 @@
 - Remove MotionWrapper keys - currentQuestion, maxQuestion and replace with something else
-- Move MotionWrapper outside Quiz.tsx and in myQuiz.tsx (potentially)
-- Add QuizButton component and try to handle some state inside (e.g. immediately showing the correct answer, highlighting of answer correctness, etc)
 - Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
 - Document the various ways to configure the quiz - config object / quiz json
-- Sort out answer button keys: <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>
 - Add timer
-- Add progress bar
 - Add option to keep trying answers till you get the correct one (i.e. only show the correct value for the current answer, not all)
 - Add delay config option
 - Warn about weird combinations of config options ? explain default behavior in docs?
@@ -15,19 +11,15 @@
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
 - Move MotionWrapper outside of Quiz.tsx into myQuiz, pass it as prop into each quiz page. 
 This way there's no need to have <AnimatePresence mode="popLayout"> outside too. Pass in AnimatePresence mode too as a prop.
-- Figure out how to set the explainer to be displayed below the question, or on a new page alternatively - already done?
-- If explainer is shown on a new page, nextButton needs to go to explainer page instead of next question - done?
 - Create separate context that deals with answers ? 
 https://frontendmastery.com/posts/advanced-react-component-composition-guide/
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion) - what about index starting with 0?
-- Create useAnswerButton so that users can use a regular button instead of <AnswerButton>
 - Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
 - Explainer Next button seems to be buggy, when autoResumeOnAnswer/nextButton is true, it advances the question but the quiz bugs out
-- Bug: question changes before animation has played. Animation plays for new questions only
 - Automatically generate IDs for questions and answers (so we can avoid passing key like this: <Quiz.AnswerButton key={currentQuestionData.question + index} index={index}>)
 - Bug(?): if you answer the question while the enter animation is playing, the quiz bugs out
 - Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
 - If you click too quickly (during the transition between questions/explainer), the quiz bugs out. Add state to disable actions while in transition?
 - Bug: potential bug when moving from explainer (on a new page) after the last question, to the Result slide. The explainer gets pushed down for some reason
-
+- Find a way to use flexbox on quiz that also animates

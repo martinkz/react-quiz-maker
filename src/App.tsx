@@ -68,7 +68,7 @@ function App() {
 					animation: "scale",
 					// motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: false,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<Quiz />
