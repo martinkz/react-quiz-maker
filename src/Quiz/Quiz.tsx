@@ -208,4 +208,4 @@ const ResultPage = ({ children, state }: { children?: React.ReactNode; state: Qu
 ResultPage.displayName = "ResultPage";
 Quiz.ResultPage = ResultPage;
 
-export default Quiz;
+// export default Quiz;
