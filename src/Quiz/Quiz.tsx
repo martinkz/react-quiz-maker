@@ -12,6 +12,7 @@ type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
 	components?: {
 		IntroPage?: React.FC<QuizContextProps>;
+		QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
 		QuestionHeader?: React.FC<QuizContextProps>;
 		QuestionBody?: React.FC<QuizContextProps>;
 		QuestionPage?: React.FC<{ children: React.ReactNode }>;
@@ -22,7 +23,8 @@ interface QuizProps {
 }
 
 export const Quiz = ({ components, children }: QuizProps) => {
-	const { IntroPage, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } = components || {};
+	const { IntroPage, QuestionWrapper, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } =
+		components || {};
 
 	const state = useQuiz();
 	const { quizState, currentQuestion, maxQuestions, explainerVisible, explainerClosed, config } = state;
@@ -53,6 +55,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 
 	// Component function props or local component
 	const IntroPageComponent = (IntroPage && <IntroPage {...state} />) || <Quiz.IntroPage state={state} />;
+	const QuestionWrapperComponent = QuestionWrapper || Quiz.QuestionWrapper;
 	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
 	const QuestionHeaderComponent = (QuestionHeader && <QuestionHeader {...state} />) || (
 		<Quiz.QuestionHeader state={state} />
@@ -85,13 +88,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							gap: "30px",
-						}}
-					>
+					<QuestionWrapperComponent>
 						{/* <motion.div key={-2} {...MotionSlide}>
 							{Header}
 						</motion.div> */}
@@ -120,7 +117,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 								</AnimatePresence>
 							</QuestionPageComponent>
 						</MotionWrapper>
-					</div>
+					</QuestionWrapperComponent>
 				)}
 
 				{quizState === QuizState.RESULT && (
@@ -143,8 +140,19 @@ Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
 
+function QuestionWrapper({ children }: { children: React.ReactNode }) {
+	return (
+		<div className="question-wrap" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+			{children}
+		</div>
+	);
+}
+
+QuestionWrapper.displayName = "QuestionWrapper";
+Quiz.QuestionWrapper = QuestionWrapper;
+
 function QuestionPage({ children }: { children: React.ReactNode }) {
-	return <div className="question-wrap">{children}</div>;
+	return <div className="question">{children}</div>;
 }
 
 QuestionPage.displayName = "QuestionPage";

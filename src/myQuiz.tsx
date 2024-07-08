@@ -12,10 +12,36 @@ export const btnColors = {
 
 // If you want to omit a component, you can create a component returning null
 
+export default function MyQuiz() {
+	return (
+		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
+			<Quiz
+				components={{
+					IntroPage,
+					QuestionWrapper,
+					QuestionPage,
+					QuestionHeader,
+					QuestionBody,
+					ExplainerPage,
+					ResultPage,
+				}}
+			></Quiz>
+		</div>
+	);
+}
+
+function QuestionWrapper({ children }: { children: React.ReactNode }) {
+	return (
+		<div className="question-wrap" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+			{children}
+		</div>
+	);
+}
+
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return (
 		<div
-			className="question-wrap"
+			className="question"
 			// style={{ display: "flex", flexDirection: "column", minHeight: "600px", justifyContent: "stretch" }}
 		>
 			{children}
@@ -99,14 +125,6 @@ function ResultPage({ handleStartBtnClick, result }: QuizContextProps) {
 			<button type="button" onClick={handleStartBtnClick}>
 				Play again
 			</button>
-		</div>
-	);
-}
-
-export default function MyQuiz() {
-	return (
-		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
-			<Quiz components={{ IntroPage, QuestionPage, QuestionHeader, QuestionBody, ExplainerPage, ResultPage }}></Quiz>
 		</div>
 	);
 }
