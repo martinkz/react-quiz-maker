@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
 import { AnswerButtonState, QuizState, useQuiz, btnColors, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
-import { MotionWrapper, MotionScale, MotionSlide } from "./MotionWrapper";
+import { MotionWrapper, MotionScale, MotionSlide, MotionSlideSide } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
 import { motion } from "framer-motion";
@@ -34,8 +34,8 @@ export const Quiz = ({ components, children }: QuizProps) => {
 	const { animation, answerExplainerOnNewPage } = config;
 
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
-	// const animatePresenceMode = animation === "scale" ? "popLayout" : "sync";
-	const animatePresenceMode = "popLayout"; // sync seems to work better
+	const animatePresenceMode = animation === "slideLeftRight" ? "popLayout" : "sync";
+	// const animatePresenceMode = "popLayout"; // sync seems to work better
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");

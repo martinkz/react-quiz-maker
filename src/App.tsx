@@ -11,13 +11,6 @@ import quizJson2 from "./quizData2.json";
 // 	return "Custom result";
 // }
 
-const MotionSlideSideProps = {
-	initial: { opacity: 0, x: "-120px" },
-	animate: { opacity: 1, x: 0 },
-	transition: { duration: 0.5 },
-	exit: { opacity: 0, x: "-120px" },
-};
-
 function App() {
 	return (
 		<>
@@ -27,8 +20,7 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "custom",
-					motionObject: MotionSlideSideProps,
+					animation: "slideUpDown",
 					showAnswerExplainer: false,
 					answerExplainerOnNewPage: false,
 				}}
@@ -44,9 +36,7 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					// animation: "slide",
-					// animation: "custom",
-					// motionObject: MotionSlideSideProps,
+					animation: "slideUpDown",
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: true,
 				}}
@@ -62,8 +52,7 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "slide",
-					// motionObject: MotionSlideSideProps,
+					animation: "scale",
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: true,
 				}}

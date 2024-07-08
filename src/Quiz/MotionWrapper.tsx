@@ -12,12 +12,12 @@ export const MotionWrapper = forwardRef(function (
 		throw new Error("No config object provided");
 	}
 
-	const { animation = "default", motionObject } = config;
+	const { animation = "default" /*, motionObject*/ } = config;
 
 	const wrappers = {
-		slide: MotionSlide,
+		slideUpDown: MotionSlide,
+		slideLeftRight: MotionSlideSide,
 		scale: MotionScale,
-		custom: motionObject,
 		default: motionProps,
 	};
 	return (
@@ -45,13 +45,18 @@ export const MotionScale = {
 	exit: { opacity: 0, scale: 0, height: 0 },
 };
 
+export const MotionSlideSide = {
+	initial: { opacity: 0, x: "-120px" },
+	animate: { opacity: 1, x: 0 },
+	transition: { duration: 0.5 },
+	exit: { opacity: 0, x: "-120px" },
+};
+
 // With flexGrow, but it's buggy
-// const MotionSlide = {
+// export const MotionSlide = {
 // 	style: { overflow: "hidden" },
 // 	initial: { height: 0, flexGrow: 0 },
 // 	animate: { height: "auto", flexGrow: 1 },
-// 	transition: {
-// 		duration: 0.5,
-// 	},
+// 	transition: { duration: 0.5 },
 // 	exit: { height: 0, flexGrow: 0 },
 // };
