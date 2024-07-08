@@ -5,6 +5,7 @@ import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } fr
 import { MotionWrapper } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
+import { motion } from "framer-motion";
 import React from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
@@ -73,26 +74,75 @@ export const Quiz = ({ components, children }: QuizProps) => {
 			<AnimatePresence mode={animatePresenceMode}>
 				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{QuestionHeaderChild || <Quiz.QuestionHeader />}</MotionWrapper>} */}
 
-				{quizState === QuizState.START && <MotionWrapper key={-1}>{Intro}</MotionWrapper>}
-
-				{quizState === QuizState.QUESTION && (
-					<MotionWrapper key={-2}>
-						<QuestionPageComponent>
-							<AnimatePresence mode={animatePresenceMode}>
-								<MotionWrapper key={-3}>{Header}</MotionWrapper>
-								{!hideQuestionOnExplainer && (
-									<MotionWrapper key={currentQuestion + maxQuestions + 1}>{Body}</MotionWrapper>
-								)}
-								{explainerVisible && <MotionWrapper key={-4}>{Explainer}</MotionWrapper>}
-							</AnimatePresence>
-						</QuestionPageComponent>
+				{quizState === QuizState.START && (
+					<MotionWrapper motionProps={motionProps} key={-1}>
+						{Intro}
 					</MotionWrapper>
+					// <motion.div key={-1} {...motionProps}>
+					// 	{Intro}
+					// </motion.div>
 				)}
 
-				{quizState === QuizState.RESULT && <MotionWrapper key={maxQuestions}>{Result}</MotionWrapper>}
+				{quizState === QuizState.QUESTION && (
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							gap: "30px",
+						}}
+					>
+						{/* <motion.div key={-2} {...motionProps}>{Header}</motion.div> */}
+						<MotionWrapper motionProps={motionProps} key={-2}>
+							{Header}
+						</MotionWrapper>
+						<motion.div key={-3} {...motionProps}>
+							<QuestionPageComponent>
+								<AnimatePresence mode={animatePresenceMode}>
+									{!hideQuestionOnExplainer && (
+										<MotionWrapper motionProps={motionProps} key={currentQuestion + maxQuestions + 1}>
+											{Body}
+										</MotionWrapper>
+										// <motion.div {...motionProps} key={currentQuestion + maxQuestions + 1}>{Body}</motion.div>
+									)}
+									{explainerVisible && (
+										<motion.div key={-4} {...motionProps1}>
+											{Explainer}
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</QuestionPageComponent>
+						</motion.div>
+					</div>
+				)}
+
+				{quizState === QuizState.RESULT && (
+					// <motion.div key={maxQuestions} {...motionProps}>
+					// 	{Result}
+					// </motion.div>
+					<MotionWrapper motionProps={motionProps} key={maxQuestions}>
+						{Result}
+					</MotionWrapper>
+				)}
 			</AnimatePresence>
 		</>
 	);
+};
+
+const motionProps = {
+	style: { overflow: "hidden" },
+	initial: { height: 0 },
+	animate: { height: "auto" },
+	transition: {
+		duration: 0.5,
+	},
+	exit: { height: 0 },
+};
+
+const motionProps1 = {
+	initial: { opacity: 0, scale: 0, height: 0 },
+	animate: { opacity: 1, scale: 1, height: "auto" },
+	transition: { duration: 0.5 },
+	exit: { opacity: 0, scale: 0, height: 0 },
 };
 
 Quiz.ProgressBar = ProgressBar;

@@ -12,13 +12,10 @@ import quizJson2 from "./quizData2.json";
 // }
 
 const MotionSlideSideProps = {
-	initial: { opacity: 0, x: "-100px" },
+	initial: { opacity: 0, x: "-150px" },
 	animate: { opacity: 1, x: 0 },
-	transition: {
-		duration: 0.6,
-	},
-	exit: { opacity: 0, x: "-100px" },
-	// transitionEnd: { visibility: "hidden" },
+	transition: { duration: 0.6 },
+	exit: { opacity: 0, x: "-150px" },
 };
 
 function App() {
@@ -47,9 +44,9 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "slide",
+					// animation: "slide",
 					// animation: "custom",
-					motionObject: MotionSlideSideProps,
+					// motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
 				}}
