@@ -39,14 +39,7 @@ function QuestionWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
-	return (
-		<div
-			className="question"
-			// style={{ display: "flex", flexDirection: "column", minHeight: "600px", justifyContent: "stretch" }}
-		>
-			{children}
-		</div>
-	);
+	return <div className="question">{children}</div>;
 }
 
 function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContextProps) {
