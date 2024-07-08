@@ -24,7 +24,7 @@ export const MotionWrapper = forwardRef(function (
 	};
 	return (
 		<motion.div
-			// ref={ref}
+			// ref={ref} // When ref is used animation is sometimes buggy?
 			{...wrappers[animation!]}
 		>
 			{children}
