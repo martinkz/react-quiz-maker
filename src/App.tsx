@@ -12,10 +12,10 @@ import quizJson2 from "./quizData2.json";
 // }
 
 const MotionSlideSideProps = {
-	initial: { opacity: 0, x: "-150px" },
+	initial: { opacity: 0, x: "-120px" },
 	animate: { opacity: 1, x: 0 },
-	transition: { duration: 0.6 },
-	exit: { opacity: 0, x: "-150px" },
+	transition: { duration: 0.5 },
+	exit: { opacity: 0, x: "-120px" },
 };
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
 					// animation: "custom",
 					// motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: false,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<MyQuiz />
@@ -62,7 +62,7 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "scale",
+					animation: "slide",
 					// motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: true,

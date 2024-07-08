@@ -2,7 +2,7 @@ import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
 import { AnswerButtonState, QuizState, useQuiz, btnColors, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
-import { MotionWrapper } from "./MotionWrapper";
+import { MotionWrapper, MotionScale, MotionSlide } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
 import { motion } from "framer-motion";
@@ -34,7 +34,8 @@ export const Quiz = ({ components, children }: QuizProps) => {
 	const { animation, answerExplainerOnNewPage } = config;
 
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
-	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
+	// const animatePresenceMode = animation === "scale" ? "popLayout" : "sync";
+	const animatePresenceMode = "popLayout"; // sync seems to work better
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
@@ -75,10 +76,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{QuestionHeaderChild || <Quiz.QuestionHeader />}</MotionWrapper>} */}
 
 				{quizState === QuizState.START && (
-					<MotionWrapper motionProps={motionProps} key={-1}>
+					<MotionWrapper motionProps={MotionSlide} key={-1}>
 						{Intro}
 					</MotionWrapper>
-					// <motion.div key={-1} {...motionProps}>
+					// <motion.div key={-1} {...MotionSlide}>
 					// 	{Intro}
 					// </motion.div>
 				)}
@@ -91,58 +92,48 @@ export const Quiz = ({ components, children }: QuizProps) => {
 							gap: "30px",
 						}}
 					>
-						{/* <motion.div key={-2} {...motionProps}>{Header}</motion.div> */}
-						<MotionWrapper motionProps={motionProps} key={-2}>
+						{/* <motion.div key={-2} {...MotionSlide}>
+							{Header}
+						</motion.div> */}
+						<MotionWrapper motionProps={MotionSlide} key={-2}>
 							{Header}
 						</MotionWrapper>
-						<motion.div key={-3} {...motionProps}>
+						<MotionWrapper motionProps={MotionSlide} key={-3}>
 							<QuestionPageComponent>
 								<AnimatePresence mode={animatePresenceMode}>
 									{!hideQuestionOnExplainer && (
-										<MotionWrapper motionProps={motionProps} key={currentQuestion + maxQuestions + 1}>
+										<MotionWrapper motionProps={MotionSlide} key={currentQuestion + maxQuestions + 1}>
 											{Body}
 										</MotionWrapper>
-										// <motion.div {...motionProps} key={currentQuestion + maxQuestions + 1}>{Body}</motion.div>
+										// <motion.div {...MotionSlide} key={currentQuestion + maxQuestions + 1}>
+										// 	{Body}
+										// </motion.div>
 									)}
 									{explainerVisible && (
-										<motion.div key={-4} {...motionProps1}>
+										<MotionWrapper motionProps={MotionScale} key={-4}>
 											{Explainer}
-										</motion.div>
+										</MotionWrapper>
+										// <motion.div {...MotionScale} key={-4}>
+										// 	{Explainer}
+										// </motion.div>
 									)}
 								</AnimatePresence>
 							</QuestionPageComponent>
-						</motion.div>
+						</MotionWrapper>
 					</div>
 				)}
 
 				{quizState === QuizState.RESULT && (
-					// <motion.div key={maxQuestions} {...motionProps}>
+					// <motion.div key={maxQuestions} {...MotionSlide}>
 					// 	{Result}
 					// </motion.div>
-					<MotionWrapper motionProps={motionProps} key={maxQuestions}>
+					<MotionWrapper motionProps={MotionSlide} key={maxQuestions}>
 						{Result}
 					</MotionWrapper>
 				)}
 			</AnimatePresence>
 		</>
 	);
-};
-
-const motionProps = {
-	style: { overflow: "hidden" },
-	initial: { height: 0 },
-	animate: { height: "auto" },
-	transition: {
-		duration: 0.5,
-	},
-	exit: { height: 0 },
-};
-
-const motionProps1 = {
-	initial: { opacity: 0, scale: 0, height: 0 },
-	animate: { opacity: 1, scale: 1, height: "auto" },
-	transition: { duration: 0.5 },
-	exit: { opacity: 0, scale: 0, height: 0 },
 };
 
 Quiz.ProgressBar = ProgressBar;
