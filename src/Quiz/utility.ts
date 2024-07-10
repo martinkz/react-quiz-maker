@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement, ComponentType } from "react";
 import { UserAnswer } from "./QuizContext";
 
 export function evaluateScore(userAnswers: UserAnswer[]) {
@@ -31,4 +31,15 @@ export function evaluatePersonality(userAnswers: UserAnswer[]) {
 
 export function findIndexes<T>(arr: Array<T>, value: T): number[] {
 	return arr.flatMap((el, i) => (el === value ? i : []));
+}
+
+// export function findReactChild(children: React.ReactNode, type: string): React.ReactNode {
+// 	return React.Children.toArray(children).find((child: any) => child.type.name === type);
+// }
+
+export function findReactChild(children: React.ReactNode, name: string): React.ReactElement | undefined {
+	return React.Children.toArray(children).find(
+		(child): child is React.ReactElement =>
+			React.isValidElement(child) && typeof child.type !== "string" && (child.type as any).displayName === name
+	);
 }

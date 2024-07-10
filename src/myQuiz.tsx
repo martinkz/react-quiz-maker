@@ -2,7 +2,9 @@ import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz } from "./Quiz/QuizContext";
 
-function QuestionWrapper({ children }: { children: React.ReactNode }) {
+// If you want to omit a component, you can create a component returning null
+
+function QuestionPage({ children }: { children: React.ReactNode }) {
 	return <div className="question-wrap">{children}</div>;
 }
 
@@ -74,7 +76,7 @@ export default function MyQuiz() {
 	return (
 		<Quiz
 			IntroPage={IntroPage}
-			QuestionWrapper={QuestionWrapper}
+			QuestionPage={QuestionPage}
 			QuestionHeader={QuestionHeader}
 			QuestionBody={QuestionBody}
 			ExplainerPage={ExplainerPage}
