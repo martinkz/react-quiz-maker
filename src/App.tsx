@@ -11,16 +11,6 @@ import quizJson2 from "./quizData2.json";
 // 	return "Custom result";
 // }
 
-const MotionSlideSideProps = {
-	initial: { opacity: 0, x: "-100px" },
-	animate: { opacity: 1, x: 0 },
-	transition: {
-		duration: 0.6,
-	},
-	exit: { opacity: 0, x: "-100px" },
-	// transitionEnd: { visibility: "hidden" },
-};
-
 function App() {
 	return (
 		<>
@@ -30,8 +20,7 @@ function App() {
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "custom",
-					motionObject: MotionSlideSideProps,
+					animation: "slideUpDown",
 					showAnswerExplainer: false,
 					answerExplainerOnNewPage: false,
 				}}
@@ -41,18 +30,14 @@ function App() {
 
 			{/* <div style={{ margin: "80px 0" }}></div> */}
 
-			<div style={{ margin: "80px 0" }}></div>
-
 			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
-					animation: "slide",
-					// animation: "custom",
-					motionObject: MotionSlideSideProps,
-					showAnswerExplainer: true,
+					animation: "scale",
+					showAnswerExplainer: false,
 					answerExplainerOnNewPage: false,
 				}}
 			>
@@ -62,15 +47,14 @@ function App() {
 			<div style={{ margin: "80px 0" }}></div>
 
 			<QuizProvider
-				quizData={quizJson2}
+				quizData={quizJson}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					nextButton: false,
 					revealAnswer: true,
 					animation: "scale",
-					// motionObject: MotionSlideSideProps,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<Quiz />

@@ -2,15 +2,17 @@ import styles from "./styles.module.css";
 import { AnimatePresence } from "framer-motion";
 import { AnswerButtonState, QuizState, useQuiz, btnColors, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
-import { MotionWrapper } from "./MotionWrapper";
+import { MotionWrapper, MotionScale, MotionSlide, MotionSlideSide } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
+import { motion } from "framer-motion";
 import React from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
 	components?: {
 		IntroPage?: React.FC<QuizContextProps>;
+		QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
 		QuestionHeader?: React.FC<QuizContextProps>;
 		QuestionBody?: React.FC<QuizContextProps>;
 		QuestionPage?: React.FC<{ children: React.ReactNode }>;
@@ -21,7 +23,8 @@ interface QuizProps {
 }
 
 export const Quiz = ({ components, children }: QuizProps) => {
-	const { IntroPage, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } = components || {};
+	const { IntroPage, QuestionWrapper, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } =
+		components || {};
 
 	const state = useQuiz();
 	const { quizState, currentQuestion, maxQuestions, explainerVisible, explainerClosed, config } = state;
@@ -33,7 +36,8 @@ export const Quiz = ({ components, children }: QuizProps) => {
 	const { animation, answerExplainerOnNewPage } = config;
 
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
-	const animatePresenceMode = animation === "slide" ? "sync" : "popLayout";
+	const animatePresenceMode = animation === "slideLeftRight" ? "popLayout" : "sync";
+	// const animatePresenceMode = "popLayout"; // sync seems to work better
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
@@ -51,6 +55,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 
 	// Component function props or local component
 	const IntroPageComponent = (IntroPage && <IntroPage {...state} />) || <Quiz.IntroPage state={state} />;
+	const QuestionWrapperComponent = QuestionWrapper || Quiz.QuestionWrapper;
 	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
 	const QuestionHeaderComponent = (QuestionHeader && <QuestionHeader {...state} />) || (
 		<Quiz.QuestionHeader state={state} />
@@ -73,23 +78,56 @@ export const Quiz = ({ components, children }: QuizProps) => {
 			<AnimatePresence mode={animatePresenceMode}>
 				{/* {quizState === QuizState.QUESTION && <MotionWrapper key={-2}>{QuestionHeaderChild || <Quiz.QuestionHeader />}</MotionWrapper>} */}
 
-				{quizState === QuizState.START && <MotionWrapper key={-1}>{Intro}</MotionWrapper>}
-
-				{quizState === QuizState.QUESTION && (
-					<MotionWrapper key={-2}>
-						<QuestionPageComponent>
-							<AnimatePresence mode={animatePresenceMode}>
-								<MotionWrapper key={-3}>{Header}</MotionWrapper>
-								{!hideQuestionOnExplainer && (
-									<MotionWrapper key={currentQuestion + maxQuestions + 1}>{Body}</MotionWrapper>
-								)}
-								{explainerVisible && <MotionWrapper key={-4}>{Explainer}</MotionWrapper>}
-							</AnimatePresence>
-						</QuestionPageComponent>
+				{quizState === QuizState.START && (
+					<MotionWrapper motionProps={MotionSlide} key={-1}>
+						{Intro}
 					</MotionWrapper>
+					// <motion.div key={-1} {...MotionSlide}>
+					// 	{Intro}
+					// </motion.div>
 				)}
 
-				{quizState === QuizState.RESULT && <MotionWrapper key={maxQuestions}>{Result}</MotionWrapper>}
+				{quizState === QuizState.QUESTION && (
+					<QuestionWrapperComponent>
+						{/* <motion.div key={-2} {...MotionSlide}>
+							{Header}
+						</motion.div> */}
+						<MotionWrapper motionProps={MotionSlide} key={-2}>
+							{Header}
+						</MotionWrapper>
+						<MotionWrapper motionProps={MotionSlide} key={-3}>
+							<QuestionPageComponent>
+								<AnimatePresence mode={animatePresenceMode}>
+									{!hideQuestionOnExplainer && (
+										<MotionWrapper motionProps={MotionSlide} key={currentQuestion}>
+											{Body}
+										</MotionWrapper>
+										// <motion.div {...MotionSlide} key={currentQuestion}>
+										// 	{Body}
+										// </motion.div>
+									)}
+									{explainerVisible && (
+										<MotionWrapper motionProps={MotionScale} key={-4}>
+											{Explainer}
+										</MotionWrapper>
+										// <motion.div {...MotionScale} key={-4}>
+										// 	{Explainer}
+										// </motion.div>
+									)}
+								</AnimatePresence>
+							</QuestionPageComponent>
+						</MotionWrapper>
+					</QuestionWrapperComponent>
+				)}
+
+				{quizState === QuizState.RESULT && (
+					// <motion.div key={maxQuestions} {...MotionSlide}>
+					// 	{Result}
+					// </motion.div>
+					<MotionWrapper motionProps={MotionSlide} key={maxQuestions}>
+						{Result}
+					</MotionWrapper>
+				)}
 			</AnimatePresence>
 		</>
 	);
@@ -102,8 +140,19 @@ Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
 
+function QuestionWrapper({ children }: { children: React.ReactNode }) {
+	return (
+		<div className="question-wrap" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+			{children}
+		</div>
+	);
+}
+
+QuestionWrapper.displayName = "QuestionWrapper";
+Quiz.QuestionWrapper = QuestionWrapper;
+
 function QuestionPage({ children }: { children: React.ReactNode }) {
-	return <div className="question-wrap">{children}</div>;
+	return <div className="question">{children}</div>;
 }
 
 QuestionPage.displayName = "QuestionPage";
@@ -154,7 +203,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
-						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index} state={state}>
+						<Quiz.AnswerButton key={index} index={index} state={state}>
 							{item.answer}
 						</Quiz.AnswerButton>
 					))}

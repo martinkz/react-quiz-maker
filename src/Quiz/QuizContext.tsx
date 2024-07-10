@@ -18,7 +18,7 @@ export enum QuizState {
 	RESULT = "result",
 }
 
-export type AnimationVariants = "slide" | "scale" | "custom";
+export type AnimationVariants = "slideUpDown" | "slideLeftRight" | "scale";
 
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
@@ -190,11 +190,11 @@ export const QuizProvider = ({
 		);
 	}
 
-	if (animation === "custom" && !motionObject) {
-		throw new Error(
-			"You selected a custom animation but did not provide a motion object. Please add a motionObject property to the config object."
-		);
-	}
+	// if (animation === "custom" && !motionObject) {
+	// 	throw new Error(
+	// 		"You selected a custom animation but did not provide a motion object. Please add a motionObject property to the config object."
+	// 	);
+	// }
 
 	if (answerExplainerOnNewPage && !showAnswerExplainer) {
 		throw new Error(
