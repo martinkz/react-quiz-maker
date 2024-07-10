@@ -34,7 +34,7 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					nextButton: true,
 					revealAnswer: true,
 					animation: "scale",
 					showAnswerExplainer: false,
