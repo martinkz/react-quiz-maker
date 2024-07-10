@@ -41,6 +41,8 @@ function App() {
 
 			{/* <div style={{ margin: "80px 0" }}></div> */}
 
+			<div style={{ margin: "80px 0" }}></div>
+
 			<QuizProvider
 				quizData={quizJson2}
 				config={{
