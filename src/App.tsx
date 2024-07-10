@@ -34,11 +34,11 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					nextButton: false,
 					revealAnswer: true,
-					animation: "slideUpDown",
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					animation: "scale",
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<MyQuiz />
@@ -47,14 +47,14 @@ function App() {
 			<div style={{ margin: "80px 0" }}></div>
 
 			<QuizProvider
-				quizData={quizJson2}
+				quizData={quizJson}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					nextButton: false,
 					revealAnswer: true,
 					animation: "scale",
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<Quiz />

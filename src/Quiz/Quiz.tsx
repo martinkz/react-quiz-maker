@@ -99,10 +99,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 							<QuestionPageComponent>
 								<AnimatePresence mode={animatePresenceMode}>
 									{!hideQuestionOnExplainer && (
-										<MotionWrapper motionProps={MotionSlide} key={currentQuestion + maxQuestions + 1}>
+										<MotionWrapper motionProps={MotionSlide} key={currentQuestion}>
 											{Body}
 										</MotionWrapper>
-										// <motion.div {...MotionSlide} key={currentQuestion + maxQuestions + 1}>
+										// <motion.div {...MotionSlide} key={currentQuestion}>
 										// 	{Body}
 										// </motion.div>
 									)}
@@ -203,7 +203,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 					<h2>Question {currentQuestion + 1}</h2>
 					<p>{currentQuestionData.question}</p>
 					{currentQuestionData.answers.map((item: any, index: number) => (
-						<Quiz.AnswerButton key={currentQuestionData.question + index} index={index} state={state}>
+						<Quiz.AnswerButton key={index} index={index} state={state}>
 							{item.answer}
 						</Quiz.AnswerButton>
 					))}

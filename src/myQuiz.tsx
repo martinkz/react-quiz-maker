@@ -68,7 +68,7 @@ function QuestionBody({
 			{currentQuestionData.answers.map((item: any, index: number) => (
 				<button
 					type="button"
-					key={currentQuestionData.question + index}
+					key={index}
 					onClick={() => handleAnswerBtnClick(index)}
 					style={{ background: btnColors[answerButtonState[index]] }}
 					{...answerBtnRequiredProps}
