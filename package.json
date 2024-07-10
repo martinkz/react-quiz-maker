@@ -1,15 +1,15 @@
 {
-	"name": "quizmaker",
+	"name": "react-quiz-maker",
 	"private": true,
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
-	"main": "./dist/quizmaker.umd.cjs",
-	"module": "./dist/quizmaker.js",
+	"main": "./dist/react-quiz-maker.umd.cjs",
+	"module": "./dist/react-quiz-maker.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/quizmaker.js",
-			"require": "./dist/quizmaker.umd.cjs",
+			"import": "./dist/react-quiz-maker.js",
+			"require": "./dist/react-quiz-maker.umd.cjs",
 			"types": "./dist/index.d.ts"
 		}
 	},

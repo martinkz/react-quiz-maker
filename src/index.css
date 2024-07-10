@@ -27,10 +27,11 @@ body {
 
 body {
 	margin: 0;
-	display: flex;
+	text-align: center;
+	/* display: flex;
 	justify-content: center;
 	align-items: center;
-	text-align: center;
+	text-align: center; */
 	min-width: 320px;
-	min-height: 100vh;
+	/* min-height: 100vh; */
 }

@@ -1,5 +1,5 @@
 import MyQuiz from "./myQuiz";
-import Quiz from "./Quiz/Quiz";
+import { Quiz } from "./Quiz/Quiz";
 import MyQuizComposed from "./myQuizComposed";
 import { QuizProvider } from "./Quiz/QuizContext";
 import quizJson from "./quizData.json";
@@ -15,28 +15,31 @@ const MotionSlideSideProps = {
 	initial: { opacity: 0, x: "-100px" },
 	animate: { opacity: 1, x: 0 },
 	transition: {
-		duration: 0.5,
+		duration: 0.6,
 	},
 	exit: { opacity: 0, x: "-100px" },
+	// transitionEnd: { visibility: "hidden" },
 };
 
 function App() {
 	return (
 		<>
-			<QuizProvider
+			{/* <QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
-					// revealAnswer: true,
+					nextButton: true,
+					revealAnswer: true,
 					animation: "custom",
 					motionObject: MotionSlideSideProps,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<MyQuizComposed />
-			</QuizProvider>
+			</QuizProvider> */}
+
+			{/* <div style={{ margin: "80px 0" }}></div> */}
 
 			<div style={{ margin: "80px 0" }}></div>
 
@@ -44,11 +47,13 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
-					revealAnswer: false,
+					nextButton: true,
+					revealAnswer: true,
 					animation: "slide",
+					// animation: "custom",
+					motionObject: MotionSlideSideProps,
 					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					answerExplainerOnNewPage: false,
 				}}
 			>
 				<MyQuiz />
@@ -60,12 +65,12 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					nextButton: true,
 					revealAnswer: true,
 					animation: "scale",
 					// motionObject: MotionSlideSideProps,
-					// showAnswerExplainer: true,
-					// answerExplainerOnNewPage: true,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
 				}}
 			>
 				<Quiz />
