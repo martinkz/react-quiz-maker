@@ -14,21 +14,21 @@ import quizJson2 from "./quizData2.json";
 function App() {
 	return (
 		<>
-			{/* <QuizProvider
+			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					nextButton: true,
 					revealAnswer: true,
 					animation: "slideUpDown",
-					showAnswerExplainer: false,
+					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
 				}}
 			>
 				<MyQuizComposed />
-			</QuizProvider> */}
+			</QuizProvider>
 
-			{/* <div style={{ margin: "80px 0" }}></div> */}
+			<div style={{ margin: "80px 0" }}></div>
 
 			<QuizProvider
 				quizData={quizJson2}

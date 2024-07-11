@@ -47,14 +47,6 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export const btnColors = {
-	[AnswerButtonState.UNSET]: "#222",
-	[AnswerButtonState.DEFAULT]: "#222",
-	[AnswerButtonState.SELECTED]: "blue",
-	[AnswerButtonState.CORRECT]: "green",
-	[AnswerButtonState.INCORRECT]: "red",
-};
-
 export interface QuizContextProps {
 	quizState: QuizState;
 	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;

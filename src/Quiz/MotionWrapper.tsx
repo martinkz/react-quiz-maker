@@ -22,7 +22,9 @@ export const MotionWrapper = forwardRef(function (
 	};
 	return (
 		<motion.div
-			ref={ref} // When ref is used animation is sometimes buggy?
+			// When ref is used animation is sometimes buggy? Seems to depend on the AnimationPresense mode
+			// Commenting out the ref seems to change whether the AnimationPresense mode (wrapping this component) is being used or not
+			ref={ref}
 			{...wrappers[animation!]}
 		>
 			{children}

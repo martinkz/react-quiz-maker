@@ -1,4 +1,12 @@
-import { btnColors, type QuizContextProps } from "./QuizContext";
+import { type QuizContextProps } from "./QuizContext";
+
+export const btnColors = {
+	unset: "#222",
+	default: "#222",
+	selected: "blue",
+	correct: "green",
+	incorrect: "red",
+};
 
 export function QuestionNextButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
 	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps } = state;

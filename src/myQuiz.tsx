@@ -2,7 +2,7 @@ import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { type QuizContextProps } from "./Quiz/QuizContext";
 
-export const btnColors = {
+const btnColors = {
 	unset: "#222",
 	default: "#222",
 	selected: "blue",
@@ -19,8 +19,8 @@ export default function MyQuiz() {
 				components={{
 					IntroPage,
 					QuestionWrapper,
-					QuestionPage,
 					QuestionHeader,
+					QuestionPage,
 					QuestionBody,
 					ExplainerPage,
 					ResultPage,
@@ -32,14 +32,14 @@ export default function MyQuiz() {
 
 function QuestionWrapper({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="question-wrap" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+		<div className="question-wrapper" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
 			{children}
 		</div>
 	);
 }
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
-	return <div className="question">{children}</div>;
+	return <div className="question-page">{children}</div>;
 }
 
 function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContextProps) {
@@ -88,7 +88,7 @@ function QuestionBody({
 
 function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: QuizContextProps) {
 	return (
-		<div className="explainer">
+		<div className="question-explainer">
 			<h2>Explainer</h2>
 			<p>{currentQuestionData.explanation}</p>
 			<button type="button" onClick={handleExplainerNextBtnClick}>
@@ -100,7 +100,7 @@ function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: Qui
 
 function IntroPage({ handleStartBtnClick }: QuizContextProps) {
 	return (
-		<div className="quiz-intro">
+		<div className="intro-page">
 			<p>Start the quiz</p>
 			<button type="button" onClick={handleStartBtnClick}>
 				Start quiz
@@ -111,7 +111,7 @@ function IntroPage({ handleStartBtnClick }: QuizContextProps) {
 
 function ResultPage({ handleStartBtnClick, result }: QuizContextProps) {
 	return (
-		<div className="quiz-result">
+		<div className="result-page">
 			<h1>
 				<em>Your results is: {result}</em>
 			</h1>
