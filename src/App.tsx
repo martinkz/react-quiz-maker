@@ -18,9 +18,9 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					nextButton: false,
 					revealAnswer: true,
-					animation: "slideUpDown",
+					animation: "disabled",
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
 				}}

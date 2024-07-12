@@ -16,5 +16,6 @@
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion) - what about index starting with 0?
-- Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
 - Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
+- Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
+- Add testing

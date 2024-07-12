@@ -20,16 +20,21 @@ export const MotionWrapper = forwardRef(function (
 		scale: MotionScale,
 		default: motionProps,
 	};
-	return (
-		<motion.div
-			// When ref is used animation is sometimes buggy? Seems to depend on the AnimationPresense mode
-			// Commenting out the ref seems to change whether the AnimationPresense mode (wrapping this component) is being used or not
-			ref={ref}
-			{...wrappers[animation!]}
-		>
-			{children}
-		</motion.div>
-	);
+
+	if (animation === "disabled") {
+		return <div>{children}</div>;
+	} else {
+		return (
+			<motion.div
+				// When ref is used animation is sometimes buggy? Seems to depend on the AnimationPresense mode
+				// Commenting out the ref seems to change whether the AnimationPresense mode (wrapping this component) is being used or not
+				ref={ref}
+				{...wrappers[animation!]}
+			>
+				{children}
+			</motion.div>
+		);
+	}
 });
 
 export const MotionSlide = {
