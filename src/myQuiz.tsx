@@ -79,7 +79,7 @@ function QuestionBody({
 			))}
 			<p>
 				<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
-					Next
+					Question Next
 				</button>
 			</p>
 		</div>
@@ -92,7 +92,7 @@ function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: Qui
 			<h2>Explainer</h2>
 			<p>{currentQuestionData.explanation}</p>
 			<button type="button" onClick={handleExplainerNextBtnClick}>
-				Next
+				Explainer Next
 			</button>
 		</div>
 	);

@@ -14,7 +14,7 @@ import quizJson2 from "./quizData2.json";
 function App() {
 	return (
 		<>
-			<QuizProvider
+			{/* <QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
@@ -44,16 +44,16 @@ function App() {
 				<MyQuiz />
 			</QuizProvider>
 
-			<div style={{ margin: "80px 0" }}></div>
+			<div style={{ margin: "80px 0" }}></div> */}
 
 			<QuizProvider
 				quizData={quizJson}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					nextButton: true,
 					revealAnswer: true,
-					animation: "scale",
-					showAnswerExplainer: false,
+					animation: "disabled",
+					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
 				}}
 			>

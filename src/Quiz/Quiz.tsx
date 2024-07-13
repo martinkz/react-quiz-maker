@@ -175,7 +175,7 @@ const IntroPage = ({ children, state }: { children?: React.ReactNode; state: Qui
 			{children || (
 				<div className="intro-page-default">
 					<h1>Welcome to the Quiz</h1>
-					<Quiz.StartButton state={state}>Start Quiz</Quiz.StartButton>
+					<Quiz.StartButton state={state}>Start quiz</Quiz.StartButton>
 				</div>
 			)}
 		</>
@@ -202,7 +202,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 					))}
 					{nextButton && (
 						<p>
-							<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
+							<Quiz.QuestionNextButton state={state}>Question Next</Quiz.QuestionNextButton>
 						</p>
 					)}
 				</div>
@@ -224,7 +224,7 @@ const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state:
 						<h1>Explainer</h1>
 						<p>{currentQuestionData.explanation}</p>
 						<p>
-							<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
+							<Quiz.ExplainerNextButton state={state}>Explainer Next</Quiz.ExplainerNextButton>
 						</p>
 					</>
 				</div>

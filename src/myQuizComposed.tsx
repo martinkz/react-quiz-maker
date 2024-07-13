@@ -33,14 +33,14 @@ export default function MyQuizComposed() {
 								</Quiz.AnswerButton>
 							))}
 							<p>
-								<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
+								<Quiz.QuestionNextButton state={state}>Question Next</Quiz.QuestionNextButton>
 							</p>
 						</Quiz.QuestionBody>
 						<Quiz.ExplainerPage state={state}>
 							<h1>Explainer Child</h1>
 							<p>{currentQuestionData.question}</p>
 							<p>
-								<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
+								<Quiz.ExplainerNextButton state={state}>Explainer Next</Quiz.ExplainerNextButton>
 							</p>
 						</Quiz.ExplainerPage>
 					</Quiz.QuestionPage>
