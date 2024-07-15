@@ -3,7 +3,6 @@
 - LOW PRIORITY: Fix myQuizComposed (try to pass classnames to wrapper components)
 - LOW PRIORITY: Expose entire animation component tree as a custom component so that users can provide their own motion wrappers and AnimatePresense values
 - TO CONFIRM THIS EXISTS IN REALISTIC USE CASE: Bug - potential bug when moving from explainer (on a new page) after the last question, to the Result slide. The explainer gets pushed down for some reason
-- TO CONFIRM THIS EXISTS IN REALISTIC USE CASE: Explainer Next button seems to be buggy, when autoResumeOnAnswer/nextButton is true, it advances the question but the quiz bugs out
 - TO CONFIRM THIS EXISTS IN REALISTIC USE CASE: If you click too quickly (during the transition between questions/explainer), the quiz bugs out. Add state to disable actions while in transition?
 - Document the various ways to configure the quiz - config object / quiz json
 - Add timer
@@ -20,5 +19,6 @@
 - Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
 - Add testing
 - Rename animations to slideLeft and slideUp
+- Rename showAnswerExplainer to explainer, rename answerExplainerOnNewPage to explainerNewPage
 - Fix Console error when using slideLeft animation
 - Find a way to use more accessible answer buttons (radio/checkboxes for single/multiple select), weigh against more complicated usage of own custom components

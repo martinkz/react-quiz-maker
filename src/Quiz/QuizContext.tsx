@@ -75,8 +75,6 @@ export interface QuizContextProps {
 	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 	explainerVisible: boolean;
 	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
-	explainerClosed: boolean;
-	setExplainerClosed: React.Dispatch<React.SetStateAction<boolean>>;
 	progress: number;
 }
 
@@ -109,8 +107,6 @@ const QuizContext = createContext<QuizContextProps>({
 	setAnswerButtonState: () => {},
 	explainerVisible: false,
 	setExplainerVisible: () => {},
-	explainerClosed: false,
-	setExplainerClosed: () => {},
 	progress: 0,
 });
 
@@ -134,9 +130,6 @@ export const QuizProvider = ({
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const [explainerVisible, setExplainerVisible] = useState(false);
-	// explainerClosed is used ot distinguish between the explainer not yet having been opened and the explainer already been closed,
-	// which is needed to decide whether to show the Next button for the question
-	const [explainerClosed, setExplainerClosed] = useState(false);
 	const currentQuestionData = quizData.questions[currentQuestion];
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
@@ -164,7 +157,8 @@ export const QuizProvider = ({
 	};
 	const questionNextBtnRequiredProps = {
 		disabled: currentAnswer === undefined,
-		style: { visibility: explainerVisible || explainerClosed ? "hidden" : "visible" },
+		// style: { visibility: explainerVisible || explainerClosed ? "hidden" : "visible" },
+		style: { visibility: explainerVisible ? "hidden" : "visible" },
 	};
 
 	if (!Object.values(QuizType).includes(quizType)) {
@@ -201,7 +195,6 @@ export const QuizProvider = ({
 		setCurrentAnswer(undefined);
 		setAnswerButtonState(initialAnswerButtonState);
 		setResult(null);
-		setExplainerClosed(false);
 	}
 
 	function handleAnswerBtnClick(index: number) {
@@ -262,7 +255,6 @@ export const QuizProvider = ({
 		const nextQuestion = currentQuestion + 1;
 		setCurrentQuestion(nextQuestion);
 		setCurrentAnswer(undefined);
-		setExplainerClosed(false);
 		const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
 			AnswerButtonState.UNSET
 		);
@@ -272,7 +264,6 @@ export const QuizProvider = ({
 	function handleExplainerNextBtnClick() {
 		handleAnswer(currentAnswer!);
 		setExplainerVisible(false);
-		setExplainerClosed(true);
 	}
 
 	function endQuiz(userAnswers: UserAnswer[]) {
@@ -316,8 +307,6 @@ export const QuizProvider = ({
 				setAnswerButtonState,
 				explainerVisible,
 				setExplainerVisible,
-				explainerClosed,
-				setExplainerClosed,
 				progress,
 			}}
 		>

@@ -26,7 +26,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 		components || {};
 
 	const state = useQuiz();
-	const { quizState, currentQuestion, maxQuestions, explainerVisible, explainerClosed, config } = state;
+	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = state;
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -34,7 +34,8 @@ export const Quiz = ({ components, children }: QuizProps) => {
 
 	const { animation, answerExplainerOnNewPage } = config;
 
-	const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
+	// const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
+	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
