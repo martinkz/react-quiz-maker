@@ -216,8 +216,11 @@ export const QuizProvider = ({
 			handleAnswer(theAnswer);
 		}
 		if (showAnswerExplainer && !explainerVisible && !nextButton) {
-			const delay = answerExplainerOnNewPage ? 1500 : 0;
-			setTimeout(() => setExplainerVisible(true), delay);
+			if (answerExplainerOnNewPage) {
+				setTimeout(() => setExplainerVisible(true), 1500);
+			} else {
+				setExplainerVisible(true);
+			}
 		}
 	}
 
@@ -236,16 +239,23 @@ export const QuizProvider = ({
 		const updatedUserAnswers = [...userAnswers, userAnswer];
 		setUserAnswers(updatedUserAnswers);
 
-		const delay =
-			// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && !nextButton)) ? 1500 : 0;
-			!showAnswerExplainer && !nextButton ? 1500 : 0;
+		const hasDelay = !showAnswerExplainer && !nextButton;
+		// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && !nextButton))
 
 		if (currentQuestion === maxQuestions - 1) {
-			setTimeout(() => endQuiz(updatedUserAnswers), delay);
+			if (hasDelay) {
+				setTimeout(() => endQuiz(updatedUserAnswers), 1500);
+			} else {
+				endQuiz(updatedUserAnswers);
+			}
 			return;
 		}
 
-		setTimeout(() => setUpNextQuestion(), delay);
+		if (hasDelay) {
+			setTimeout(() => setUpNextQuestion(), 1500);
+		} else {
+			setUpNextQuestion();
+		}
 	}
 
 	function setUpNextQuestion() {
