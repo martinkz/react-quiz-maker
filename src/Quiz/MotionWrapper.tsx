@@ -1,6 +1,24 @@
-import { motion, MotionProps } from "framer-motion";
+import { motion, AnimatePresence, MotionProps } from "framer-motion";
 import { forwardRef, ForwardedRef } from "react";
 import { useQuiz } from "./QuizContext";
+
+export const AnimatePresenceWithDisable = ({ children }: { children: React.ReactNode }) => {
+	const { config } = useQuiz();
+
+	if (!config) {
+		throw new Error("No config object provided");
+	}
+
+	const { animation = "default" } = config;
+	const animatePresenceMode = animation === "slideLeftRight" ? "popLayout" : "sync";
+	// const animatePresenceMode = "popLayout"; // sync seems to work better
+
+	if (animation === "disabled") {
+		return children;
+	} else {
+		return <AnimatePresence mode={animatePresenceMode}>{children}</AnimatePresence>;
+	}
+};
 
 export const MotionWrapper = forwardRef(function (
 	{ children, motionProps }: { children: React.ReactNode; motionProps?: MotionProps },
