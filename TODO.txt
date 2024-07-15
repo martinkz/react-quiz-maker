@@ -19,3 +19,6 @@
 - Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
 - Rename nextButton setting to autoResumeOnAnswer and add autoResumeDelay
 - Add testing
+- Rename animations to slideLeft and slideUp
+- Fix Console error when using slideLeft animation
+- Find a way to use more accessible answer buttons (radio/checkboxes for single/multiple select), weigh against more complicated usage of own custom components

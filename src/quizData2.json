@@ -4,7 +4,7 @@
 	"type": "scored",
 	"questions": [
 		{
-			"question": "Question - ReactJS is developed by _____?",
+			"question": "Question: Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
 			"questionType": "text",
 			"questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
 			"answerSelectionType": "single",
@@ -20,7 +20,7 @@
 			"point": "20"
 		},
 		{
-			"question": "Question - ReactJS is an MVC based framework?",
+			"question": "Question: ReactJS is an MVC based framework?",
 			"questionType": "text",
 			"answerSelectionType": "single",
 			"answers": [
@@ -33,21 +33,7 @@
 			"point": "10"
 		},
 		{
-			"question": "Question - Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-			"questionType": "photo",
-			"answerSelectionType": "single",
-			"answers": [
-				{ "answer": "Answer - This is a long answer", "result": "1" },
-				{ "answer": "Answer - This is a very long answer", "result": "0" },
-				{ "answer": "Answer - This is an even longer answer", "result": "0" }
-			],
-			"messageForCorrectAnswer": "Correct answer. Good job.",
-			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-			"explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-			"point": "20"
-		},
-		{
-			"question": "Question - What are the advantages of React JS?",
+			"question": "Question: What are the advantages of React JS?",
 			"questionType": "text",
 			"answerSelectionType": "multiple",
 			"answers": [

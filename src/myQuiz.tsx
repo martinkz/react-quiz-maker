@@ -78,8 +78,13 @@ function QuestionBody({
 				</button>
 			))}
 			<p>
-				<button type="button" onClick={handleQuestionNextBtnClick} {...questionNextBtnRequiredProps}>
-					Question Next
+				<button
+					data-testid="question-next"
+					type="button"
+					onClick={handleQuestionNextBtnClick}
+					{...questionNextBtnRequiredProps}
+				>
+					Next
 				</button>
 			</p>
 		</div>
@@ -91,8 +96,8 @@ function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: Qui
 		<div className="question-explainer">
 			<h2>Explainer</h2>
 			<p>{currentQuestionData.explanation}</p>
-			<button type="button" onClick={handleExplainerNextBtnClick}>
-				Explainer Next
+			<button data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
+				Next
 			</button>
 		</div>
 	);

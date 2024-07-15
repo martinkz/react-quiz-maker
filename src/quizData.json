@@ -4,7 +4,7 @@
 	"type": "personality",
 	"questions": [
 		{
-			"question": "Question: ReactJS is developed by _____?",
+			"question": "Question: Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
 			"questionType": "text",
 			"questionPic": "https://dummyimage.com/600x400/000/fff&text=X",
 			"answerSelectionType": "single",
@@ -29,19 +29,6 @@
 			"messageForCorrectAnswer": "Correct answer. Good job.",
 			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
 			"point": "10"
-		},
-		{
-			"question": "Question: Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-			"questionType": "photo",
-			"answerSelectionType": "single",
-			"answers": [
-				{ "answer": "Answer - This is a long answer", "result": "test" },
-				{ "answer": "Answer - This is a very long answer", "result": "0" },
-				{ "answer": "Answer - This is an even longer answer", "result": "0" }
-			],
-			"messageForCorrectAnswer": "Correct answer. Good job.",
-			"messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-			"point": "20"
 		},
 		{
 			"question": "Question: What are the advantages of React JS?",
