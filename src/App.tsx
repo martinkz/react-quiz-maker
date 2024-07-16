@@ -51,6 +51,7 @@ function App() {
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,
+					autoResumeDelay: 500,
 					revealAnswer: true,
 					showAnswerExplainer: false,
 					answerExplainerOnNewPage: false,

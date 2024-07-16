@@ -23,6 +23,7 @@ export type AnimationVariants = "slideUpDown" | "slideLeftRight" | "scale" | "di
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
 	autoResume?: boolean;
+	autoResumeDelay?: number;
 	revealAnswer?: boolean;
 	showAnswerExplainer?: boolean;
 	answerExplainerOnNewPage?: boolean;
@@ -142,6 +143,7 @@ export const QuizProvider = ({
 	const {
 		evalCustom,
 		autoResume,
+		autoResumeDelay = 1000,
 		animation,
 		motionObject,
 		revealAnswer,
@@ -210,7 +212,7 @@ export const QuizProvider = ({
 		}
 		if (showAnswerExplainer && !explainerVisible && autoResume) {
 			if (answerExplainerOnNewPage) {
-				setTimeout(() => setExplainerVisible(true), 1500);
+				setTimeout(() => setExplainerVisible(true), autoResumeDelay);
 			} else {
 				setExplainerVisible(true);
 			}
@@ -237,7 +239,7 @@ export const QuizProvider = ({
 
 		if (currentQuestion === maxQuestions - 1) {
 			if (hasDelay) {
-				setTimeout(() => endQuiz(updatedUserAnswers), 1500);
+				setTimeout(() => endQuiz(updatedUserAnswers), autoResumeDelay);
 			} else {
 				endQuiz(updatedUserAnswers);
 			}
@@ -245,7 +247,7 @@ export const QuizProvider = ({
 		}
 
 		if (hasDelay) {
-			setTimeout(() => setUpNextQuestion(), 1500);
+			setTimeout(() => setUpNextQuestion(), autoResumeDelay);
 		} else {
 			setUpNextQuestion();
 		}
