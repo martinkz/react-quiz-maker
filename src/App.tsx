@@ -53,7 +53,7 @@ function App() {
 					autoResume: true,
 					autoResumeDelay: 500,
 					revealAnswer: true,
-					showAnswerExplainer: false,
+					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
 					// animation: "slideLeftRight",
 				}}

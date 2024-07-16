@@ -1,4 +1,7 @@
-import { describe, it, test, expect, vi, beforeEach, afterEach } from "vitest";
+/* These are functional tests that cover a broad range 
+of the quiz functionality, though they do not cover 100% */
+
+import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitForElementToBeRemoved, waitFor, logRoles, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Quiz } from "../Quiz/Quiz";
@@ -8,14 +11,6 @@ import quizJson2 from "../quizData2.json";
 
 import { MotionGlobalConfig } from "framer-motion";
 MotionGlobalConfig.skipAnimations = true;
-
-const quizConfig = {
-	autoResume: true,
-	revealAnswer: true,
-	animation: "disabled", // Animation must be disabled for the tests to work
-	showAnswerExplainer: false,
-	answerExplainerOnNewPage: false,
-} as QuizConfig;
 
 // Extracting these here, as the markup is likely to change
 const q = {
@@ -31,6 +26,12 @@ const q = {
 	getPlayAgainBtn() {
 		return screen.getByRole("button", { name: /play again/i });
 	},
+	queryQuestionNextBtn() {
+		return screen.queryByTestId("question-next");
+	},
+	queryExplainerNextBtn() {
+		return screen.queryByTestId("explainer-next");
+	},
 };
 
 describe("Quiz", () => {
@@ -42,22 +43,37 @@ describe("Quiz", () => {
 		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
+
+	/* 
+		autoResume: true,
+		revealAnswer: true,
+		showAnswerExplainer: false,
+		answerExplainerOnNewPage: false, 
+	*/
+
 	test("Quiz completes successfully", async () => {
 		// const user = userEvent.setup();
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-		const { container } = render(
-			<QuizProvider quizData={quizJson2} config={quizConfig}>
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: true,
+					revealAnswer: true,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
+					animation: "disabled", // Animation must be disabled for the tests to work
+				}}
+			>
 				<Quiz />
 			</QuizProvider>
 		);
 		// logRoles(container);
 
-		// Button with text content "Start quiz" is found
 		const startBtn = q.getStartBtn();
 
 		await user.click(startBtn);
 
-		// Text content "Question 1" is found
 		q.getQuestionText(1);
 		// Buttons with text content "answer" are found
 		const firstQuestionAnswerBtns = q.getAnswerBtns();
@@ -83,7 +99,213 @@ describe("Quiz", () => {
 		await act(() => vi.runAllTimers());
 
 		q.getPlayAgainBtn();
+	});
 
-		// screen.debug();
+	/* 
+		autoResume: true,
+		revealAnswer: false,
+		showAnswerExplainer: false,
+		answerExplainerOnNewPage: false, 
+	*/
+
+	test("Quiz resumes automatically and doesn't contain a Next button", async () => {
+		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: true,
+					revealAnswer: false,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
+					animation: "disabled",
+				}}
+			>
+				<Quiz />
+			</QuizProvider>
+		);
+
+		const startBtn = q.getStartBtn();
+		await user.click(startBtn);
+
+		const firstQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(firstQuestionAnswerBtns[0]);
+
+		// The answer buttons are not disabled as revealAnswer is false (and explainer is not shown)
+		expect(firstQuestionAnswerBtns[0]).not.toBeDisabled();
+
+		// The Next button is not found as autoResume is true
+		expect(q.queryQuestionNextBtn()).not.toBeInTheDocument();
+
+		await act(() => vi.runAllTimers());
+
+		// The quiz advances to the next question automatically
+		q.getQuestionText(2);
+	});
+
+	/* 
+		autoResume: true,
+		revealAnswer: false,
+		showAnswerExplainer: true,
+		answerExplainerOnNewPage: false, 
+	*/
+
+	test("Quiz displays the explainer at the same time as the question and answer buttons are disabled", async () => {
+		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: true,
+					revealAnswer: false,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: false,
+					animation: "disabled",
+				}}
+			>
+				<Quiz />
+			</QuizProvider>
+		);
+
+		const startBtn = q.getStartBtn();
+		await user.click(startBtn);
+
+		const firstQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(firstQuestionAnswerBtns[0]);
+
+		// The copy for question 1 is still on the page, as we have the explainer on the same page
+		q.getQuestionText(1);
+
+		// The answer buttons are disabled despite revealAnswer being false, due to the explainer being shown automatically
+		expect(firstQuestionAnswerBtns[0]).toBeDisabled();
+
+		// The Next button is not found as autoResume is true
+		expect(q.queryQuestionNextBtn()).not.toBeInTheDocument();
+
+		// The explainer next button is found
+		expect(q.queryExplainerNextBtn()).toBeInTheDocument();
+
+		await user.click(q.queryExplainerNextBtn()!);
+
+		// autoResume is instant (no setTimeout is used), so we don't need to run timers
+		// await act(() => vi.runAllTimers());
+
+		// The quiz advances to the next question after we click the explainer next button
+		q.getQuestionText(2);
+	});
+
+	/* 
+		autoResume: false,
+		revealAnswer: false,
+		showAnswerExplainer: true,
+		answerExplainerOnNewPage: false, 
+	*/
+
+	test("Quiz displays the explainer on the same page, but the next button is hidden due to autoResume being false", async () => {
+		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: false,
+					revealAnswer: false,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: false,
+					animation: "disabled",
+				}}
+			>
+				<Quiz />
+			</QuizProvider>
+		);
+
+		const startBtn = q.getStartBtn();
+		await user.click(startBtn);
+
+		const firstQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(firstQuestionAnswerBtns[0]);
+
+		// The copy for question 1 is still on the page, as we have the explainer on the same page
+		q.getQuestionText(1);
+
+		// The answer buttons are not disabled as revealAnswer is false (and explainer is not shown yet)
+		expect(firstQuestionAnswerBtns[0]).not.toBeDisabled();
+
+		// The Next button is found as autoResume is false
+		expect(q.queryQuestionNextBtn()).toBeInTheDocument();
+
+		// The explainer next button is not found (yet)
+		expect(q.queryExplainerNextBtn()).not.toBeInTheDocument();
+
+		await user.click(q.queryQuestionNextBtn()!);
+
+		// The explainer next button is now found, after we clicked next
+		expect(q.queryExplainerNextBtn()).toBeInTheDocument();
+
+		// Answer buttons are now disabled, as we have shown the explainer
+		expect(firstQuestionAnswerBtns[0]).toBeDisabled();
+
+		// The Next button is hidden after we show the explainer
+		expect(q.queryQuestionNextBtn()).not.toBeVisible();
+
+		await user.click(q.queryExplainerNextBtn()!);
+
+		// The quiz advances to the next question after we click the explainer next button
+		q.getQuestionText(2);
+	});
+
+	/* 
+		autoResume: false,
+		revealAnswer: false,
+		showAnswerExplainer: true,
+		answerExplainerOnNewPage: true, 
+	*/
+
+	test("Quiz displays the explainer on a new page", async () => {
+		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: false,
+					revealAnswer: false,
+					showAnswerExplainer: true,
+					answerExplainerOnNewPage: true,
+					animation: "disabled",
+				}}
+			>
+				<Quiz />
+			</QuizProvider>
+		);
+
+		const startBtn = q.getStartBtn();
+		await user.click(startBtn);
+
+		const firstQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(firstQuestionAnswerBtns[0]);
+
+		// The copy for question 1 is still on the page, as autoResume is false
+		q.getQuestionText(1);
+
+		// The answer buttons are not disabled as revealAnswer is false (and explainer is not shown on this page)
+		expect(firstQuestionAnswerBtns[0]).not.toBeDisabled();
+
+		// The Next button is found as autoResume is false
+		expect(q.queryQuestionNextBtn()).toBeInTheDocument();
+
+		// The explainer next button is not found (yet)
+		expect(q.queryExplainerNextBtn()).not.toBeInTheDocument();
+
+		await user.click(q.queryQuestionNextBtn()!);
+
+		// The explainer next button is now found, after we clicked next
+		expect(q.queryExplainerNextBtn()).toBeInTheDocument();
+
+		// The Next button is not found after we show the explainer on a new page
+		expect(q.queryQuestionNextBtn()).not.toBeInTheDocument();
+
+		await user.click(q.queryExplainerNextBtn()!);
+
+		// The quiz advances to the next question after we click the explainer next button
+		q.getQuestionText(2);
 	});
 });
