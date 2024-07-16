@@ -172,7 +172,7 @@ const IntroPage = ({ children, state }: { children?: React.ReactNode; state: Qui
 		<>
 			{children || (
 				<div className="intro-page-default">
-					{/* <h1>Welcome to the Quiz</h1> */}
+					<h1>Welcome to the Quiz</h1>
 					<Quiz.StartButton state={state}>Start quiz</Quiz.StartButton>
 				</div>
 			)}
@@ -185,7 +185,7 @@ Quiz.IntroPage = IntroPage;
 
 const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
 	const { config, currentQuestion, currentQuestionData } = state;
-	const { nextButton } = config || {};
+	const { autoResume } = config || {};
 
 	return (
 		<>
@@ -202,7 +202,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 						// 	<label htmlFor={item.answer}>{item.answer}</label>
 						// </span>
 					))}
-					{nextButton && (
+					{!autoResume && (
 						<p>
 							<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 						</p>

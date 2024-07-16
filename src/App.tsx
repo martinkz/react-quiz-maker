@@ -18,7 +18,7 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: false,
+					autoResume: false,
 					revealAnswer: true,
 					animation: "disabled",
 					showAnswerExplainer: true,
@@ -34,7 +34,7 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
+					autoResume: true,
 					revealAnswer: false,
 					showAnswerExplainer: true,
 					answerExplainerOnNewPage: false,
@@ -50,10 +50,10 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					nextButton: true,
-					revealAnswer: false,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: true,
+					autoResume: true,
+					revealAnswer: true,
+					showAnswerExplainer: false,
+					answerExplainerOnNewPage: false,
 					// animation: "slideLeftRight",
 				}}
 			>

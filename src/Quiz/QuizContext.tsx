@@ -22,7 +22,7 @@ export type AnimationVariants = "slideUpDown" | "slideLeftRight" | "scale" | "di
 
 export type QuizConfig = {
 	evalCustom?: EvalFunction;
-	nextButton?: boolean;
+	autoResume?: boolean;
 	revealAnswer?: boolean;
 	showAnswerExplainer?: boolean;
 	answerExplainerOnNewPage?: boolean;
@@ -141,7 +141,7 @@ export const QuizProvider = ({
 
 	const {
 		evalCustom,
-		nextButton,
+		autoResume,
 		animation,
 		motionObject,
 		revealAnswer,
@@ -205,10 +205,10 @@ export const QuizProvider = ({
 		setAnswerButtonState(answerButtonsUpdatedState);
 		// Only handle the answer if we're not using a next button and not showing the explainer.
 		// Otherwise the answer will be handled by the next button
-		if (!nextButton && !showAnswerExplainer) {
+		if (autoResume && !showAnswerExplainer) {
 			handleAnswer(theAnswer);
 		}
-		if (showAnswerExplainer && !explainerVisible && !nextButton) {
+		if (showAnswerExplainer && !explainerVisible && autoResume) {
 			if (answerExplainerOnNewPage) {
 				setTimeout(() => setExplainerVisible(true), 1500);
 			} else {
@@ -232,8 +232,8 @@ export const QuizProvider = ({
 		const updatedUserAnswers = [...userAnswers, userAnswer];
 		setUserAnswers(updatedUserAnswers);
 
-		const hasDelay = !showAnswerExplainer && !nextButton;
-		// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && !nextButton))
+		const hasDelay = !showAnswerExplainer && autoResume;
+		// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && autoResume))
 
 		if (currentQuestion === maxQuestions - 1) {
 			if (hasDelay) {

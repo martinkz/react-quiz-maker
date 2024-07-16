@@ -10,13 +10,14 @@ import { MotionGlobalConfig } from "framer-motion";
 MotionGlobalConfig.skipAnimations = true;
 
 const quizConfig = {
-	nextButton: false,
+	autoResume: true,
 	revealAnswer: true,
 	animation: "disabled", // Animation must be disabled for the tests to work
 	showAnswerExplainer: false,
 	answerExplainerOnNewPage: false,
 } as QuizConfig;
 
+// Extracting these here, as the markup is likely to change
 const q = {
 	getStartBtn() {
 		return screen.getByRole("button", { name: /start quiz/i });
