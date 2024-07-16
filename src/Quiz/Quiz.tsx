@@ -32,7 +32,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 		throw new Error("No config object provided");
 	}
 
-	const { animation, answerExplainerOnNewPage } = config;
+	const { answerExplainerOnNewPage } = config;
 
 	// const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
 	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
@@ -77,36 +77,38 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && (
-					<QuestionWrapperComponent>
-						{/* <motion.div key={-2} {...MotionSlide}>
+					<MotionWrapper key={-2}>
+						<QuestionWrapperComponent>
+							{/* <motion.div key={-3} {...MotionSlide}>
 							{Header}
 						</motion.div> */}
-						<MotionWrapper motionProps={MotionSlide} key={-2}>
-							{Header}
-						</MotionWrapper>
-						<MotionWrapper motionProps={MotionSlide} key={-3}>
-							<QuestionPageComponent>
-								<AnimatePresenceWithDisable>
-									{!hideQuestionOnExplainer && (
-										<MotionWrapper motionProps={MotionSlide} key={currentQuestion}>
-											{Body}
-										</MotionWrapper>
-										// <motion.div {...MotionSlide} key={currentQuestion}>
-										// 	{Body}
-										// </motion.div>
-									)}
-									{explainerVisible && (
-										<MotionWrapper motionProps={MotionScale} key={-4}>
-											{Explainer}
-										</MotionWrapper>
-										// <motion.div {...MotionScale} key={-4}>
-										// 	{Explainer}
-										// </motion.div>
-									)}
-								</AnimatePresenceWithDisable>
-							</QuestionPageComponent>
-						</MotionWrapper>
-					</QuestionWrapperComponent>
+							<MotionWrapper motionProps={MotionSlide} key={-3}>
+								{Header}
+							</MotionWrapper>
+							<MotionWrapper motionProps={MotionSlide} key={-4}>
+								<QuestionPageComponent>
+									<AnimatePresenceWithDisable>
+										{!hideQuestionOnExplainer && (
+											<MotionWrapper motionProps={MotionSlide} key={currentQuestion}>
+												{Body}
+											</MotionWrapper>
+											// <motion.div {...MotionSlide} key={currentQuestion}>
+											// 	{Body}
+											// </motion.div>
+										)}
+										{explainerVisible && (
+											<MotionWrapper motionProps={MotionScale} key={-5}>
+												{Explainer}
+											</MotionWrapper>
+											// <motion.div {...MotionScale} key={-5}>
+											// 	{Explainer}
+											// </motion.div>
+										)}
+									</AnimatePresenceWithDisable>
+								</QuestionPageComponent>
+							</MotionWrapper>
+						</QuestionWrapperComponent>
+					</MotionWrapper>
 				)}
 
 				{quizState === QuizState.RESULT && (
@@ -170,7 +172,7 @@ const IntroPage = ({ children, state }: { children?: React.ReactNode; state: Qui
 		<>
 			{children || (
 				<div className="intro-page-default">
-					<h1>Welcome to the Quiz</h1>
+					{/* <h1>Welcome to the Quiz</h1> */}
 					<Quiz.StartButton state={state}>Start quiz</Quiz.StartButton>
 				</div>
 			)}
