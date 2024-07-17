@@ -26,7 +26,7 @@ export type QuizConfig = {
 	autoResumeDelay?: number;
 	revealAnswer?: boolean;
 	explainerEnabled?: boolean;
-	answerExplainerOnNewPage?: boolean;
+	explainerNewPage?: boolean;
 	animation?: AnimationVariants;
 	motionObject?: HTMLMotionProps<"div">;
 };
@@ -138,7 +138,7 @@ export const QuizProvider = ({
 	// console.log("QuizProvider: ", config);
 
 	// config.animation = config?.animation || "scale"; // Provide config default
-	config.answerExplainerOnNewPage = config?.answerExplainerOnNewPage || false;
+	config.explainerNewPage = config?.explainerNewPage || false;
 
 	const {
 		evalCustom,
@@ -148,7 +148,7 @@ export const QuizProvider = ({
 		motionObject,
 		revealAnswer,
 		explainerEnabled,
-		answerExplainerOnNewPage,
+		explainerNewPage,
 	} = config || {};
 
 	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
@@ -184,9 +184,9 @@ export const QuizProvider = ({
 	// 	);
 	// }
 
-	if (answerExplainerOnNewPage && !explainerEnabled) {
+	if (explainerNewPage && !explainerEnabled) {
 		throw new Error(
-			"You set answerExplainerOnNewPage to true but explainerEnabled is false. Please set explainerEnabled to true to display it."
+			"You set explainerNewPage to true but explainerEnabled is false. Please set explainerEnabled to true to display it."
 		);
 	}
 
@@ -211,7 +211,7 @@ export const QuizProvider = ({
 			handleAnswer(theAnswer);
 		}
 		if (explainerEnabled && !explainerVisible && autoResume) {
-			if (answerExplainerOnNewPage) {
+			if (explainerNewPage) {
 				setTimeout(() => setExplainerVisible(true), autoResumeDelay);
 			} else {
 				setExplainerVisible(true);

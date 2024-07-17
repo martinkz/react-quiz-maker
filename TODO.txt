@@ -16,4 +16,4 @@
 - Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion) - what about index starting with 0?
 - Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
 - Rename animations to slideLeft and slideUp
-- Rename explainerEnabled to explainer, rename answerExplainerOnNewPage to explainerNewPage
+

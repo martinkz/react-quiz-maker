@@ -22,7 +22,7 @@ function App() {
 					revealAnswer: true,
 					animation: "disabled",
 					explainerEnabled: true,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 				}}
 			>
 				<MyQuizComposed />
@@ -37,7 +37,7 @@ function App() {
 					autoResume: true,
 					revealAnswer: false,
 					explainerEnabled: true,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 					animation: "slideLeftRight",
 				}}
 			>
@@ -54,7 +54,7 @@ function App() {
 					autoResumeDelay: 500,
 					revealAnswer: true,
 					explainerEnabled: true,
-					answerExplainerOnNewPage: true,
+					explainerNewPage: true,
 					// animation: "slideLeftRight",
 				}}
 			>

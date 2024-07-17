@@ -48,7 +48,7 @@ describe("Quiz", () => {
 		autoResume: true,
 		revealAnswer: true,
 		explainerEnabled: false,
-		answerExplainerOnNewPage: false, 
+		explainerNewPage: false, 
 	*/
 
 	test("Quiz completes successfully", async () => {
@@ -61,7 +61,7 @@ describe("Quiz", () => {
 					autoResume: true,
 					revealAnswer: true,
 					explainerEnabled: false,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 					animation: "disabled", // Animation must be disabled for the tests to work
 				}}
 			>
@@ -105,7 +105,7 @@ describe("Quiz", () => {
 		autoResume: true,
 		revealAnswer: false,
 		explainerEnabled: false,
-		answerExplainerOnNewPage: false, 
+		explainerNewPage: false, 
 	*/
 
 	test("Quiz resumes automatically and doesn't contain a Next button", async () => {
@@ -117,7 +117,7 @@ describe("Quiz", () => {
 					autoResume: true,
 					revealAnswer: false,
 					explainerEnabled: false,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 					animation: "disabled",
 				}}
 			>
@@ -147,7 +147,7 @@ describe("Quiz", () => {
 		autoResume: true,
 		revealAnswer: false,
 		explainerEnabled: true,
-		answerExplainerOnNewPage: false, 
+		explainerNewPage: false, 
 	*/
 
 	test("Quiz displays the explainer at the same time as the question and answer buttons are disabled", async () => {
@@ -159,7 +159,7 @@ describe("Quiz", () => {
 					autoResume: true,
 					revealAnswer: false,
 					explainerEnabled: true,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 					animation: "disabled",
 				}}
 			>
@@ -198,7 +198,7 @@ describe("Quiz", () => {
 		autoResume: false,
 		revealAnswer: false,
 		explainerEnabled: true,
-		answerExplainerOnNewPage: false, 
+		explainerNewPage: false, 
 	*/
 
 	test("Quiz displays the explainer on the same page, but the next button is hidden due to autoResume being false", async () => {
@@ -210,7 +210,7 @@ describe("Quiz", () => {
 					autoResume: false,
 					revealAnswer: false,
 					explainerEnabled: true,
-					answerExplainerOnNewPage: false,
+					explainerNewPage: false,
 					animation: "disabled",
 				}}
 			>
@@ -257,7 +257,7 @@ describe("Quiz", () => {
 		autoResume: false,
 		revealAnswer: false,
 		explainerEnabled: true,
-		answerExplainerOnNewPage: true, 
+		explainerNewPage: true, 
 	*/
 
 	test("Quiz displays the explainer on a new page", async () => {
@@ -269,7 +269,7 @@ describe("Quiz", () => {
 					autoResume: false,
 					revealAnswer: false,
 					explainerEnabled: true,
-					answerExplainerOnNewPage: true,
+					explainerNewPage: true,
 					animation: "disabled",
 				}}
 			>

@@ -32,10 +32,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 		throw new Error("No config object provided");
 	}
 
-	const { answerExplainerOnNewPage } = config;
+	const { explainerNewPage } = config;
 
-	// const hideQuestionOnExplainer = answerExplainerOnNewPage && (explainerVisible || explainerClosed);
-	const hideQuestionOnExplainer = answerExplainerOnNewPage && explainerVisible;
+	// const hideQuestionOnExplainer = explainerNewPage && (explainerVisible || explainerClosed);
+	const hideQuestionOnExplainer = explainerNewPage && explainerVisible;
 
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
