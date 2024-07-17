@@ -53,10 +53,8 @@ export interface QuizContextProps {
 	currentQuestion: any;
 	currentAnswer: UserAnswer | undefined;
 	result: QuizResult;
-	// setResult: React.Dispatch<React.SetStateAction<QuizResult>>;
 	maxQuestions: number;
 	quizType: QuizType;
-	handleAnswer: (userAnswer: UserAnswer) => void;
 	handleAnswerBtnClick: (index: number) => void;
 	// The below type needs to be updated to hold attributes for HTML elements through passing a generic type
 	answerBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
@@ -80,7 +78,6 @@ const QuizContext = createContext<QuizContextProps>({
 	result: null,
 	maxQuestions: 0,
 	quizType: QuizType.SCORED,
-	handleAnswer: () => {},
 	handleAnswerBtnClick: () => {},
 	answerBtnRequiredProps: {},
 	handleQuestionNextBtnClick: () => {},
@@ -194,7 +191,7 @@ export const QuizProvider = ({
 		// Only handle the answer if we're not using a next button and not showing the explainer.
 		// Otherwise the answer will be handled by the next button
 		if (autoResume && !explainerEnabled) {
-			handleAnswer(theAnswer);
+			processAnswer(theAnswer);
 		}
 		if (explainerEnabled && !explainerVisible && autoResume) {
 			if (explainerNewPage) {
@@ -210,13 +207,13 @@ export const QuizProvider = ({
 			if (explainerEnabled && !explainerVisible) {
 				setExplainerVisible(true);
 			} else {
-				handleAnswer(currentAnswer);
+				processAnswer(currentAnswer);
 				setExplainerVisible(false);
 			}
 		}
 	}
 
-	function handleAnswer(userAnswer: UserAnswer) {
+	function processAnswer(userAnswer: UserAnswer) {
 		const updatedUserAnswers = [...userAnswers, userAnswer];
 		setUserAnswers(updatedUserAnswers);
 
@@ -250,7 +247,7 @@ export const QuizProvider = ({
 	}
 
 	function handleExplainerNextBtnClick() {
-		handleAnswer(currentAnswer!);
+		processAnswer(currentAnswer!);
 		setExplainerVisible(false);
 	}
 
@@ -276,7 +273,6 @@ export const QuizProvider = ({
 				maxQuestions,
 				currentAnswer,
 				result,
-				handleAnswer,
 				handleAnswerBtnClick,
 				answerBtnRequiredProps,
 				handleQuestionNextBtnClick,
