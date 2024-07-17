@@ -47,7 +47,7 @@ describe("Quiz", () => {
 	/* 
 		autoResume: true,
 		revealAnswer: true,
-		showAnswerExplainer: false,
+		explainerEnabled: false,
 		answerExplainerOnNewPage: false, 
 	*/
 
@@ -60,7 +60,7 @@ describe("Quiz", () => {
 				config={{
 					autoResume: true,
 					revealAnswer: true,
-					showAnswerExplainer: false,
+					explainerEnabled: false,
 					answerExplainerOnNewPage: false,
 					animation: "disabled", // Animation must be disabled for the tests to work
 				}}
@@ -104,7 +104,7 @@ describe("Quiz", () => {
 	/* 
 		autoResume: true,
 		revealAnswer: false,
-		showAnswerExplainer: false,
+		explainerEnabled: false,
 		answerExplainerOnNewPage: false, 
 	*/
 
@@ -116,7 +116,7 @@ describe("Quiz", () => {
 				config={{
 					autoResume: true,
 					revealAnswer: false,
-					showAnswerExplainer: false,
+					explainerEnabled: false,
 					answerExplainerOnNewPage: false,
 					animation: "disabled",
 				}}
@@ -146,7 +146,7 @@ describe("Quiz", () => {
 	/* 
 		autoResume: true,
 		revealAnswer: false,
-		showAnswerExplainer: true,
+		explainerEnabled: true,
 		answerExplainerOnNewPage: false, 
 	*/
 
@@ -158,7 +158,7 @@ describe("Quiz", () => {
 				config={{
 					autoResume: true,
 					revealAnswer: false,
-					showAnswerExplainer: true,
+					explainerEnabled: true,
 					answerExplainerOnNewPage: false,
 					animation: "disabled",
 				}}
@@ -197,7 +197,7 @@ describe("Quiz", () => {
 	/* 
 		autoResume: false,
 		revealAnswer: false,
-		showAnswerExplainer: true,
+		explainerEnabled: true,
 		answerExplainerOnNewPage: false, 
 	*/
 
@@ -209,7 +209,7 @@ describe("Quiz", () => {
 				config={{
 					autoResume: false,
 					revealAnswer: false,
-					showAnswerExplainer: true,
+					explainerEnabled: true,
 					answerExplainerOnNewPage: false,
 					animation: "disabled",
 				}}
@@ -256,7 +256,7 @@ describe("Quiz", () => {
 	/* 
 		autoResume: false,
 		revealAnswer: false,
-		showAnswerExplainer: true,
+		explainerEnabled: true,
 		answerExplainerOnNewPage: true, 
 	*/
 
@@ -268,7 +268,7 @@ describe("Quiz", () => {
 				config={{
 					autoResume: false,
 					revealAnswer: false,
-					showAnswerExplainer: true,
+					explainerEnabled: true,
 					answerExplainerOnNewPage: true,
 					animation: "disabled",
 				}}

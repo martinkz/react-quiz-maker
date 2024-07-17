@@ -25,7 +25,7 @@ export type QuizConfig = {
 	autoResume?: boolean;
 	autoResumeDelay?: number;
 	revealAnswer?: boolean;
-	showAnswerExplainer?: boolean;
+	explainerEnabled?: boolean;
 	answerExplainerOnNewPage?: boolean;
 	animation?: AnimationVariants;
 	motionObject?: HTMLMotionProps<"div">;
@@ -147,7 +147,7 @@ export const QuizProvider = ({
 		animation,
 		motionObject,
 		revealAnswer,
-		showAnswerExplainer,
+		explainerEnabled,
 		answerExplainerOnNewPage,
 	} = config || {};
 
@@ -184,9 +184,9 @@ export const QuizProvider = ({
 	// 	);
 	// }
 
-	if (answerExplainerOnNewPage && !showAnswerExplainer) {
+	if (answerExplainerOnNewPage && !explainerEnabled) {
 		throw new Error(
-			"You set answerExplainerOnNewPage to true but showAnswerExplainer is false. Please set showAnswerExplainer to true to display it."
+			"You set answerExplainerOnNewPage to true but explainerEnabled is false. Please set explainerEnabled to true to display it."
 		);
 	}
 
@@ -207,10 +207,10 @@ export const QuizProvider = ({
 		setAnswerButtonState(answerButtonsUpdatedState);
 		// Only handle the answer if we're not using a next button and not showing the explainer.
 		// Otherwise the answer will be handled by the next button
-		if (autoResume && !showAnswerExplainer) {
+		if (autoResume && !explainerEnabled) {
 			handleAnswer(theAnswer);
 		}
-		if (showAnswerExplainer && !explainerVisible && autoResume) {
+		if (explainerEnabled && !explainerVisible && autoResume) {
 			if (answerExplainerOnNewPage) {
 				setTimeout(() => setExplainerVisible(true), autoResumeDelay);
 			} else {
@@ -221,7 +221,7 @@ export const QuizProvider = ({
 
 	function handleQuestionNextBtnClick() {
 		if (currentAnswer) {
-			if (showAnswerExplainer && !explainerVisible) {
+			if (explainerEnabled && !explainerVisible) {
 				setExplainerVisible(true);
 			} else {
 				handleAnswer(currentAnswer);
@@ -234,8 +234,8 @@ export const QuizProvider = ({
 		const updatedUserAnswers = [...userAnswers, userAnswer];
 		setUserAnswers(updatedUserAnswers);
 
-		const hasDelay = !showAnswerExplainer && autoResume;
-		// revealAnswer && ((showAnswerExplainer && !explainerVisible) || (!showAnswerExplainer && autoResume))
+		const hasDelay = !explainerEnabled && autoResume;
+		// revealAnswer && ((explainerEnabled && !explainerVisible) || (!explainerEnabled && autoResume))
 
 		if (currentQuestion === maxQuestions - 1) {
 			if (hasDelay) {

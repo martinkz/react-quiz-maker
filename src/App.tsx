@@ -21,7 +21,7 @@ function App() {
 					autoResume: false,
 					revealAnswer: true,
 					animation: "disabled",
-					showAnswerExplainer: true,
+					explainerEnabled: true,
 					answerExplainerOnNewPage: false,
 				}}
 			>
@@ -30,19 +30,19 @@ function App() {
 
 			<div style={{ margin: "80px 0" }}></div> */}
 
-			{/* <QuizProvider
+			<QuizProvider
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,
 					revealAnswer: false,
-					showAnswerExplainer: true,
+					explainerEnabled: true,
 					answerExplainerOnNewPage: false,
 					animation: "slideLeftRight",
 				}}
 			>
 				<MyQuiz />
-			</QuizProvider> */}
+			</QuizProvider>
 
 			<div style={{ margin: "80px 0" }}></div>
 
@@ -50,11 +50,11 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					autoResume: true,
+					autoResume: false,
 					autoResumeDelay: 500,
 					revealAnswer: true,
-					showAnswerExplainer: true,
-					answerExplainerOnNewPage: false,
+					explainerEnabled: true,
+					answerExplainerOnNewPage: true,
 					// animation: "slideLeftRight",
 				}}
 			>
