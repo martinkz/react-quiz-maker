@@ -152,8 +152,8 @@ export const QuizProvider = ({
 	} = config || {};
 
 	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
-	const answerBtnStateIsSet = currentAnswer !== undefined;
-	const isAnswerBtnDisabled = answerBtnStateIsSet && (showCorrectAnswer || explainerVisible);
+	const isAnswerBtnStateSet = currentAnswer !== undefined;
+	const isAnswerBtnDisabled = isAnswerBtnStateSet && (showCorrectAnswer || explainerVisible);
 	const answerBtnRequiredProps = {
 		disabled: isAnswerBtnDisabled,
 	};
