@@ -14,5 +14,4 @@
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
-- Combine currentQuestion and currentQuestionData (add index to currentQuestionData and rename to currentQuestion) - what about index starting with 0?
-- Use 'is' prefix for boolean values, e.g. isAnswerBtnDisabled
+- Review whether QuizContext is exporting anything not used outside QuizContext

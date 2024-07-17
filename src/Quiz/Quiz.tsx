@@ -89,10 +89,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 								<QuestionPageComponent>
 									<AnimatePresenceWithDisable>
 										{!hideQuestionOnExplainer && (
-											<MotionWrapper motionProps={MotionSlideUp} key={currentQuestion}>
+											<MotionWrapper motionProps={MotionSlideUp} key={currentQuestion.index}>
 												{Body}
 											</MotionWrapper>
-											// <motion.div {...MotionSlideUp} key={currentQuestion}>
+											// <motion.div {...MotionSlideUp} key={currentQuestion.index}>
 											// 	{Body}
 											// </motion.div>
 										)}
@@ -184,16 +184,16 @@ IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
-	const { config, currentQuestion, currentQuestionData } = state;
+	const { config, currentQuestion } = state;
 	const { autoResume } = config || {};
 
 	return (
 		<>
 			{children || (
 				<div className="question-body-default">
-					<h2>Question {currentQuestion + 1}</h2>
-					<p>{currentQuestionData.question}</p>
-					{currentQuestionData.answers.map((item: any, index: number) => (
+					<h2>Question {currentQuestion.index}</h2>
+					<p>{currentQuestion.question}</p>
+					{currentQuestion.answers.map((item: any, index: number) => (
 						<Quiz.AnswerButton key={index} index={index} state={state}>
 							{item.answer}
 						</Quiz.AnswerButton>
@@ -217,14 +217,14 @@ QuestionBody.displayName = "QuestionBody";
 Quiz.QuestionBody = QuestionBody;
 
 const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
-	const { currentQuestionData } = state;
+	const { currentQuestion } = state;
 	return (
 		<>
 			{children || (
 				<div className="question-explainer-default">
 					<>
 						<h1>Explainer</h1>
-						<p>{currentQuestionData.explanation}</p>
+						<p>{currentQuestion.explanation}</p>
 						<p>
 							<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
 						</p>

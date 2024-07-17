@@ -45,7 +45,7 @@ function QuestionPage({ children }: { children: React.ReactNode }) {
 function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContextProps) {
 	return (
 		<div className="question-header">
-			<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`}</h4>
+			<h4>{`${currentQuestion.index} / ${maxQuestions} - ${progress}%`}</h4>
 			<progress className={styles.progress} max="100" value={progress}></progress>
 		</div>
 	);
@@ -53,7 +53,6 @@ function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContext
 
 function QuestionBody({
 	currentQuestion,
-	currentQuestionData,
 	answerButtonState,
 	handleAnswerBtnClick,
 	answerBtnRequiredProps,
@@ -63,9 +62,9 @@ function QuestionBody({
 	return (
 		<div className="question-body">
 			<h2>
-				Question {currentQuestionData.question} - {currentQuestion}
+				{currentQuestion.question} - {currentQuestion.index}
 			</h2>
-			{currentQuestionData.answers.map((item: any, index: number) => (
+			{currentQuestion.answers.map((item: any, index: number) => (
 				<button
 					type="button"
 					key={index}
@@ -91,11 +90,11 @@ function QuestionBody({
 	);
 }
 
-function ExplainerPage({ currentQuestionData, handleExplainerNextBtnClick }: QuizContextProps) {
+function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick }: QuizContextProps) {
 	return (
 		<div className="question-explainer">
 			<h2>Explainer</h2>
-			<p>{currentQuestionData.explanation}</p>
+			<p>{currentQuestion.explanation}</p>
 			<button data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
 				Next
 			</button>

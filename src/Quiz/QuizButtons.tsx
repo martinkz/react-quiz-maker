@@ -52,12 +52,12 @@ export function AnswerButton({
 	index: number;
 	state: QuizContextProps;
 }) {
-	const { currentQuestionData, currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;
+	const { currentQuestion, currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;
 
 	return (
 		<button
 			type="button"
-			key={currentQuestionData.question + index}
+			key={currentQuestion.question + index}
 			onClick={() => handleAnswerBtnClick(index)}
 			style={{ background: btnColors[answerButtonState[index]] }}
 			aria-pressed={currentAnswer?.index === index}

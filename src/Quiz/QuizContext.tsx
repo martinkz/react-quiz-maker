@@ -51,8 +51,7 @@ export type QuizResult = number | string | null;
 export interface QuizContextProps {
 	quizState: QuizState;
 	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
-	currentQuestion: number;
-	setCurrentQuestion: React.Dispatch<React.SetStateAction<number>>;
+	currentQuestion: any;
 	userAnswers: Array<UserAnswer>;
 	setUserAnswers: React.Dispatch<React.SetStateAction<Array<UserAnswer>>>;
 	currentAnswer: UserAnswer | undefined;
@@ -69,7 +68,6 @@ export interface QuizContextProps {
 	questionNextBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
 	handleExplainerNextBtnClick: () => void;
 	handleStartBtnClick: () => void;
-	currentQuestionData: any;
 	quizData: any;
 	config?: QuizConfig;
 	answerButtonState: AnswerButtonState[];
@@ -84,8 +82,7 @@ export interface QuizContextProps {
 const QuizContext = createContext<QuizContextProps>({
 	quizState: QuizState.START,
 	setQuizState: () => {},
-	currentQuestion: 0,
-	setCurrentQuestion: () => {},
+	currentQuestion: null,
 	userAnswers: [],
 	setUserAnswers: () => {},
 	currentAnswer: undefined,
@@ -101,7 +98,6 @@ const QuizContext = createContext<QuizContextProps>({
 	questionNextBtnRequiredProps: {},
 	handleExplainerNextBtnClick: () => {},
 	handleStartBtnClick: () => {},
-	currentQuestionData: null,
 	quizData: null,
 	config: {},
 	answerButtonState: [],
@@ -124,17 +120,20 @@ export const QuizProvider = ({
 }) => {
 	const initialAnswerButtonState = Array(quizData.questions[0].answers.length).fill(AnswerButtonState.UNSET);
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
-	const [currentQuestion, setCurrentQuestion] = useState(0);
+	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
 	// currentAnswer is used to store the user's current answer when the next button setting is on. We need to store it as the user can change their answer before the press Next
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const [explainerVisible, setExplainerVisible] = useState(false);
-	const currentQuestionData = quizData.questions[currentQuestion];
+	const currentQuestion = {
+		...quizData.questions[currentQuestionIndex],
+		index: currentQuestionIndex + 1,
+	};
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
-	const progress = Math.round((100 / maxQuestions) * (currentQuestion + 1));
+	const progress = Math.round((100 / maxQuestions) * (currentQuestionIndex + 1));
 	// console.log("QuizProvider: ", config);
 
 	// config.animation = config?.animation || "scale"; // Provide config default
@@ -192,7 +191,7 @@ export const QuizProvider = ({
 
 	function handleStartBtnClick() {
 		setQuizState(QuizState.QUESTION);
-		setCurrentQuestion(0);
+		setCurrentQuestionIndex(0);
 		setUserAnswers([]);
 		setCurrentAnswer(undefined);
 		setAnswerButtonState(initialAnswerButtonState);
@@ -200,7 +199,7 @@ export const QuizProvider = ({
 	}
 
 	function handleAnswerBtnClick(index: number) {
-		const answers = quizData.questions[currentQuestion].answers;
+		const answers = quizData.questions[currentQuestionIndex].answers;
 		const theAnswer = { index: index, result: answers[index].result };
 		const answerButtonsUpdatedState = getAnswerBtnsNewState(index, answers, theAnswer, showCorrectAnswer);
 		setCurrentAnswer(theAnswer);
@@ -237,7 +236,7 @@ export const QuizProvider = ({
 		const hasDelay = !explainerEnabled && autoResume;
 		// revealAnswer && ((explainerEnabled && !explainerVisible) || (!explainerEnabled && autoResume))
 
-		if (currentQuestion === maxQuestions - 1) {
+		if (currentQuestionIndex === maxQuestions - 1) {
 			if (hasDelay) {
 				setTimeout(() => endQuiz(updatedUserAnswers), autoResumeDelay);
 			} else {
@@ -254,8 +253,8 @@ export const QuizProvider = ({
 	}
 
 	function setUpNextQuestion() {
-		const nextQuestion = currentQuestion + 1;
-		setCurrentQuestion(nextQuestion);
+		const nextQuestion = currentQuestionIndex + 1;
+		setCurrentQuestionIndex(nextQuestion);
 		setCurrentAnswer(undefined);
 		const initialAnswerButtonState = Array(quizData.questions[nextQuestion].answers.length).fill(
 			AnswerButtonState.UNSET
@@ -288,8 +287,6 @@ export const QuizProvider = ({
 				quizType,
 				setQuizState,
 				currentQuestion,
-				setCurrentQuestion,
-				currentQuestionData,
 				maxQuestions,
 				userAnswers,
 				setUserAnswers,

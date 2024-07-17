@@ -4,7 +4,7 @@ import { useQuiz } from "./Quiz/QuizContext";
 
 export default function MyQuizComposed() {
 	const state = useQuiz();
-	const { currentQuestion, maxQuestions, progress, currentQuestionData, answerButtonState, result } = state;
+	const { maxQuestions, progress, currentQuestion, answerButtonState, result } = state;
 
 	return (
 		<div className="my-quiz">
@@ -18,16 +18,16 @@ export default function MyQuizComposed() {
 				<Quiz.QuestionWrapper>
 					<Quiz.QuestionHeader state={state}>
 						<div>
-							<h4>{`${currentQuestion + 1} / ${maxQuestions} - ${progress}%`} - Header child</h4>
+							<h4>{`${currentQuestion.index} / ${maxQuestions} - ${progress}%`} - Header child</h4>
 							<progress className={styles.progress} max="100" value={progress}></progress>
 						</div>
 					</Quiz.QuestionHeader>
 					<Quiz.QuestionPage>
 						<Quiz.QuestionBody state={state}>
-							<h1>Question {currentQuestion + 1} - Question body child</h1>
-							<p>{currentQuestionData.question}</p>
-							{currentQuestionData.answers.map((item: any, index: number) => (
-								<Quiz.AnswerButton state={state} key={currentQuestionData.question + index} index={index}>
+							<h1>Question {currentQuestion.index} - Question body child</h1>
+							<p>{currentQuestion.question}</p>
+							{currentQuestion.answers.map((item: any, index: number) => (
+								<Quiz.AnswerButton state={state} key={currentQuestion.question + index} index={index}>
 									{item.answer}
 									{answerButtonState[index] === "correct" && <span> ✔</span>}
 								</Quiz.AnswerButton>
@@ -38,7 +38,7 @@ export default function MyQuizComposed() {
 						</Quiz.QuestionBody>
 						<Quiz.ExplainerPage state={state}>
 							<h1>Explainer Child</h1>
-							<p>{currentQuestionData.question}</p>
+							<p>{currentQuestion.question}</p>
 							<p>
 								<Quiz.ExplainerNextButton state={state}>Explainer Next</Quiz.ExplainerNextButton>
 							</p>
