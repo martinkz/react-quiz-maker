@@ -10,8 +10,8 @@
   * personality quiz type && revealAnswer: true
 - Find a way to use more accessible answer buttons (radio/checkboxes for single/multiple select), weigh against more complicated usage of own custom components
 - Create types for the quiz JSON
+- Move types from QuizContext to their own file
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
-- Review whether QuizContext is exporting anything not used outside QuizContext

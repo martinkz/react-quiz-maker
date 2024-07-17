@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState } from "./utility";
-import { HTMLMotionProps } from "framer-motion";
+// import { HTMLMotionProps } from "framer-motion";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 
@@ -28,7 +28,7 @@ export type QuizConfig = {
 	explainerEnabled?: boolean;
 	explainerNewPage?: boolean;
 	animation?: AnimationVariants;
-	motionObject?: HTMLMotionProps<"div">;
+	// motionObject?: HTMLMotionProps<"div">;
 };
 
 export enum AnswerButtonState {
@@ -50,14 +50,10 @@ export type QuizResult = number | string | null;
 
 export interface QuizContextProps {
 	quizState: QuizState;
-	setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
 	currentQuestion: any;
-	userAnswers: Array<UserAnswer>;
-	setUserAnswers: React.Dispatch<React.SetStateAction<Array<UserAnswer>>>;
 	currentAnswer: UserAnswer | undefined;
-	setCurrentAnswer: React.Dispatch<React.SetStateAction<UserAnswer | undefined>>;
 	result: QuizResult;
-	setResult: React.Dispatch<React.SetStateAction<QuizResult>>;
+	// setResult: React.Dispatch<React.SetStateAction<QuizResult>>;
 	maxQuestions: number;
 	quizType: QuizType;
 	handleAnswer: (userAnswer: UserAnswer) => void;
@@ -71,9 +67,7 @@ export interface QuizContextProps {
 	quizData: any;
 	config?: QuizConfig;
 	answerButtonState: AnswerButtonState[];
-	setAnswerButtonState: React.Dispatch<React.SetStateAction<AnswerButtonState[]>>;
 	explainerVisible: boolean;
-	setExplainerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 	progress: number;
 }
 
@@ -81,14 +75,9 @@ export interface QuizContextProps {
 
 const QuizContext = createContext<QuizContextProps>({
 	quizState: QuizState.START,
-	setQuizState: () => {},
 	currentQuestion: null,
-	userAnswers: [],
-	setUserAnswers: () => {},
 	currentAnswer: undefined,
-	setCurrentAnswer: () => {},
 	result: null,
-	setResult: () => {},
 	maxQuestions: 0,
 	quizType: QuizType.SCORED,
 	handleAnswer: () => {},
@@ -101,9 +90,7 @@ const QuizContext = createContext<QuizContextProps>({
 	quizData: null,
 	config: {},
 	answerButtonState: [],
-	setAnswerButtonState: () => {},
 	explainerVisible: false,
-	setExplainerVisible: () => {},
 	progress: 0,
 });
 
@@ -123,7 +110,7 @@ export const QuizProvider = ({
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
 	const [result, setResult] = useState<QuizResult>(null);
-	// currentAnswer is used to store the user's current answer when the next button setting is on. We need to store it as the user can change their answer before the press Next
+	// currentAnswer is used to store the user's current answer when the autoResume setting is off. We need to store it as the user can change their answer before the press Next
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const [explainerVisible, setExplainerVisible] = useState(false);
@@ -144,7 +131,7 @@ export const QuizProvider = ({
 		autoResume,
 		autoResumeDelay = 1000,
 		animation,
-		motionObject,
+		// motionObject,
 		revealAnswer,
 		explainerEnabled,
 		explainerNewPage,
@@ -285,15 +272,10 @@ export const QuizProvider = ({
 				quizData,
 				quizState,
 				quizType,
-				setQuizState,
 				currentQuestion,
 				maxQuestions,
-				userAnswers,
-				setUserAnswers,
 				currentAnswer,
-				setCurrentAnswer,
 				result,
-				setResult,
 				handleAnswer,
 				handleAnswerBtnClick,
 				answerBtnRequiredProps,
@@ -303,9 +285,7 @@ export const QuizProvider = ({
 				handleStartBtnClick,
 				config,
 				answerButtonState,
-				setAnswerButtonState,
 				explainerVisible,
-				setExplainerVisible,
 				progress,
 			}}
 		>
