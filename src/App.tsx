@@ -38,7 +38,7 @@ function App() {
 					revealAnswer: false,
 					explainerEnabled: true,
 					explainerNewPage: false,
-					animation: "slideLeftRight",
+					animation: "slideLeft",
 				}}
 			>
 				<MyQuiz />
@@ -55,7 +55,7 @@ function App() {
 					revealAnswer: true,
 					explainerEnabled: true,
 					explainerNewPage: true,
-					// animation: "slideLeftRight",
+					// animation: "slideLeft",
 				}}
 			>
 				<Quiz />

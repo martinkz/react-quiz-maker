@@ -10,8 +10,7 @@ export const AnimatePresenceWithDisable = ({ children }: { children: React.React
 	}
 
 	const { animation = "default" } = config;
-	const animatePresenceMode = animation === "slideLeftRight" ? "popLayout" : "sync";
-	// const animatePresenceMode = "popLayout"; // sync seems to work better
+	const animatePresenceMode = animation === "slideLeft" ? "popLayout" : "sync";
 
 	if (animation === "disabled") {
 		return children;
@@ -33,8 +32,8 @@ export const MotionWrapper = forwardRef(function (
 	const { animation = "default" /*, motionObject*/ } = config;
 
 	const wrappers = {
-		slideUpDown: MotionSlide,
-		slideLeftRight: MotionSlideSide,
+		slideUp: MotionSlideUp,
+		slideLeft: MotionSlideLeft,
 		scale: MotionScale,
 		default: motionProps,
 	};
@@ -55,7 +54,7 @@ export const MotionWrapper = forwardRef(function (
 	}
 });
 
-export const MotionSlide = {
+export const MotionSlideUp = {
 	style: { overflow: "hidden" },
 	initial: { height: 0 },
 	animate: { height: "auto" },
@@ -70,7 +69,7 @@ export const MotionScale = {
 	exit: { opacity: 0, scale: 0, height: 0 },
 };
 
-export const MotionSlideSide = {
+export const MotionSlideLeft = {
 	initial: { opacity: 0, x: "-120px" },
 	animate: { opacity: 1, x: 0 },
 	transition: { duration: 0.5 },
@@ -78,7 +77,7 @@ export const MotionSlideSide = {
 };
 
 // With flexGrow, but it's buggy
-// export const MotionSlide = {
+// export const MotionSlideUp = {
 // 	style: { overflow: "hidden" },
 // 	initial: { height: 0, flexGrow: 0 },
 // 	animate: { height: "auto", flexGrow: 1 },

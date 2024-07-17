@@ -18,7 +18,7 @@ export enum QuizState {
 	RESULT = "result",
 }
 
-export type AnimationVariants = "slideUpDown" | "slideLeftRight" | "scale" | "disabled";
+export type AnimationVariants = "slideUp" | "slideLeft" | "scale" | "disabled";
 
 export type QuizConfig = {
 	evalCustom?: EvalFunction;

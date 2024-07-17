@@ -1,7 +1,7 @@
 import styles from "./styles.module.css";
 import { AnswerButtonState, QuizState, useQuiz, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
-import { MotionWrapper, MotionScale, MotionSlide, AnimatePresenceWithDisable } from "./MotionWrapper";
+import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
 import { motion } from "framer-motion";
@@ -68,10 +68,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 		<>
 			<AnimatePresenceWithDisable>
 				{quizState === QuizState.START && (
-					<MotionWrapper motionProps={MotionSlide} key={-1}>
+					<MotionWrapper motionProps={MotionSlideUp} key={-1}>
 						{Intro}
 					</MotionWrapper>
-					// <motion.div key={-1} {...MotionSlide}>
+					// <motion.div key={-1} {...MotionSlideUp}>
 					// 	{Intro}
 					// </motion.div>
 				)}
@@ -79,20 +79,20 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper key={-2}>
 						<QuestionWrapperComponent>
-							{/* <motion.div key={-3} {...MotionSlide}>
+							{/* <motion.div key={-3} {...MotionSlideUp}>
 							{Header}
 						</motion.div> */}
-							<MotionWrapper motionProps={MotionSlide} key={-3}>
+							<MotionWrapper motionProps={MotionSlideUp} key={-3}>
 								{Header}
 							</MotionWrapper>
-							<MotionWrapper motionProps={MotionSlide} key={-4}>
+							<MotionWrapper motionProps={MotionSlideUp} key={-4}>
 								<QuestionPageComponent>
 									<AnimatePresenceWithDisable>
 										{!hideQuestionOnExplainer && (
-											<MotionWrapper motionProps={MotionSlide} key={currentQuestion}>
+											<MotionWrapper motionProps={MotionSlideUp} key={currentQuestion}>
 												{Body}
 											</MotionWrapper>
-											// <motion.div {...MotionSlide} key={currentQuestion}>
+											// <motion.div {...MotionSlideUp} key={currentQuestion}>
 											// 	{Body}
 											// </motion.div>
 										)}
@@ -112,10 +112,10 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.RESULT && (
-					// <motion.div key={maxQuestions} {...MotionSlide}>
+					// <motion.div key={maxQuestions} {...MotionSlideUp}>
 					// 	{Result}
 					// </motion.div>
-					<MotionWrapper motionProps={MotionSlide} key={maxQuestions}>
+					<MotionWrapper motionProps={MotionSlideUp} key={maxQuestions}>
 						{Result}
 					</MotionWrapper>
 				)}
