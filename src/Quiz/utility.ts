@@ -72,3 +72,23 @@ export function getAnswerBtnsNewState(
 	}
 	return newBtnStateAll;
 }
+
+export interface Timer {
+	id: ReturnType<typeof setTimeout>;
+	readonly remainingTime: number;
+}
+
+// Returns a timeout object which holds it's setTimeout id and the remaining time.
+// The remaining time is used to in cases where we need to clear the setTimeout and re-set while keeping the remaining time.
+export function createTimeout<T extends unknown[]>(fn: (...args: T) => void, delay: number, ...params: T): Timer {
+	const id = setTimeout(fn, delay, ...params);
+	const endTime = new Date().getTime() + delay;
+
+	return {
+		id,
+		get remainingTime(): number {
+			const remainingTime = endTime - new Date().getTime();
+			return remainingTime > 0 ? remainingTime : 0;
+		},
+	};
+}

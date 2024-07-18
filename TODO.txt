@@ -15,3 +15,4 @@
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
 - Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
+- Add test to check whether the answer is correctly calculated if we change answers during the autoResume timeout

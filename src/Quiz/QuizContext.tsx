@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState } from "./utility";
+import React, { createContext, useContext, useState, useRef } from "react";
+import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState, createTimeout, type Timer } from "./utility";
 // import { HTMLMotionProps } from "framer-motion";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
@@ -111,6 +111,8 @@ export const QuizProvider = ({
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);
 	const [explainerVisible, setExplainerVisible] = useState(false);
+	const timersRef = useRef<Record<string, any>>({});
+
 	const currentQuestion = {
 		...quizData.questions[currentQuestionIndex],
 		index: currentQuestionIndex + 1,
@@ -195,6 +197,7 @@ export const QuizProvider = ({
 		}
 		if (explainerEnabled && !explainerVisible && autoResume) {
 			if (explainerNewPage) {
+				// setTaskQueue((prevTasks) => [...prevTasks, { setExplainerVisibleTask: 1 }]);
 				setTimeout(() => setExplainerVisible(true), autoResumeDelay);
 			} else {
 				setExplainerVisible(true);
@@ -213,8 +216,14 @@ export const QuizProvider = ({
 		}
 	}
 
+	function handleExplainerNextBtnClick() {
+		processAnswer(currentAnswer!);
+		setExplainerVisible(false);
+	}
+
 	function processAnswer(userAnswer: UserAnswer) {
-		const updatedUserAnswers = [...userAnswers, userAnswer];
+		const updatedUserAnswers = [...userAnswers];
+		updatedUserAnswers[currentQuestionIndex] = userAnswer;
 		setUserAnswers(updatedUserAnswers);
 
 		const hasDelay = !explainerEnabled && autoResume;
@@ -222,7 +231,15 @@ export const QuizProvider = ({
 
 		if (currentQuestionIndex === maxQuestions - 1) {
 			if (hasDelay) {
-				setTimeout(() => endQuiz(updatedUserAnswers), autoResumeDelay);
+				// Clear the timeout and set up a new one with the remaining time of the previous timeout
+				// This is to prevent endQuiz being called with a stale updatedUserAnswers value
+				// Possibly refactor this into it's own hook (including the ref)
+				if (timersRef.current?.endQuizTask) {
+					clearTimeout(timersRef.current?.endQuizTask?.id);
+				}
+				const delay = timersRef.current?.endQuizTask?.remainingTime || autoResumeDelay;
+				const timer = createTimeout(() => endQuiz(updatedUserAnswers), delay);
+				timersRef.current.endQuizTask = timer;
 			} else {
 				endQuiz(updatedUserAnswers);
 			}
@@ -230,13 +247,20 @@ export const QuizProvider = ({
 		}
 
 		if (hasDelay) {
-			setTimeout(() => setUpNextQuestion(), autoResumeDelay);
+			// Only set up once, since setUpNextQuestion doesn't depend on any value that could be stale due to the user changing answers
+			if (!timersRef.current?.setUpNextQuestionTask) {
+				const timeoutId = setTimeout(() => setUpNextQuestion(), autoResumeDelay);
+				timersRef.current.setUpNextQuestionTask = timeoutId;
+			}
 		} else {
 			setUpNextQuestion();
 		}
 	}
 
 	function setUpNextQuestion() {
+		console.log("Setting up next question: " + currentQuestionIndex);
+
+		timersRef.current = {};
 		const nextQuestion = currentQuestionIndex + 1;
 		setCurrentQuestionIndex(nextQuestion);
 		setCurrentAnswer(undefined);
@@ -246,17 +270,14 @@ export const QuizProvider = ({
 		setAnswerButtonState(initialAnswerButtonState);
 	}
 
-	function handleExplainerNextBtnClick() {
-		processAnswer(currentAnswer!);
-		setExplainerVisible(false);
-	}
-
 	function endQuiz(userAnswers: UserAnswer[]) {
+		timersRef.current = {};
 		const evalFunctions = {
 			[QuizType.SCORED]: evaluateScore,
 			[QuizType.PERSONALITY]: evaluatePersonality,
 			[QuizType.CUSTOM]: evalCustom,
 		};
+
 		const evalResult = (evalFunctions[quizType] as EvalFunction)(userAnswers);
 		console.log("Your result is: ", evalResult);
 		setResult(evalResult);
