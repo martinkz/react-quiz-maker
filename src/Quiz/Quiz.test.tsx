@@ -308,4 +308,48 @@ describe("Quiz", () => {
 		// The quiz advances to the next question after we click the explainer next button
 		q.getQuestionText(2);
 	});
+
+	test("Quiz result is correctly calculated if we change answers during the autoResume timeout", async () => {
+		// const user = userEvent.setup();
+		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+		render(
+			<QuizProvider
+				quizData={quizJson2}
+				config={{
+					autoResume: true,
+					revealAnswer: false,
+					explainerEnabled: false,
+					explainerNewPage: false,
+					animation: "disabled",
+				}}
+			>
+				<Quiz />
+			</QuizProvider>
+		);
+		// logRoles(container);
+
+		const startBtn = q.getStartBtn();
+		await user.click(startBtn);
+
+		const firstQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(firstQuestionAnswerBtns[1]);
+		await user.click(firstQuestionAnswerBtns[0]); // Change the answer before running the timers
+
+		await act(() => vi.runAllTimers());
+
+		const secondQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(secondQuestionAnswerBtns[1]);
+		await user.click(secondQuestionAnswerBtns[0]);
+
+		await act(() => vi.runAllTimers());
+
+		const thirdQuestionAnswerBtns = q.getAnswerBtns();
+		await user.click(thirdQuestionAnswerBtns[1]);
+		await user.click(thirdQuestionAnswerBtns[0]);
+		await act(() => vi.runAllTimers());
+
+		screen.getByText(/3/i);
+
+		q.getPlayAgainBtn();
+	});
 });
