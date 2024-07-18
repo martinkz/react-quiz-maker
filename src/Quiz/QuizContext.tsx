@@ -258,8 +258,6 @@ export const QuizProvider = ({
 	}
 
 	function setUpNextQuestion() {
-		console.log("Setting up next question: " + currentQuestionIndex);
-
 		timersRef.current = {};
 		const nextQuestion = currentQuestionIndex + 1;
 		setCurrentQuestionIndex(nextQuestion);
@@ -278,7 +276,7 @@ export const QuizProvider = ({
 			[QuizType.CUSTOM]: evalCustom,
 		};
 
-		const evalResult = (evalFunctions[quizType] as EvalFunction)(userAnswers);
+		const evalResult = evalFunctions[quizType]!(userAnswers);
 		console.log("Your result is: ", evalResult);
 		setResult(evalResult);
 		setQuizState(QuizState.RESULT);
