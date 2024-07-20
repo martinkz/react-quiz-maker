@@ -17,7 +17,11 @@ export function QuestionNextButton({
 	state: QuizContextProps;
 	className?: string;
 }) {
-	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps } = state;
+	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps, config } = state;
+
+	if (config?.autoResume) {
+		return null;
+	}
 
 	return (
 		<button

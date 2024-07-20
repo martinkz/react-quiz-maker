@@ -5,15 +5,13 @@
 - LOW PRIORITY: Add 'inTransition' state which prevents interaction in all buttons, as clicking during transitions can bug out the quiz. It's low priority as it's realistically very hard to click on anything during a transition
 - TO CONFIRM THIS EXISTS IN REALISTIC USE CASE: Bug - potential bug when moving from explainer (on a new page) after the last question, to the Result slide. The explainer gets pushed down for some reason
 - TO CONFIRM THIS EXISTS IN REALISTIC USE CASE: If you click too quickly (during the transition between questions/explainer), the quiz bugs out. Add state to disable actions while in transition?
-- Adding next button manually to quiz shows it even though it can't be used - figure out what to do (if anything - hide it?).
 - Add timer
 - Add option to keep trying answers till you get the correct one (i.e. only show the correct value for the current answer, not all)
 - Warn about weird combinations of config options ? explain default behavior in docs?
   * personality quiz type && revealAnswer: true
+- Move types from QuizContext to their own file
 - Find a way to use more accessible answer buttons (radio/checkboxes for single/multiple select), weigh against more complicated usage of own custom components
 - Create types for the quiz JSON
-- Move types from QuizContext to their own file
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
-- Add library types
