@@ -1,6 +1,7 @@
 /* These are functional tests that cover a broad range 
 of the quiz functionality, though they do not cover 100% */
 
+import "@testing-library/jest-dom";
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitForElementToBeRemoved, waitFor, logRoles, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
