@@ -12,6 +12,7 @@ export default defineConfig({
 		libInjectCss(),
 		dts({
 			include: ["src/Quiz"],
+			insertTypesEntry: true,
 		}),
 	],
 	build: {
