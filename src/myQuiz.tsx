@@ -51,40 +51,39 @@ function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContext
 	);
 }
 
-function QuestionBody({
-	currentQuestion,
-	answerButtonState,
-	handleAnswerBtnClick,
-	answerBtnRequiredProps,
-	handleQuestionNextBtnClick,
-	questionNextBtnRequiredProps,
-}: QuizContextProps) {
+function QuestionBody(state: QuizContextProps) {
+	const { currentQuestion, answerButtonState } = state;
 	return (
 		<div className="question-body">
 			<h2>
 				{currentQuestion.question} - {currentQuestion.index}
 			</h2>
 			{currentQuestion.answers.map((item: any, index: number) => (
-				<button
-					type="button"
-					key={index}
-					onClick={() => handleAnswerBtnClick(index)}
-					style={{ background: btnColors[answerButtonState[index]] }}
-					{...answerBtnRequiredProps}
-				>
+				// <button
+				// 	type="button"
+				// 	key={index}
+				// 	onClick={() => handleAnswerBtnClick(index)}
+				// 	style={{ background: btnColors[answerButtonState[index]] }}
+				// 	{...answerBtnRequiredProps}
+				// >
+				// 	{item.answer}
+				// 	{answerButtonState[index] === "correct" && <span> ✔</span>}
+				// </button>
+				<Quiz.AnswerButton key={index} index={index} state={state}>
 					{item.answer}
 					{answerButtonState[index] === "correct" && <span> ✔</span>}
-				</button>
+				</Quiz.AnswerButton>
 			))}
 			<p>
-				<button
+				{/* <button
 					data-testid="question-next"
 					type="button"
 					onClick={handleQuestionNextBtnClick}
 					{...questionNextBtnRequiredProps}
 				>
 					Next
-				</button>
+				</button> */}
+				<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 			</p>
 		</div>
 	);

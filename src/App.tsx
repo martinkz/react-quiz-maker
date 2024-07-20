@@ -35,9 +35,10 @@ function App() {
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,
-					revealAnswer: false,
+					autoResumeDelay: 1200,
+					revealAnswer: true,
 					explainerEnabled: true,
-					explainerNewPage: false,
+					explainerNewPage: true,
 					animation: "slideLeft",
 				}}
 			>
@@ -50,11 +51,11 @@ function App() {
 				quizData={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
-					autoResume: false,
-					autoResumeDelay: 500,
-					revealAnswer: true,
-					explainerEnabled: true,
-					explainerNewPage: true,
+					autoResume: true,
+					autoResumeDelay: 1200,
+					revealAnswer: false,
+					// explainerEnabled: true,
+					// explainerNewPage: true,
 					// animation: "slideLeft",
 				}}
 			>

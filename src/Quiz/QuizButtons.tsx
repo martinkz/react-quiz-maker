@@ -8,11 +8,20 @@ export const btnColors = {
 	incorrect: "red",
 };
 
-export function QuestionNextButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+export function QuestionNextButton({
+	children,
+	state,
+	className,
+}: {
+	children: React.ReactNode;
+	state: QuizContextProps;
+	className?: string;
+}) {
 	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps } = state;
 
 	return (
 		<button
+			className={className}
 			data-testid="question-next"
 			type="button"
 			onClick={handleQuestionNextBtnClick}
@@ -23,21 +32,37 @@ export function QuestionNextButton({ children, state }: { children: React.ReactN
 	);
 }
 
-export function ExplainerNextButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+export function ExplainerNextButton({
+	children,
+	state,
+	className,
+}: {
+	children: React.ReactNode;
+	state: QuizContextProps;
+	className?: string;
+}) {
 	const { handleExplainerNextBtnClick } = state;
 
 	return (
-		<button data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
+		<button className={className} data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
 			{children}
 		</button>
 	);
 }
 
-export function StartButton({ children, state }: { children: React.ReactNode; state: QuizContextProps }) {
+export function StartButton({
+	children,
+	state,
+	className,
+}: {
+	children: React.ReactNode;
+	state: QuizContextProps;
+	className?: string;
+}) {
 	const { handleStartBtnClick } = state;
 
 	return (
-		<button type="button" onClick={handleStartBtnClick}>
+		<button className={className} type="button" onClick={handleStartBtnClick}>
 			{children}
 		</button>
 	);
@@ -47,17 +72,20 @@ export function AnswerButton({
 	children,
 	index,
 	state,
+	className,
 }: {
 	children: React.ReactNode;
 	index: number;
 	state: QuizContextProps;
+	className?: string;
 }) {
-	const { currentQuestion, currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;
+	const { currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;
 
 	return (
 		<button
+			className={className}
 			type="button"
-			key={currentQuestion.question + index}
+			key={index}
 			onClick={() => handleAnswerBtnClick(index)}
 			style={{ background: btnColors[answerButtonState[index]] }}
 			aria-pressed={currentAnswer?.index === index}
