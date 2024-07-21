@@ -1,4 +1,4 @@
-import { type QuizStateProps } from "./QuizContext";
+import { type QuizStateProps } from "./useQuiz";
 
 export const btnColors = {
 	unset: "#222",

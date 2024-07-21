@@ -91,7 +91,7 @@ export const useQuiz = (data: any, config: QuizConfig) => {
 	const progress = Math.round((100 / maxQuestions) * (currentQuestionIndex + 1));
 
 	// config.animation = config?.animation || "scale"; // Provide config default
-	config.explainerNewPage = config?.explainerNewPage || false;
+	// config.explainerNewPage = config?.explainerNewPage || false;
 
 	const {
 		evalCustom,
@@ -101,7 +101,7 @@ export const useQuiz = (data: any, config: QuizConfig) => {
 		// motionObject,
 		revealAnswer,
 		explainerEnabled,
-		explainerNewPage,
+		explainerNewPage = false,
 	} = config || {};
 
 	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
