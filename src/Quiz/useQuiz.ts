@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState, createTimeout } from "./utility";
-// import { HTMLMotionProps } from "framer-motion";
+// import { type HTMLMotionProps } from "framer-motion";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 
@@ -89,7 +89,6 @@ export const useQuiz = (data: any, config: QuizConfig) => {
 	const maxQuestions = quizData.questions.length;
 	const quizType: QuizType = quizData.type;
 	const progress = Math.round((100 / maxQuestions) * (currentQuestionIndex + 1));
-	// console.log("QuizProvider: ", config);
 
 	// config.animation = config?.animation || "scale"; // Provide config default
 	config.explainerNewPage = config?.explainerNewPage || false;
