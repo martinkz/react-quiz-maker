@@ -6,7 +6,6 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitForElementToBeRemoved, waitFor, logRoles, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Quiz } from "../Quiz/Quiz";
-import { QuizConfig, QuizProvider } from "../Quiz/QuizContext";
 import quizJson from "../quizData.json";
 import quizJson2 from "../quizData2.json";
 
@@ -56,8 +55,8 @@ describe("Quiz", () => {
 		// const user = userEvent.setup();
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: true,
 					revealAnswer: true,
@@ -65,9 +64,7 @@ describe("Quiz", () => {
 					explainerNewPage: false,
 					animation: "disabled", // Animation must be disabled for the tests to work
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 		// logRoles(container);
 
@@ -112,8 +109,8 @@ describe("Quiz", () => {
 	test("Quiz resumes automatically and doesn't contain a Next button", async () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -121,9 +118,7 @@ describe("Quiz", () => {
 					explainerNewPage: false,
 					animation: "disabled",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 
 		const startBtn = q.getStartBtn();
@@ -154,8 +149,8 @@ describe("Quiz", () => {
 	test("Quiz displays the explainer at the same time as the question and answer buttons are disabled", async () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -163,9 +158,7 @@ describe("Quiz", () => {
 					explainerNewPage: false,
 					animation: "disabled",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 
 		const startBtn = q.getStartBtn();
@@ -205,8 +198,8 @@ describe("Quiz", () => {
 	test("Quiz displays the explainer on the same page, but the next button is hidden due to autoResume being false", async () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -214,9 +207,7 @@ describe("Quiz", () => {
 					explainerNewPage: false,
 					animation: "disabled",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 
 		const startBtn = q.getStartBtn();
@@ -264,8 +255,8 @@ describe("Quiz", () => {
 	test("Quiz displays the explainer on a new page", async () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -273,9 +264,7 @@ describe("Quiz", () => {
 					explainerNewPage: true,
 					animation: "disabled",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 
 		const startBtn = q.getStartBtn();
@@ -314,8 +303,8 @@ describe("Quiz", () => {
 		// const user = userEvent.setup();
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -323,9 +312,7 @@ describe("Quiz", () => {
 					explainerNewPage: false,
 					animation: "disabled",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		);
 		// logRoles(container);
 
