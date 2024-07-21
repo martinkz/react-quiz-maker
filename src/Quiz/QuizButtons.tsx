@@ -89,7 +89,6 @@ export function AnswerButton({
 		<button
 			className={className}
 			type="button"
-			key={index}
 			onClick={() => handleAnswerBtnClick(index)}
 			style={{ background: btnColors[answerButtonState[index]] }}
 			aria-pressed={currentAnswer?.index === index}

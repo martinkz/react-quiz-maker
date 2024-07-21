@@ -2,7 +2,6 @@ import styles from "./styles.module.css";
 import { AnswerButtonState, QuizState, useQuiz, type QuizContextProps } from "./QuizContext";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
-import { ProgressBar } from "./QuizProgressBar";
 import { findReactChild } from "./utility";
 import { motion } from "framer-motion";
 import React from "react";
@@ -123,8 +122,6 @@ export const Quiz = ({ components, children }: QuizProps) => {
 		</>
 	);
 };
-
-Quiz.ProgressBar = ProgressBar;
 
 Quiz.StartButton = StartButton;
 Quiz.QuestionNextButton = QuestionNextButton;
