@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { AnswerButtonState, QuizConfig, QuizState, useQuiz, type QuizContextProps } from "./useQuiz";
+import { AnswerButtonState, QuizConfig, QuizState, useQuiz, type QuizStateProps } from "./useQuiz";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
@@ -10,15 +10,15 @@ type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
 	data: any;
 	config: QuizConfig;
-	parentState?: QuizContextProps; // comes from QuizComposed
+	parentState?: QuizStateProps; // comes from QuizComposed
 	components?: {
-		IntroPage?: React.FC<QuizContextProps>;
+		IntroPage?: React.FC<QuizStateProps>;
 		QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
-		QuestionHeader?: React.FC<QuizContextProps>;
-		QuestionBody?: React.FC<QuizContextProps>;
+		QuestionHeader?: React.FC<QuizStateProps>;
+		QuestionBody?: React.FC<QuizStateProps>;
 		QuestionPage?: React.FC<{ children: React.ReactNode }>;
-		ExplainerPage?: React.FC<QuizContextProps>;
-		ResultPage?: React.FC<QuizContextProps>;
+		ExplainerPage?: React.FC<QuizStateProps>;
+		ResultPage?: React.FC<QuizStateProps>;
 	};
 	children?: React.ReactNode;
 }
@@ -151,7 +151,7 @@ function QuestionPage({ children }: { children: React.ReactNode }) {
 QuestionPage.displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
-const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
 	const { progress } = state;
 	return (
 		<>
@@ -169,7 +169,7 @@ const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state
 QuestionHeader.displayName = "QuestionHeader";
 Quiz.QuestionHeader = QuestionHeader;
 
-const IntroPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+const IntroPage = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
 	return (
 		<>
 			{children || (
@@ -185,7 +185,7 @@ const IntroPage = ({ children, state }: { children?: React.ReactNode; state: Qui
 IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
-const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
 	const { config, currentQuestion } = state;
 	const { autoResume } = config || {};
 
@@ -218,7 +218,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 QuestionBody.displayName = "QuestionBody";
 Quiz.QuestionBody = QuestionBody;
 
-const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
 	const { currentQuestion } = state;
 	return (
 		<>
@@ -240,7 +240,7 @@ const ExplainerPage = ({ children, state }: { children?: React.ReactNode; state:
 ExplainerPage.displayName = "ExplainerPage";
 Quiz.ExplainerPage = ExplainerPage;
 
-const ResultPage = ({ children, state }: { children?: React.ReactNode; state: QuizContextProps }) => {
+const ResultPage = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
 	const { result } = state;
 	return (
 		<>

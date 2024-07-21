@@ -1,6 +1,6 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { useQuiz, type QuizConfig, type QuizContextProps } from "./Quiz/useQuiz";
+import { useQuiz, type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
 

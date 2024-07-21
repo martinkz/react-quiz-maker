@@ -1,4 +1,4 @@
-import { type QuizContextProps } from "./QuizContext";
+import { type QuizStateProps } from "./QuizContext";
 
 export const btnColors = {
 	unset: "#222",
@@ -14,7 +14,7 @@ export function QuestionNextButton({
 	className,
 }: {
 	children: React.ReactNode;
-	state: QuizContextProps;
+	state: QuizStateProps;
 	className?: string;
 }) {
 	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps, config } = state;
@@ -42,7 +42,7 @@ export function ExplainerNextButton({
 	className,
 }: {
 	children: React.ReactNode;
-	state: QuizContextProps;
+	state: QuizStateProps;
 	className?: string;
 }) {
 	const { handleExplainerNextBtnClick } = state;
@@ -60,7 +60,7 @@ export function StartButton({
 	className,
 }: {
 	children: React.ReactNode;
-	state: QuizContextProps;
+	state: QuizStateProps;
 	className?: string;
 }) {
 	const { handleStartBtnClick } = state;
@@ -80,7 +80,7 @@ export function AnswerButton({
 }: {
 	children: React.ReactNode;
 	index: number;
-	state: QuizContextProps;
+	state: QuizStateProps;
 	className?: string;
 }) {
 	const { currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;

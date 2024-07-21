@@ -48,7 +48,7 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export interface QuizContextProps {
+export interface QuizStateProps {
 	quizState: QuizState;
 	currentQuestion: any;
 	currentAnswer: UserAnswer | undefined;

@@ -1,6 +1,6 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { type QuizConfig, type QuizContextProps } from "./Quiz/useQuiz";
+import { type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
 
@@ -54,7 +54,7 @@ function QuestionPage({ children }: { children: React.ReactNode }) {
 	return <div className="question-page">{children}</div>;
 }
 
-function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContextProps) {
+function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizStateProps) {
 	return (
 		<div className="question-header">
 			<h4>{`${currentQuestion.index} / ${maxQuestions} - ${progress}%`}</h4>
@@ -63,7 +63,7 @@ function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizContext
 	);
 }
 
-function QuestionBody(state: QuizContextProps) {
+function QuestionBody(state: QuizStateProps) {
 	const { currentQuestion, answerButtonState } = state;
 	return (
 		<div className="question-body">
@@ -100,7 +100,7 @@ function QuestionBody(state: QuizContextProps) {
 	);
 }
 
-function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick }: QuizContextProps) {
+function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick }: QuizStateProps) {
 	return (
 		<div className="question-explainer">
 			<h2>Explainer</h2>
@@ -112,7 +112,7 @@ function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick }: QuizCon
 	);
 }
 
-function IntroPage({ handleStartBtnClick }: QuizContextProps) {
+function IntroPage({ handleStartBtnClick }: QuizStateProps) {
 	return (
 		<div className="intro-page">
 			<p>Start the quiz</p>
@@ -123,7 +123,7 @@ function IntroPage({ handleStartBtnClick }: QuizContextProps) {
 	);
 }
 
-function ResultPage({ handleStartBtnClick, result }: QuizContextProps) {
+function ResultPage({ handleStartBtnClick, result }: QuizStateProps) {
 	return (
 		<div className="result-page">
 			<h1>

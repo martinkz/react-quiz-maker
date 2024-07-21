@@ -48,7 +48,7 @@ export type UserAnswer = {
 
 export type QuizResult = number | string | null;
 
-export interface QuizContextProps {
+export interface QuizStateProps {
 	quizState: QuizState;
 	currentQuestion: any;
 	currentAnswer: UserAnswer | undefined;
@@ -69,9 +69,9 @@ export interface QuizContextProps {
 	progress: number;
 }
 
-// export type OptionalContextProps = Partial<QuizContextProps>;
+// export type OptionalContextProps = Partial<QuizStateProps>;
 
-const QuizContext = createContext<QuizContextProps>({
+const QuizContext = createContext<QuizStateProps>({
 	quizState: QuizState.START,
 	currentQuestion: null,
 	currentAnswer: undefined,
