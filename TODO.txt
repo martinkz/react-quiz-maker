@@ -15,3 +15,4 @@
 - Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
+- Consider renaming 'state' prop that is being passed to all child components

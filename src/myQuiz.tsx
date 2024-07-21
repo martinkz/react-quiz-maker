@@ -1,6 +1,8 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { type QuizContextProps } from "./Quiz/QuizContext";
+import { type QuizConfig, type QuizContextProps } from "./Quiz/useQuiz";
+import quizJson from "./quizData.json";
+import quizJson2 from "./quizData2.json";
 
 const btnColors = {
 	unset: "#222",
@@ -10,22 +12,32 @@ const btnColors = {
 	incorrect: "red",
 };
 
+const config: QuizConfig = {
+	// evalCustom: customAnswerEval,
+	autoResume: true,
+	autoResumeDelay: 1000,
+	revealAnswer: true,
+	animation: "slideLeft",
+	explainerEnabled: false,
+	explainerNewPage: false,
+};
+
+const quizComponents = {
+	IntroPage,
+	QuestionWrapper,
+	QuestionHeader,
+	QuestionPage,
+	QuestionBody,
+	ExplainerPage,
+	ResultPage,
+};
+
 // If you want to omit a component, you can create a component returning null
 
 export default function MyQuiz() {
 	return (
 		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
-			<Quiz
-				components={{
-					IntroPage,
-					QuestionWrapper,
-					QuestionHeader,
-					QuestionPage,
-					QuestionBody,
-					ExplainerPage,
-					ResultPage,
-				}}
-			></Quiz>
+			<Quiz data={quizJson2} config={config} components={quizComponents}></Quiz>
 		</div>
 	);
 }
@@ -55,9 +67,8 @@ function QuestionBody(state: QuizContextProps) {
 	const { currentQuestion, answerButtonState } = state;
 	return (
 		<div className="question-body">
-			<h2>
-				{currentQuestion.question} - {currentQuestion.index}
-			</h2>
+			<h1 style={{ fontSize: "30px" }}>{currentQuestion.index}</h1>
+			<h2>{currentQuestion.question}</h2>
 			{currentQuestion.answers.map((item: any, index: number) => (
 				// <button
 				// 	type="button"

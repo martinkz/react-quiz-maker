@@ -1,14 +1,25 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { useQuiz } from "./Quiz/QuizContext";
+import { useQuiz, type QuizConfig, type QuizContextProps } from "./Quiz/useQuiz";
+import quizJson from "./quizData.json";
+import quizJson2 from "./quizData2.json";
 
-export default function MyQuizComposed() {
-	const state = useQuiz();
+const config: QuizConfig = {
+	// evalCustom: customAnswerEval,
+	autoResume: true,
+	revealAnswer: true,
+	animation: "slideLeft",
+	explainerEnabled: false,
+	explainerNewPage: false,
+};
+
+export default function QuizComposed() {
+	const state = useQuiz(quizJson2, config);
 	const { maxQuestions, progress, currentQuestion, answerButtonState, result } = state;
 
 	return (
 		<div className="my-quiz">
-			<Quiz>
+			<Quiz parentState={state} config={config} data={quizJson2}>
 				<Quiz.IntroPage state={state}>
 					<div>
 						<p>Intro child component</p>
@@ -27,7 +38,7 @@ export default function MyQuizComposed() {
 							<h1>Question {currentQuestion.index} - Question body child</h1>
 							<p>{currentQuestion.question}</p>
 							{currentQuestion.answers.map((item: any, index: number) => (
-								<Quiz.AnswerButton state={state} key={currentQuestion.question + index} index={index}>
+								<Quiz.AnswerButton state={state} key={index} index={index}>
 									{item.answer}
 									{answerButtonState[index] === "correct" && <span> ✔</span>}
 								</Quiz.AnswerButton>

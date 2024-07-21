@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { AnswerButtonState, QuizState, useQuiz, type QuizContextProps } from "./QuizContext";
+import { AnswerButtonState, QuizConfig, QuizState, useQuiz, type QuizContextProps } from "./useQuiz";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
@@ -8,6 +8,9 @@ import React from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
+	data: any;
+	config: QuizConfig;
+	parentState?: QuizContextProps; // comes from QuizComposed
 	components?: {
 		IntroPage?: React.FC<QuizContextProps>;
 		QuestionWrapper?: React.FC<{ children: React.ReactNode }>;
@@ -20,12 +23,14 @@ interface QuizProps {
 	children?: React.ReactNode;
 }
 
-export const Quiz = ({ components, children }: QuizProps) => {
+export const Quiz = ({ components, children, data, config, parentState }: QuizProps) => {
 	const { IntroPage, QuestionWrapper, QuestionHeader, QuestionBody, QuestionPage, ExplainerPage, ResultPage } =
 		components || {};
 
-	const state = useQuiz();
-	const { quizState, currentQuestion, maxQuestions, explainerVisible, config } = state;
+	const localState = useQuiz(data, config);
+	const state = parentState || localState; // parentState is used in QuizComposed, in which case localState is ignored
+
+	const { quizState, currentQuestion, maxQuestions, explainerVisible } = state;
 
 	if (!config) {
 		throw new Error("No config object provided");
@@ -65,9 +70,9 @@ export const Quiz = ({ components, children }: QuizProps) => {
 
 	return (
 		<>
-			<AnimatePresenceWithDisable>
+			<AnimatePresenceWithDisable config={config}>
 				{quizState === QuizState.START && (
-					<MotionWrapper motionProps={MotionSlideUp} key={-1}>
+					<MotionWrapper config={config} motionProps={MotionSlideUp} key={-1}>
 						{Intro}
 					</MotionWrapper>
 					// <motion.div key={-1} {...MotionSlideUp}>
@@ -76,19 +81,19 @@ export const Quiz = ({ components, children }: QuizProps) => {
 				)}
 
 				{quizState === QuizState.QUESTION && (
-					<MotionWrapper key={-2}>
+					<MotionWrapper config={config} key={-2}>
 						<QuestionWrapperComponent>
 							{/* <motion.div key={-3} {...MotionSlideUp}>
 							{Header}
 						</motion.div> */}
-							<MotionWrapper motionProps={MotionSlideUp} key={-3}>
+							<MotionWrapper config={config} motionProps={MotionSlideUp} key={-3}>
 								{Header}
 							</MotionWrapper>
-							<MotionWrapper motionProps={MotionSlideUp} key={-4}>
+							<MotionWrapper config={config} motionProps={MotionSlideUp} key={-4}>
 								<QuestionPageComponent>
-									<AnimatePresenceWithDisable>
+									<AnimatePresenceWithDisable config={config}>
 										{!hideQuestionOnExplainer && (
-											<MotionWrapper motionProps={MotionSlideUp} key={currentQuestion.index}>
+											<MotionWrapper config={config} motionProps={MotionSlideUp} key={currentQuestion.index}>
 												{Body}
 											</MotionWrapper>
 											// <motion.div {...MotionSlideUp} key={currentQuestion.index}>
@@ -96,7 +101,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 											// </motion.div>
 										)}
 										{explainerVisible && (
-											<MotionWrapper motionProps={MotionScale} key={-5}>
+											<MotionWrapper config={config} motionProps={MotionScale} key={-5}>
 												{Explainer}
 											</MotionWrapper>
 											// <motion.div {...MotionScale} key={-5}>
@@ -114,7 +119,7 @@ export const Quiz = ({ components, children }: QuizProps) => {
 					// <motion.div key={maxQuestions} {...MotionSlideUp}>
 					// 	{Result}
 					// </motion.div>
-					<MotionWrapper motionProps={MotionSlideUp} key={maxQuestions}>
+					<MotionWrapper config={config} motionProps={MotionSlideUp} key={maxQuestions}>
 						{Result}
 					</MotionWrapper>
 				)}

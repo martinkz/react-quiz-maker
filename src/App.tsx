@@ -1,7 +1,6 @@
 import MyQuiz from "./myQuiz";
 import { Quiz } from "./Quiz/Quiz";
-import MyQuizComposed from "./myQuizComposed";
-import { QuizProvider } from "./Quiz/QuizContext";
+import QuizComposed from "./QuizComposed";
 import quizJson from "./quizData.json";
 import quizJson2 from "./quizData2.json";
 
@@ -14,41 +13,14 @@ import quizJson2 from "./quizData2.json";
 function App() {
 	return (
 		<>
-			{/* <QuizProvider
-				quizData={quizJson2}
-				config={{
-					// evalCustom: customAnswerEval,
-					autoResume: false,
-					revealAnswer: true,
-					animation: "disabled",
-					explainerEnabled: true,
-					explainerNewPage: false,
-				}}
-			>
-				<MyQuizComposed />
-			</QuizProvider>
-
+			{/* <QuizComposed />
 			<div style={{ margin: "80px 0" }}></div> */}
 
-			<QuizProvider
-				quizData={quizJson2}
-				config={{
-					// evalCustom: customAnswerEval,
-					autoResume: true,
-					autoResumeDelay: 1200,
-					revealAnswer: true,
-					explainerEnabled: true,
-					explainerNewPage: true,
-					animation: "slideLeft",
-				}}
-			>
-				<MyQuiz />
-			</QuizProvider>
-
+			<MyQuiz />
 			<div style={{ margin: "80px 0" }}></div>
 
-			<QuizProvider
-				quizData={quizJson2}
+			<Quiz
+				data={quizJson2}
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,
@@ -58,9 +30,7 @@ function App() {
 					// explainerNewPage: true,
 					// animation: "slideLeft",
 				}}
-			>
-				<Quiz />
-			</QuizProvider>
+			/>
 		</>
 	);
 }

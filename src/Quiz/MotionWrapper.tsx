@@ -1,14 +1,8 @@
 import { motion, AnimatePresence, MotionProps } from "framer-motion";
 import { forwardRef, ForwardedRef } from "react";
-import { useQuiz } from "./QuizContext";
+import { QuizConfig } from "./QuizContext";
 
-export const AnimatePresenceWithDisable = ({ children }: { children: React.ReactNode }) => {
-	const { config } = useQuiz();
-
-	if (!config) {
-		throw new Error("No config object provided");
-	}
-
+export const AnimatePresenceWithDisable = ({ children, config }: { children: React.ReactNode; config: QuizConfig }) => {
 	const { animation = "default" } = config;
 	const animatePresenceMode = animation === "slideLeft" ? "popLayout" : "sync";
 
@@ -20,16 +14,10 @@ export const AnimatePresenceWithDisable = ({ children }: { children: React.React
 };
 
 export const MotionWrapper = forwardRef(function (
-	{ children, motionProps }: { children: React.ReactNode; motionProps?: MotionProps },
+	{ children, config, motionProps }: { children: React.ReactNode; config?: QuizConfig; motionProps?: MotionProps },
 	ref: ForwardedRef<HTMLDivElement>
 ) {
-	const { config } = useQuiz();
-
-	if (!config) {
-		throw new Error("No config object provided");
-	}
-
-	const { animation = "default" /*, motionObject*/ } = config;
+	const { animation = "default" /*, motionObject*/ } = config || {};
 
 	const wrappers = {
 		slideUp: MotionSlideUp,
@@ -46,7 +34,7 @@ export const MotionWrapper = forwardRef(function (
 				// When ref is used animation is sometimes buggy? Seems to depend on the AnimationPresense mode
 				// Commenting out the ref seems to change whether the AnimationPresense mode (wrapping this component) is being used or not
 				ref={ref}
-				{...wrappers[animation!]}
+				{...wrappers[animation]}
 			>
 				{children}
 			</motion.div>
@@ -72,7 +60,7 @@ export const MotionScale = {
 export const MotionSlideLeft = {
 	initial: { opacity: 0, x: "-120px" },
 	animate: { opacity: 1, x: 0 },
-	transition: { duration: 0.5 },
+	transition: { duration: 1.5 },
 	exit: { opacity: 0, x: "-120px" },
 };
 
