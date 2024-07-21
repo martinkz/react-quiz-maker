@@ -1,4 +1,4 @@
-- PROBABLY NOT NEEDED: Automatically generate IDs for questions and answers (so we can avoid passing key like this: <Quiz.AnswerButton key={index} index={index}>) - using index seems fine as these are in a static order in the DOM.
+- PROBABLY NOT NEEDED: Automatically generate IDs for questions and answers (so we can avoid passing key like this: <Quiz.AnswerButton key={index} index={index}>) - using index seems fine as these are always in a static order/number in the DOM.
 - LOW PRIORITY: Split revealAnswer config option into revealCurrentAnswer and revealAllAnswers
 - LOW PRIORITY: Fix myQuizComposed (try to pass classnames to wrapper components)
 - LOW PRIORITY: Expose entire animation component tree as a custom component so that users can provide their own motion wrappers and AnimatePresense values
@@ -9,9 +9,8 @@
 - Add option to keep trying answers till you get the correct one (i.e. only show the correct value for the current answer, not all)
 - Warn about weird combinations of config options ? explain default behavior in docs?
   * personality quiz type && revealAnswer: true
-- Move types from QuizContext to their own file
+- Move types to their own file (?)
 - Find a way to use more accessible answer buttons (radio/checkboxes for single/multiple select), weigh against more complicated usage of own custom components
 - Create types for the quiz JSON
-- Replace react context with Zustand https://docs.pmnd.rs/zustand/getting-started/introduction (this will allow us to remove the provider wrapper)
 - Add shuffling of Answers (and maybe questions)
 - Create example designs
