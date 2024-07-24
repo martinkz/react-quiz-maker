@@ -41,6 +41,7 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 	// const hideQuestionOnExplainer = explainerNewPage && (explainerVisible || explainerClosed);
 	const hideQuestionOnExplainer = explainerNewPage && explainerVisible;
 
+	// You can pass components as children, see QuizComposed.tsx for how that works. This API is somewhat limited, so it might be removed
 	const IntroChild = findReactChild(children, "IntroPage");
 	const ResultChild = findReactChild(children, "ResultPage");
 	const QuestionWrapperChild = findReactChild(children, "QuestionWrapper");
