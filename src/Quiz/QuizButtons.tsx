@@ -1,13 +1,5 @@
 import { type QuizStateProps } from "./useQuiz";
 
-export const btnColors = {
-	unset: "#222",
-	default: "#222",
-	selected: "blue",
-	correct: "green",
-	incorrect: "red",
-};
-
 export function QuestionNextButton({
 	children,
 	state,
@@ -77,11 +69,13 @@ export function AnswerButton({
 	index,
 	state,
 	className,
+	style,
 }: {
 	children: React.ReactNode;
 	index: number;
 	state: QuizStateProps;
 	className?: string;
+	style?: React.CSSProperties;
 }) {
 	const { currentAnswer, answerButtonState, handleAnswerBtnClick, answerBtnRequiredProps } = state;
 
@@ -90,7 +84,7 @@ export function AnswerButton({
 			className={className}
 			type="button"
 			onClick={() => handleAnswerBtnClick(index)}
-			style={{ background: btnColors[answerButtonState[index]] }}
+			style={style}
 			aria-pressed={currentAnswer?.index === index}
 			{...answerBtnRequiredProps}
 		>
