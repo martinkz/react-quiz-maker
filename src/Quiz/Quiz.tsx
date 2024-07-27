@@ -4,7 +4,7 @@ import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } fr
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
@@ -134,6 +134,34 @@ Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
 
+interface ResumeProgressProps extends HTMLAttributes<HTMLDivElement> {
+	state: QuizStateProps;
+}
+
+function ResumeProgress({ state, ...props }: ResumeProgressProps) {
+	const { config, currentAnswer } = state;
+	const waitingForDelay = config?.autoResume && currentAnswer !== undefined;
+	const progress = waitingForDelay ? 100 : 0;
+	return (
+		<div
+			role="progressbar"
+			aria-valuenow={progress}
+			aria-valuemin={0}
+			aria-valuemax={100}
+			aria-label="Waiting to continue"
+			{...props}
+		>
+			<div
+				style={{
+					width: `${progress}%`,
+					transitionDuration: config?.autoResumeDelay?.toString() + "ms",
+				}}
+			></div>
+		</div>
+	);
+}
+Quiz.ResumeProgress = ResumeProgress;
+
 function QuestionWrapper({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="question-wrapper-default" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
@@ -159,7 +187,7 @@ const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state
 			{children || (
 				<div className="question-header-default">
 					<div>
-						<progress className={styles.progress} max="100" value={progress}></progress>
+						<progress max="100" value={progress}></progress>
 					</div>
 				</div>
 			)}

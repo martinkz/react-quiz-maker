@@ -64,7 +64,9 @@ function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizStatePr
 }
 
 function QuestionBody(state: QuizStateProps) {
-	const { currentQuestion, answerButtonState } = state;
+	const { currentQuestion, answerButtonState, config } = state;
+	// const { autoResume } = config || {};
+	// const duration = config?.autoResumeDelay?.toString();
 	return (
 		<div className="question-body">
 			<h1 style={{ fontSize: "30px" }}>{currentQuestion.index}</h1>
@@ -101,6 +103,9 @@ function QuestionBody(state: QuizStateProps) {
 				</button> */}
 				<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 			</p>
+			<div>
+				<Quiz.ResumeProgress className={styles["auto-resume-progress"]} state={state} />
+			</div>
 		</div>
 	);
 }
