@@ -1,8 +1,8 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
-import quizJson from "./quizData.json";
-import quizJson2 from "./quizData2.json";
+import personalityQuizData from "./personalityQuiz.json";
+import scoredQuizData from "./scoredQuiz.json";
 
 const btnColors = {
 	unset: "#222",
@@ -37,7 +37,7 @@ const quizComponents = {
 export default function MyQuiz() {
 	return (
 		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
-			<Quiz data={quizJson2} config={config} components={quizComponents}></Quiz>
+			<Quiz data={scoredQuizData} config={config} components={quizComponents}></Quiz>
 		</div>
 	);
 }

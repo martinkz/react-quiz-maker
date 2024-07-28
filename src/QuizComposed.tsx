@@ -1,8 +1,8 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import { useQuiz, type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
-import quizJson from "./quizData.json";
-import quizJson2 from "./quizData2.json";
+import personalityQuizData from "./personalityQuiz.json";
+import scoredQuizData from "./scoredQuiz.json";
 
 const config: QuizConfig = {
 	// evalCustom: customAnswerEval,
@@ -14,12 +14,12 @@ const config: QuizConfig = {
 };
 
 export default function QuizComposed() {
-	const state = useQuiz(quizJson2, config);
+	const state = useQuiz(scoredQuizData, config);
 	const { maxQuestions, progress, currentQuestion, answerButtonState, result } = state;
 
 	return (
 		<div className="my-quiz">
-			<Quiz parentState={state} config={config} data={quizJson2}>
+			<Quiz parentState={state} config={config} data={scoredQuizData}>
 				<Quiz.IntroPage state={state}>
 					<div>
 						<p>Intro child component</p>

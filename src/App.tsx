@@ -1,8 +1,8 @@
 import MyQuiz from "./myQuiz";
 import { Quiz } from "./Quiz/Quiz";
 import QuizComposed from "./QuizComposed";
-import quizJson from "./quizData.json";
-import quizJson2 from "./quizData2.json";
+import personalityQuizData from "./personalityQuiz.json";
+import scoredQuizData from "./scoredQuiz.json";
 
 // import { type UserAnswer } from "./Quiz/QuizContext";
 // function customAnswerEval(userAnswers: UserAnswer[]) {
@@ -20,7 +20,7 @@ function App() {
 			<div style={{ margin: "80px 0" }}></div>
 
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,

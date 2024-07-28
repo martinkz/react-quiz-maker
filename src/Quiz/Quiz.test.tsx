@@ -6,8 +6,8 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitForElementToBeRemoved, waitFor, logRoles, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Quiz } from "../Quiz/Quiz";
-import quizJson from "../quizData.json";
-import quizJson2 from "../quizData2.json";
+import personalityQuizData from "../personalityQuiz.json";
+import scoredQuizData from "../scoredQuiz.json";
 
 import { MotionGlobalConfig } from "framer-motion";
 MotionGlobalConfig.skipAnimations = true;
@@ -56,7 +56,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: true,
@@ -110,7 +110,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -150,7 +150,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -199,7 +199,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -256,7 +256,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -304,7 +304,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={quizJson2}
+				data={scoredQuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,

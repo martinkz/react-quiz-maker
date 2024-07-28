@@ -1,5 +1,5 @@
 import styles from "./styles.module.css";
-import { AnswerButtonState, QuizConfig, QuizState, useQuiz, type QuizStateProps } from "./useQuiz";
+import { QuizConfig, QuizState, useQuiz, type QuizStateProps } from "./useQuiz";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
