@@ -1,6 +1,7 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
+import type { QuizConfig, QuizAnswer, QuizData } from "./Quiz/types";
+import type { QuizStateProps } from "./Quiz/useQuiz";
 import personalityQuizData from "./personalityQuiz.json";
 import scoredQuizData from "./scoredQuiz.json";
 
@@ -37,7 +38,7 @@ const quizComponents = {
 export default function MyQuiz() {
 	return (
 		<div style={{ minHeight: "300px", display: "grid", justifyContent: "center", alignContent: "center" }}>
-			<Quiz data={scoredQuizData} config={config} components={quizComponents}></Quiz>
+			<Quiz data={scoredQuizData as QuizData} config={config} components={quizComponents}></Quiz>
 		</div>
 	);
 }
@@ -71,7 +72,7 @@ function QuestionBody(state: QuizStateProps) {
 		<div className="question-body">
 			<h1 style={{ fontSize: "30px" }}>{currentQuestion.index}</h1>
 			<h2>{currentQuestion.question}</h2>
-			{currentQuestion.answers.map((item: any, index: number) => (
+			{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
 				// <button
 				// 	type="button"
 				// 	key={index}
@@ -110,10 +111,11 @@ function QuestionBody(state: QuizStateProps) {
 	);
 }
 
-function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick }: QuizStateProps) {
+function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick, currentAnswer }: QuizStateProps) {
+	const answerIsCorrect = currentAnswer?.result === "1";
 	return (
 		<div className="question-explainer">
-			<h2>Explainer</h2>
+			<h2>{answerIsCorrect ? currentQuestion.messageForCorrectAnswer : currentQuestion.messageForIncorrectAnswer}</h2>
 			<p>{currentQuestion.explanation}</p>
 			<button data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
 				Next
@@ -133,12 +135,14 @@ function IntroPage({ handleStartBtnClick }: QuizStateProps) {
 	);
 }
 
-function ResultPage({ handleStartBtnClick, result }: QuizStateProps) {
+function ResultPage({ handleStartBtnClick, result, quizData }: QuizStateProps) {
+	const resultsCopy = quizData?.results;
 	return (
 		<div className="result-page">
 			<h1>
 				<em>Your results is: {result}</em>
 			</h1>
+			{resultsCopy && <p>{resultsCopy[result!].description}</p>}
 			<button type="button" onClick={handleStartBtnClick}>
 				Play again
 			</button>

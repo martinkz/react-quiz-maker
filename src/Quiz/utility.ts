@@ -1,8 +1,8 @@
 import React from "react";
-import { type UserAnswer, AnswerButtonState } from "./useQuiz";
+import { type UserAnswer, type QuizAnswer, AnswerButtonState } from "./types";
 
 export function evaluateScore(userAnswers: UserAnswer[]) {
-	const score = userAnswers.filter((answer: any) => answer.result === "1").length;
+	const score = userAnswers.filter((answer: UserAnswer) => answer.result === "1").length;
 	return score;
 }
 
@@ -47,7 +47,7 @@ export function findReactChild(children: React.ReactNode, name: string): React.R
 // Update the state of all answer buttons based on the current answer and whether to show the correct answer
 export function getAnswerBtnsNewState(
 	index: number,
-	answers: any,
+	answers: QuizAnswer[],
 	currentAnswer: UserAnswer,
 	showCorrectAnswer: boolean
 ) {
@@ -57,7 +57,7 @@ export function getAnswerBtnsNewState(
 	if (showCorrectAnswer) {
 		// If the chosen answer is correct, highlight it and all other correct answers, otherwise highlight the chosen incorrect answer and all correct answers
 		const correctIndexes = findIndexes(
-			answers.map((item: any) => item.result),
+			answers.map((item: QuizAnswer) => item.result),
 			"1"
 		);
 		const isCorrect = correctIndexes.includes(index);

@@ -1,6 +1,7 @@
 import styles from "./Quiz/styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
-import { useQuiz, type QuizConfig, type QuizStateProps } from "./Quiz/useQuiz";
+import type { QuizConfig, QuizData, QuizAnswer } from "./Quiz/types";
+import { useQuiz } from "./Quiz/useQuiz";
 import personalityQuizData from "./personalityQuiz.json";
 import scoredQuizData from "./scoredQuiz.json";
 
@@ -14,12 +15,12 @@ const config: QuizConfig = {
 };
 
 export default function QuizComposed() {
-	const state = useQuiz(scoredQuizData, config);
+	const state = useQuiz(scoredQuizData as QuizData, config);
 	const { maxQuestions, progress, currentQuestion, answerButtonState, result } = state;
 
 	return (
 		<div className="my-quiz">
-			<Quiz parentState={state} config={config} data={scoredQuizData}>
+			<Quiz parentState={state} config={config} data={scoredQuizData as QuizData}>
 				<Quiz.IntroPage state={state}>
 					<div>
 						<p>Intro child component</p>
@@ -37,7 +38,7 @@ export default function QuizComposed() {
 						<Quiz.QuestionBody state={state}>
 							<h1>Question {currentQuestion.index} - Question body child</h1>
 							<p>{currentQuestion.question}</p>
-							{currentQuestion.answers.map((item: any, index: number) => (
+							{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
 								<Quiz.AnswerButton state={state} key={index} index={index}>
 									{item.answer}
 									{answerButtonState[index] === "correct" && <span> ✔</span>}

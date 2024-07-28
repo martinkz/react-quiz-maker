@@ -1,58 +1,29 @@
 import { useState, useRef } from "react";
 import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState, createTimeout } from "./utility";
 // import { type HTMLMotionProps } from "framer-motion";
-
-type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
+import {
+	QuizData,
+	QuestionData,
+	QuizType,
+	QuizState,
+	AnimationVariants,
+	QuizConfig,
+	QuizResultValue,
+	AnswerButtonState,
+	UserAnswer,
+} from "./types";
 
 type EmptyObject = Record<string, never>;
 
-export enum QuizType {
-	SCORED = "scored",
-	PERSONALITY = "personality",
-	CUSTOM = "custom",
-}
-
-export enum QuizState {
-	START = "start",
-	QUESTION = "question",
-	RESULT = "result",
-}
-
-export type AnimationVariants = "slideUp" | "slideLeft" | "scale" | "disabled";
-
-export type QuizConfig = {
-	evalCustom?: EvalFunction;
-	autoResume?: boolean;
-	autoResumeDelay?: number;
-	revealAnswer?: boolean;
-	explainerEnabled?: boolean;
-	explainerNewPage?: boolean;
-	animation?: AnimationVariants;
-	// motionObject?: HTMLMotionProps<"div">;
-};
-
-export enum AnswerButtonState {
-	// UNSET is an initial value only, once clicked, the button will be set to one of the other values
-	// This is to distinguish between the initial state and the state after the user has clicked an answer, for styling purposes
-	UNSET = "unset",
-	DEFAULT = "default",
-	CORRECT = "correct",
-	INCORRECT = "incorrect",
-	SELECTED = "selected",
-}
-
-export type UserAnswer = {
+export interface Question extends QuestionData {
 	index: number;
-	result: string;
-};
-
-export type QuizResult = number | string | null;
+}
 
 export interface QuizStateProps {
 	quizState: QuizState;
-	currentQuestion: any;
+	currentQuestion: Question;
 	currentAnswer: UserAnswer | undefined;
-	result: QuizResult;
+	result: QuizResultValue;
 	maxQuestions: number;
 	quizType: QuizType;
 	handleAnswerBtnClick: (index: number) => void;
@@ -62,20 +33,20 @@ export interface QuizStateProps {
 	questionNextBtnRequiredProps: Record<string, string | boolean | Record<string, any>> | EmptyObject;
 	handleExplainerNextBtnClick: () => void;
 	handleStartBtnClick: () => void;
-	quizData: any;
+	quizData: QuizData;
 	config?: QuizConfig;
 	answerButtonState: AnswerButtonState[];
 	explainerVisible: boolean;
 	progress: number;
 }
 
-export const useQuiz = (data: any, config: QuizConfig) => {
+export const useQuiz = (data: QuizData, config: QuizConfig) => {
 	const quizData = data;
 	const initialAnswerButtonState = Array(quizData.questions[0].answers.length).fill(AnswerButtonState.UNSET);
 	const [quizState, setQuizState] = useState<QuizState>(QuizState.START);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [userAnswers, setUserAnswers] = useState<Array<UserAnswer>>([]);
-	const [result, setResult] = useState<QuizResult>(null);
+	const [result, setResult] = useState<QuizResultValue>(null);
 	// currentAnswer is used to store the user's current answer when the autoResume setting is off. We need to store it as the user can change their answer before the press Next
 	const [currentAnswer, setCurrentAnswer] = useState<UserAnswer | undefined>(undefined);
 	const [answerButtonState, setAnswerButtonState] = useState<AnswerButtonState[]>(initialAnswerButtonState);

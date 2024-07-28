@@ -1,5 +1,6 @@
 import styles from "./styles.module.css";
-import { QuizConfig, QuizState, useQuiz, type QuizStateProps } from "./useQuiz";
+import { useQuiz, type QuizStateProps } from "./useQuiz";
+import { QuizConfig, QuizState, QuizData, QuizAnswer } from "./types";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
@@ -8,7 +9,7 @@ import React, { HTMLAttributes } from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 interface QuizProps {
-	data: any;
+	data: QuizData;
 	config: QuizConfig;
 	parentState?: QuizStateProps; // comes from QuizComposed
 	components?: {
@@ -224,7 +225,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 				<div className="question-body-default">
 					<h2>Question {currentQuestion.index}</h2>
 					<p>{currentQuestion.question}</p>
-					{currentQuestion.answers.map((item: any, index: number) => (
+					{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
 						<Quiz.AnswerButton key={index} index={index} state={state}>
 							{item.answer}
 						</Quiz.AnswerButton>

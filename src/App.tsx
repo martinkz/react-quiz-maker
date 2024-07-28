@@ -1,5 +1,6 @@
 import MyQuiz from "./myQuiz";
 import { Quiz } from "./Quiz/Quiz";
+import { QuizData } from "./Quiz/types";
 import QuizComposed from "./QuizComposed";
 import personalityQuizData from "./personalityQuiz.json";
 import scoredQuizData from "./scoredQuiz.json";
@@ -20,7 +21,7 @@ function App() {
 			<div style={{ margin: "80px 0" }}></div>
 
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					// evalCustom: customAnswerEval,
 					autoResume: true,

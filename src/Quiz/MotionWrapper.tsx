@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, MotionProps } from "framer-motion";
 import { forwardRef, ForwardedRef } from "react";
-import { QuizConfig } from "./useQuiz";
+import { QuizConfig } from "./types";
 
 export const AnimatePresenceWithDisable = ({ children, config }: { children: React.ReactNode; config: QuizConfig }) => {
 	const { animation = "default" } = config;

@@ -6,6 +6,7 @@ import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitForElementToBeRemoved, waitFor, logRoles, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Quiz } from "../Quiz/Quiz";
+import { QuizData } from "../Quiz/types";
 import personalityQuizData from "../personalityQuiz.json";
 import scoredQuizData from "../scoredQuiz.json";
 
@@ -56,7 +57,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: true,
@@ -110,7 +111,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -150,7 +151,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
@@ -199,7 +200,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -256,7 +257,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: false,
 					revealAnswer: false,
@@ -304,7 +305,7 @@ describe("Quiz", () => {
 		const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 		render(
 			<Quiz
-				data={scoredQuizData}
+				data={scoredQuizData as QuizData}
 				config={{
 					autoResume: true,
 					revealAnswer: false,
