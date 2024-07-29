@@ -28,6 +28,8 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 	const { IntroPage, QuestionPage, QuestionHeader, QuestionBody, QuestionInnerWrapper, Explainer, ResultPage } =
 		components || {};
 
+	console.log();
+
 	const localState = useQuiz(data, config);
 	const state = parentState || localState; // parentState is used in QuizComposed, in which case localState is ignored
 
@@ -55,44 +57,67 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 	const QuestionExplainerChild = findReactChild(QuestionInnerWrapperChildren, "Explainer");
 
 	// Component function props
-	const IntroPageComponent = IntroPage && <IntroPage {...state} />;
-	const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
-	const QuestionInnerWrapperComponent = QuestionInnerWrapper || Quiz.QuestionInnerWrapper;
-	const QuestionHeaderComponent = QuestionHeader && <QuestionHeader {...state} />;
-	const QuestionBodyComponent = QuestionBody && <QuestionBody {...state} />;
-	const ExplainerComponent = Explainer && <Explainer {...state} />;
-	const ResultPageComponent = ResultPage && <ResultPage {...state} />;
+	// const IntroPageComponent = IntroPage && <IntroPage {...state} />;
+	// const QuestionPageComponent = QuestionPage || Quiz.QuestionPage;
+	// const QuestionInnerWrapperComponent = QuestionInnerWrapper || Quiz.QuestionInnerWrapper;
+	// const QuestionHeaderComponent = QuestionHeader && <QuestionHeader {...state} />;
+	// const QuestionBodyComponent = QuestionBody && <QuestionBody {...state} />;
+	// const ExplainerComponent = Explainer && <Explainer {...state} />;
+	// const ResultPageComponent = ResultPage && <ResultPage {...state} />;
+
+	const hasComponentProp = components !== undefined;
+	const hasChildren = children !== undefined;
+
+	const EmptyWrapper = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+	let TheIntro = null,
+		TheHeader = null,
+		TheQuestionPage: React.FC<{ children: React.ReactNode }> = EmptyWrapper,
+		TheQuestionInnerWrapper: React.FC<{ children: React.ReactNode }> = EmptyWrapper,
+		TheQuestionBody = null,
+		TheExplainer = null,
+		TheResult = null;
+
+	if (hasComponentProp) {
+		TheIntro = IntroPage && <IntroPage {...state} />;
+		TheHeader = QuestionHeader && <QuestionHeader {...state} />;
+		TheQuestionPage = QuestionPage ?? EmptyWrapper;
+		TheQuestionInnerWrapper =
+			QuestionInnerWrapper ?? (({ children }: { children: React.ReactNode }) => <div>{children}</div>);
+		TheQuestionBody = QuestionBody && <QuestionBody {...state} />;
+		TheExplainer = Explainer && <Explainer {...state} />;
+		TheResult = ResultPage && <ResultPage {...state} />;
+	}
 
 	// Children components or components from props or local components
-	const Intro = IntroChild || IntroPageComponent || <Quiz.IntroPage state={state} />;
-	const Header = QuestionHeaderChild || QuestionHeaderComponent || <Quiz.QuestionHeader state={state} />;
-	const TheQuestionBody = QuestionBodyChild || QuestionBodyComponent || <Quiz.QuestionBody state={state} />;
-	const ExplainerBody = QuestionExplainerChild || ExplainerComponent || <Quiz.Explainer state={state} />;
-	const Result = ResultChild || ResultPageComponent || <Quiz.ResultPage state={state} />;
+	// 	const Intro = IntroChild || IntroPageComponent || <Quiz.IntroPage state={state} />;
+	// const Header = QuestionHeaderChild || QuestionHeaderComponent || <Quiz.QuestionHeader state={state} />;
+	// const TheQuestionBody = QuestionBodyChild || QuestionBodyComponent || <Quiz.QuestionBody state={state} />;
+	// const ExplainerBody = QuestionExplainerChild || ExplainerComponent || <Quiz.Explainer state={state} />;
+	// const Result = ResultChild || ResultPageComponent || <Quiz.ResultPage state={state} />;
 
 	return (
 		<>
 			<AnimatePresenceWithDisable config={config}>
 				{quizState === QuizState.START && (
 					<MotionWrapper config={config} motionProps={MotionSlideUp} key={-1}>
-						{Intro}
+						{TheIntro}
 					</MotionWrapper>
 					// <motion.div key={-1} {...MotionSlideUp}>
-					// 	{Intro}
+					// 	{TheIntro}
 					// </motion.div>
 				)}
 
 				{quizState === QuizState.QUESTION && (
 					<MotionWrapper config={config} key={-2}>
-						<QuestionPageComponent>
+						<TheQuestionPage>
 							{/* <motion.div key={-3} {...MotionSlideUp}>
 							{Header}
 						</motion.div> */}
 							<MotionWrapper config={config} motionProps={MotionSlideUp} key={-3}>
-								{Header}
+								{TheHeader}
 							</MotionWrapper>
 							<MotionWrapper config={config} motionProps={MotionSlideUp} key={-4}>
-								<QuestionInnerWrapperComponent>
+								<TheQuestionInnerWrapper>
 									<AnimatePresenceWithDisable config={config}>
 										{!hideQuestionOnExplainer && (
 											<MotionWrapper config={config} motionProps={MotionSlideUp} key={currentQuestion.index}>
@@ -104,25 +129,25 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 										)}
 										{explainerVisible && (
 											<MotionWrapper config={config} motionProps={MotionScale} key={-5}>
-												{ExplainerBody}
+												{TheExplainer}
 											</MotionWrapper>
 											// <motion.div {...MotionScale} key={-5}>
-											// 	{ExplainerBody}
+											// 	{TheExplainer}
 											// </motion.div>
 										)}
 									</AnimatePresenceWithDisable>
-								</QuestionInnerWrapperComponent>
+								</TheQuestionInnerWrapper>
 							</MotionWrapper>
-						</QuestionPageComponent>
+						</TheQuestionPage>
 					</MotionWrapper>
 				)}
 
 				{quizState === QuizState.RESULT && (
 					// <motion.div key={maxQuestions} {...MotionSlideUp}>
-					// 	{Result}
+					// 	{TheResult}
 					// </motion.div>
 					<MotionWrapper config={config} motionProps={MotionSlideUp} key={maxQuestions}>
-						{Result}
+						{TheResult}
 					</MotionWrapper>
 				)}
 			</AnimatePresenceWithDisable>
