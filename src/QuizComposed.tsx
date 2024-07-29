@@ -27,14 +27,14 @@ export default function QuizComposed() {
 						<Quiz.StartButton state={state}>Start Quiz</Quiz.StartButton>
 					</div>
 				</Quiz.IntroPage>
-				<Quiz.QuestionWrapper>
+				<Quiz.QuestionPage>
 					<Quiz.QuestionHeader state={state}>
 						<div>
 							<h4>{`${currentQuestion.index} / ${maxQuestions} - ${progress}%`} - Header child</h4>
 							<progress className={styles.progress} max="100" value={progress}></progress>
 						</div>
 					</Quiz.QuestionHeader>
-					<Quiz.QuestionPage>
+					<Quiz.QuestionInnerWrapper>
 						<Quiz.QuestionBody state={state}>
 							<h1>Question {currentQuestion.index} - Question body child</h1>
 							<p>{currentQuestion.question}</p>
@@ -48,15 +48,15 @@ export default function QuizComposed() {
 								<Quiz.QuestionNextButton state={state}>Question Next</Quiz.QuestionNextButton>
 							</p>
 						</Quiz.QuestionBody>
-						<Quiz.ExplainerPage state={state}>
+						<Quiz.Explainer state={state}>
 							<h1>Explainer Child</h1>
 							<p>{currentQuestion.question}</p>
 							<p>
 								<Quiz.ExplainerNextButton state={state}>Explainer Next</Quiz.ExplainerNextButton>
 							</p>
-						</Quiz.ExplainerPage>
-					</Quiz.QuestionPage>
-				</Quiz.QuestionWrapper>
+						</Quiz.Explainer>
+					</Quiz.QuestionInnerWrapper>
+				</Quiz.QuestionPage>
 				<Quiz.ResultPage state={state}>
 					<h1>
 						<em>Your results is: {result} - Result child</em>

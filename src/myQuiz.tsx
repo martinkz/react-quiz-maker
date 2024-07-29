@@ -25,11 +25,11 @@ const config: QuizConfig = {
 
 const quizComponents = {
 	IntroPage,
-	QuestionWrapper,
-	QuestionHeader,
 	QuestionPage,
+	QuestionHeader,
+	QuestionInnerWrapper,
 	QuestionBody,
-	ExplainerPage,
+	Explainer,
 	ResultPage,
 };
 
@@ -43,7 +43,7 @@ export default function MyQuiz() {
 	);
 }
 
-function QuestionWrapper({ children }: { children: React.ReactNode }) {
+function QuestionPage({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="question-wrapper" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
 			{children}
@@ -51,7 +51,7 @@ function QuestionWrapper({ children }: { children: React.ReactNode }) {
 	);
 }
 
-function QuestionPage({ children }: { children: React.ReactNode }) {
+function QuestionInnerWrapper({ children }: { children: React.ReactNode }) {
 	return <div className="question-page">{children}</div>;
 }
 
@@ -111,7 +111,7 @@ function QuestionBody(state: QuizStateProps) {
 	);
 }
 
-function ExplainerPage({ currentQuestion, handleExplainerNextBtnClick, currentAnswer }: QuizStateProps) {
+function Explainer({ currentQuestion, handleExplainerNextBtnClick, currentAnswer }: QuizStateProps) {
 	const answerIsCorrect = currentAnswer?.result === "1";
 	return (
 		<div className="question-explainer">
