@@ -83,7 +83,6 @@ export const useQuiz = (data: QuizData, config: QuizConfig) => {
 	};
 	const questionNextBtnRequiredProps = {
 		disabled: currentAnswer === undefined,
-		// style: { visibility: explainerVisible || explainerClosed ? "hidden" : "visible" },
 		style: { visibility: explainerVisible ? "hidden" : "visible" },
 	};
 
