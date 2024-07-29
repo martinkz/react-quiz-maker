@@ -45,14 +45,14 @@ export default function MyQuiz() {
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="question-wrapper" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+		<div className="question-page" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
 			{children}
 		</div>
 	);
 }
 
 function QuestionInnerWrapper({ children }: { children: React.ReactNode }) {
-	return <div className="question-page">{children}</div>;
+	return <div className="question-inner-wrapper">{children}</div>;
 }
 
 function QuestionHeader({ currentQuestion, maxQuestions, progress }: QuizStateProps) {
@@ -114,7 +114,7 @@ function QuestionBody(state: QuizStateProps) {
 function Explainer({ currentQuestion, handleExplainerNextBtnClick, currentAnswer }: QuizStateProps) {
 	const answerIsCorrect = currentAnswer?.result === "1";
 	return (
-		<div className="question-explainer">
+		<div className="explainer">
 			<h2>{answerIsCorrect ? currentQuestion.messageForCorrectAnswer : currentQuestion.messageForIncorrectAnswer}</h2>
 			<p>{currentQuestion.explanation}</p>
 			<button data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
