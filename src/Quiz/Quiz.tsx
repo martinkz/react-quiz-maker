@@ -8,19 +8,22 @@ import { motion } from "framer-motion";
 import React, { HTMLAttributes } from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
+
+type QuizComponents = {
+	IntroPage?: React.FC<QuizStateProps>;
+	QuestionPage?: React.FC<{ children: React.ReactNode }>;
+	QuestionHeader?: React.FC<QuizStateProps>;
+	QuestionBody?: React.FC<QuizStateProps>;
+	QuestionInnerWrapper?: React.FC<{ children: React.ReactNode }>;
+	Explainer?: React.FC<QuizStateProps>;
+	ResultPage?: React.FC<QuizStateProps>;
+};
+
 interface QuizProps {
 	data: QuizData;
 	config: QuizConfig;
 	parentState?: QuizStateProps; // comes from QuizComposed
-	components?: {
-		IntroPage?: React.FC<QuizStateProps>;
-		QuestionPage?: React.FC<{ children: React.ReactNode }>;
-		QuestionHeader?: React.FC<QuizStateProps>;
-		QuestionBody?: React.FC<QuizStateProps>;
-		QuestionInnerWrapper?: React.FC<{ children: React.ReactNode }>;
-		Explainer?: React.FC<QuizStateProps>;
-		ResultPage?: React.FC<QuizStateProps>;
-	};
+	components?: QuizComponents;
 	children?: React.ReactNode;
 }
 
