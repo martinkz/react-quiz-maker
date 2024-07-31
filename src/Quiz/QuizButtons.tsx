@@ -4,10 +4,12 @@ export function QuestionNextButton({
 	children,
 	state,
 	className,
+	style,
 }: {
 	children: React.ReactNode;
 	state: QuizStateProps;
 	className?: string;
+	style?: React.CSSProperties;
 }) {
 	const { handleQuestionNextBtnClick, questionNextBtnRequiredProps, config } = state;
 
@@ -18,6 +20,7 @@ export function QuestionNextButton({
 	return (
 		<button
 			className={className}
+			style={style}
 			data-testid="question-next"
 			type="button"
 			onClick={handleQuestionNextBtnClick}
@@ -32,15 +35,23 @@ export function ExplainerNextButton({
 	children,
 	state,
 	className,
+	style,
 }: {
 	children: React.ReactNode;
 	state: QuizStateProps;
 	className?: string;
+	style?: React.CSSProperties;
 }) {
 	const { handleExplainerNextBtnClick } = state;
 
 	return (
-		<button className={className} data-testid="explainer-next" type="button" onClick={handleExplainerNextBtnClick}>
+		<button
+			className={className}
+			style={style}
+			data-testid="explainer-next"
+			type="button"
+			onClick={handleExplainerNextBtnClick}
+		>
 			{children}
 		</button>
 	);
@@ -50,15 +61,17 @@ export function StartButton({
 	children,
 	state,
 	className,
+	style,
 }: {
 	children: React.ReactNode;
 	state: QuizStateProps;
 	className?: string;
+	style?: React.CSSProperties;
 }) {
 	const { handleStartBtnClick } = state;
 
 	return (
-		<button className={className} type="button" onClick={handleStartBtnClick}>
+		<button className={className} style={style} type="button" onClick={handleStartBtnClick}>
 			{children}
 		</button>
 	);
