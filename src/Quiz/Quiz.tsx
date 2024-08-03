@@ -67,11 +67,11 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 	const ResultPageComponent = ResultPage && <ResultPage {...state} />;
 
 	// Children components or components from props or local components
-	const Intro = IntroChild || IntroPageComponent || <Quiz.IntroPage state={state} />;
-	const Header = QuestionHeaderChild || QuestionHeaderComponent || <Quiz.QuestionHeader state={state} />;
-	const TheQuestionBody = QuestionBodyChild || QuestionBodyComponent || <Quiz.QuestionBody state={state} />;
-	const ExplainerBody = QuestionExplainerChild || ExplainerComponent || <Quiz.Explainer state={state} />;
-	const Result = ResultChild || ResultPageComponent || <Quiz.ResultPage state={state} />;
+	const Intro = IntroPageComponent || IntroChild || <Quiz.IntroPage state={state} />;
+	const Header = QuestionHeaderComponent || QuestionHeaderChild || <Quiz.QuestionHeader state={state} />;
+	const TheQuestionBody = QuestionBodyComponent || QuestionBodyChild || <Quiz.QuestionBody state={state} />;
+	const ExplainerBody = ExplainerComponent || QuestionExplainerChild || <Quiz.Explainer state={state} />;
+	const Result = ResultPageComponent || ResultChild || <Quiz.ResultPage state={state} />;
 
 	return (
 		<>
