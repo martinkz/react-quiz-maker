@@ -1,3 +1,4 @@
+import "./react-quiz.css";
 import { useQuiz, type QuizStateProps } from "./useQuiz";
 import { QuizConfig, QuizState, QuizData, QuizAnswer } from "./types";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
@@ -73,7 +74,7 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 	const Result = ResultPageComponent || ResultChild || <Quiz.ResultPage state={state} />;
 
 	return (
-		<>
+		<QuizWrapper components={components}>
 			<AnimatePresenceWithDisable config={config}>
 				{quizState === QuizState.START && (
 					<MotionWrapper config={config} motionProps={MotionSlideUp} key={-1}>
@@ -128,14 +129,34 @@ export const Quiz = ({ components, children, data, config, parentState }: QuizPr
 					</MotionWrapper>
 				)}
 			</AnimatePresenceWithDisable>
-		</>
+		</QuizWrapper>
 	);
+};
+
+const btnClasses = {
+	unset: "unset",
+	default: "default",
+	selected: "selected",
+	correct: "correct",
+	incorrect: "incorrect",
 };
 
 Quiz.StartButton = StartButton;
 Quiz.QuestionNextButton = QuestionNextButton;
 Quiz.ExplainerNextButton = ExplainerNextButton;
 Quiz.AnswerButton = AnswerButton;
+
+function QuizWrapper({ children, components }: { children: React.ReactNode; components: QuizComponents | undefined }) {
+	if (!components) {
+		return (
+			<div className="quiz-wrapper">
+				<div className="quiz-wrapper-inner">{children}</div>
+			</div>
+		);
+	}
+
+	return <>{children}</>;
+}
 
 interface ResumeProgressProps extends HTMLAttributes<HTMLDivElement> {
 	state: QuizStateProps;
@@ -167,7 +188,7 @@ Quiz.ResumeProgress = ResumeProgress;
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="question-wrapper-default" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+		<div className="quiz-question-page" style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
 			{children}
 		</div>
 	);
@@ -177,21 +198,23 @@ QuestionPage.displayName = "QuestionPage";
 Quiz.QuestionPage = QuestionPage;
 
 function QuestionInnerWrapper({ children }: { children: React.ReactNode }) {
-	return <div className="question-page-default">{children}</div>;
+	return <div className="quiz-question-inner-wrapper">{children}</div>;
 }
 
 QuestionInnerWrapper.displayName = "QuestionInnerWrapper";
 Quiz.QuestionInnerWrapper = QuestionInnerWrapper;
 
 const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
-	const { progress } = state;
+	const { progress, currentQuestion, maxQuestions } = state;
 	return (
 		<>
 			{children || (
-				<div className="question-header-default">
-					<div>
-						<progress max="100" value={progress}></progress>
-					</div>
+				<div className="quiz-question-header">
+					<h3>
+						{currentQuestion.index} <span className="">/</span> {maxQuestions}
+					</h3>
+					<progress className="quiz-progress" max="100" value={progress}></progress>
+					<h3 className="">{`${progress}%`}</h3>
 				</div>
 			)}
 		</>
@@ -205,8 +228,8 @@ const IntroPage = ({ children, state }: { children?: React.ReactNode; state: Qui
 	return (
 		<>
 			{children || (
-				<div className="intro-page-default">
-					<h1>Welcome to the Quiz</h1>
+				<div className="quiz-intro-page">
+					<h2>Welcome to the Quiz</h2>
 					<Quiz.StartButton state={state}>Start quiz</Quiz.StartButton>
 				</div>
 			)}
@@ -218,29 +241,40 @@ IntroPage.displayName = "IntroPage";
 Quiz.IntroPage = IntroPage;
 
 const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
-	const { config, currentQuestion } = state;
+	const { config, currentQuestion, answerButtonState } = state;
 	const { autoResume } = config || {};
 
 	return (
 		<>
 			{children || (
-				<div className="question-body-default">
-					<h2>Question {currentQuestion.index}</h2>
-					<p>{currentQuestion.question}</p>
-					{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
-						<Quiz.AnswerButton key={index} index={index} state={state}>
-							{item.answer}
-						</Quiz.AnswerButton>
-						// <span key={index}>
-						// 	<input type="radio" id={item.answer} name="answer" value={item.answer} />
-						// 	<label htmlFor={item.answer}>{item.answer}</label>
-						// </span>
-					))}
+				<div className="quiz-question-body">
+					{/* <h2>Question {currentQuestion.index}</h2> */}
+					<h2>{currentQuestion.question}</h2>
+					<div className="answer-wrap">
+						{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
+							<Quiz.AnswerButton
+								className={btnClasses[answerButtonState[index]]}
+								key={index}
+								index={index}
+								state={state}
+							>
+								{item.answer}
+								{answerButtonState[index] === "correct" && <span> ✓</span>}
+								{answerButtonState[index] === "incorrect" && <span> ×</span>}
+							</Quiz.AnswerButton>
+							// <span key={index}>
+							// 	<input type="radio" id={item.answer} name="answer" value={item.answer} />
+							// 	<label htmlFor={item.answer}>{item.answer}</label>
+							// </span>
+						))}
+					</div>
 					{!autoResume && (
 						<p>
 							<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 						</p>
 					)}
+
+					{autoResume && <Quiz.ResumeProgress className="quiz-auto-resume-progress" state={state} />}
 				</div>
 			)}
 		</>
@@ -255,9 +289,9 @@ const Explainer = ({ children, state }: { children?: React.ReactNode; state: Qui
 	return (
 		<>
 			{children || (
-				<div className="question-explainer-default">
+				<div className="quiz-explainer">
 					<>
-						<h1>Explainer</h1>
+						<h2>Explainer</h2>
 						<p>{currentQuestion.explanation}</p>
 						<p>
 							<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
@@ -277,8 +311,8 @@ const ResultPage = ({ children, state }: { children?: React.ReactNode; state: Qu
 	return (
 		<>
 			{children || (
-				<div className="result-page-default">
-					<h1>Your results is: {result}</h1>
+				<div className="quiz-result-page">
+					<h2>Your results is: {result}</h2>
 					<Quiz.StartButton state={state}>Play again</Quiz.StartButton>
 				</div>
 			)}

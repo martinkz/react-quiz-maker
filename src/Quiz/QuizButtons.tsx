@@ -3,7 +3,7 @@ import { type QuizStateProps } from "./useQuiz";
 export function QuestionNextButton({
 	children,
 	state,
-	className,
+	className = "",
 	style,
 }: {
 	children: React.ReactNode;
@@ -19,7 +19,7 @@ export function QuestionNextButton({
 
 	return (
 		<button
-			className={className}
+			className={`quiz-button ${className}`}
 			style={style}
 			data-testid="question-next"
 			type="button"
@@ -34,7 +34,7 @@ export function QuestionNextButton({
 export function ExplainerNextButton({
 	children,
 	state,
-	className,
+	className = "",
 	style,
 }: {
 	children: React.ReactNode;
@@ -46,7 +46,7 @@ export function ExplainerNextButton({
 
 	return (
 		<button
-			className={className}
+			className={`quiz-button ${className}`}
 			style={style}
 			data-testid="explainer-next"
 			type="button"
@@ -60,7 +60,7 @@ export function ExplainerNextButton({
 export function StartButton({
 	children,
 	state,
-	className,
+	className = "",
 	style,
 }: {
 	children: React.ReactNode;
@@ -71,7 +71,7 @@ export function StartButton({
 	const { handleStartBtnClick } = state;
 
 	return (
-		<button className={className} style={style} type="button" onClick={handleStartBtnClick}>
+		<button className={`quiz-button ${className}`} style={style} type="button" onClick={handleStartBtnClick}>
 			{children}
 		</button>
 	);
@@ -81,7 +81,7 @@ export function AnswerButton({
 	children,
 	index,
 	state,
-	className,
+	className = "",
 	style,
 }: {
 	children: React.ReactNode;
@@ -94,7 +94,7 @@ export function AnswerButton({
 
 	return (
 		<button
-			className={className}
+			className={`quiz-button ${className}`}
 			type="button"
 			onClick={() => handleAnswerBtnClick(index)}
 			style={style}

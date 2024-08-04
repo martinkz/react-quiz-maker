@@ -1,4 +1,4 @@
-import styles from "./Quiz/styles.module.css";
+import styles from "./styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import type { QuizConfig, QuizAnswer, QuizData } from "./Quiz/types";
 import type { QuizStateProps } from "./Quiz/useQuiz";
