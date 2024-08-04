@@ -27,9 +27,9 @@ function App() {
 					autoResume: true,
 					autoResumeDelay: 1200,
 					revealAnswer: false,
-					// explainerEnabled: true,
+					explainerEnabled: true,
 					// explainerNewPage: true,
-					// animation: "slideLeft",
+					animation: "mixed",
 				}}
 			/>
 		</>

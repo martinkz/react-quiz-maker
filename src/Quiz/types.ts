@@ -12,7 +12,7 @@ export enum QuizState {
 	RESULT = "result",
 }
 
-export type AnimationVariants = "slideUp" | "slideLeft" | "scale" | "disabled";
+export type AnimationVariants = "mixed" | "slideUp" | "slideLeft" | "scale" | "disabled";
 
 type EvalFunction = (userAnswers: UserAnswer[]) => string | number | null;
 

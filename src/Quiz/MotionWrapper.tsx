@@ -17,13 +17,13 @@ export const MotionWrapper = forwardRef(function (
 	{ children, config, motionProps }: { children: React.ReactNode; config?: QuizConfig; motionProps?: MotionProps },
 	ref: ForwardedRef<HTMLDivElement>
 ) {
-	const { animation = "default" /*, motionObject*/ } = config || {};
+	const { animation = "mixed" /*, motionObject*/ } = config || {};
 
 	const wrappers = {
 		slideUp: MotionSlideUp,
 		slideLeft: MotionSlideLeft,
 		scale: MotionScale,
-		default: motionProps,
+		mixed: motionProps,
 	};
 
 	if (animation === "disabled") {
