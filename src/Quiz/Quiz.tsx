@@ -1,22 +1,21 @@
-import styles from "./styles.module.css";
 import { useQuiz, type QuizStateProps } from "./useQuiz";
 import { QuizConfig, QuizState, QuizData, QuizAnswer } from "./types";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";
 import { MotionWrapper, MotionScale, MotionSlideUp, AnimatePresenceWithDisable } from "./MotionWrapper";
 import { findReactChild } from "./utility";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import React, { HTMLAttributes } from "react";
 
 type NoPropsFC = React.FC<Record<string, never>>;
 
 type QuizComponents = {
-	IntroPage?: React.FC<QuizStateProps>;
-	QuestionPage?: React.FC<{ children: React.ReactNode }>;
-	QuestionHeader?: React.FC<QuizStateProps>;
-	QuestionBody?: React.FC<QuizStateProps>;
-	QuestionInnerWrapper?: React.FC<{ children: React.ReactNode }>;
-	Explainer?: React.FC<QuizStateProps>;
-	ResultPage?: React.FC<QuizStateProps>;
+	IntroPage: React.FC<QuizStateProps>;
+	QuestionPage: React.FC<{ children: React.ReactNode }>;
+	QuestionHeader: React.FC<QuizStateProps>;
+	QuestionBody: React.FC<QuizStateProps>;
+	QuestionInnerWrapper: React.FC<{ children: React.ReactNode }>;
+	Explainer: React.FC<QuizStateProps>;
+	ResultPage: React.FC<QuizStateProps>;
 };
 
 interface QuizProps {
