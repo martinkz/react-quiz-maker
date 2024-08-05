@@ -1,4 +1,4 @@
-import "./react-quiz.css";
+// import "./react-quiz.css";
 import { useQuiz, type QuizStateProps } from "./useQuiz";
 import { QuizConfig, QuizState, QuizData, QuizAnswer } from "./types";
 import { AnswerButton, StartButton, QuestionNextButton, ExplainerNextButton } from "./QuizButtons";

@@ -4,6 +4,7 @@ import { QuizData } from "./Quiz/types";
 import QuizComposed from "./QuizComposed";
 import personalityQuizData from "./personalityQuiz.json";
 import scoredQuizData from "./scoredQuiz.json";
+import "./Quiz/react-quiz.css";
 
 // import { type UserAnswer } from "./Quiz/QuizContext";
 // function customAnswerEval(userAnswers: UserAnswer[]) {
