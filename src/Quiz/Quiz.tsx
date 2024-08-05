@@ -225,11 +225,15 @@ QuestionHeader.displayName = "QuestionHeader";
 Quiz.QuestionHeader = QuestionHeader;
 
 const IntroPage = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
+	const { quizData } = state;
+	const quizTitle = quizData.quizTitle;
+	const quizDescription = quizData.quizSynopsis;
 	return (
 		<>
 			{children || (
 				<div className="quiz-intro-page">
-					<h2>Welcome to the Quiz</h2>
+					<h2>{quizTitle}</h2>
+					<p>{quizDescription}</p>
 					<Quiz.StartButton state={state}>Start quiz</Quiz.StartButton>
 				</div>
 			)}
@@ -248,8 +252,11 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 		<>
 			{children || (
 				<div className="quiz-question-body">
-					{/* <h2>Question {currentQuestion.index}</h2> */}
-					<h2>{currentQuestion.question}</h2>
+					<h2>
+						<span className="quiz-question-index">{currentQuestion.index} </span>
+						{currentQuestion.question}
+					</h2>
+
 					<div className="answer-wrap">
 						{currentQuestion.answers.map((item: QuizAnswer, index: number) => (
 							<Quiz.AnswerButton
@@ -285,18 +292,17 @@ QuestionBody.displayName = "QuestionBody";
 Quiz.QuestionBody = QuestionBody;
 
 const Explainer = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
-	const { currentQuestion } = state;
+	const { currentQuestion, currentAnswer } = state;
+	const answerIsCorrect = currentAnswer?.result === "1";
 	return (
 		<>
 			{children || (
 				<div className="quiz-explainer">
-					<>
-						<h2>Explainer</h2>
-						<p>{currentQuestion.explanation}</p>
-						<p>
-							<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
-						</p>
-					</>
+					<h2>
+						{answerIsCorrect ? currentQuestion.messageForCorrectAnswer : currentQuestion.messageForIncorrectAnswer}
+					</h2>
+					<p>{currentQuestion.explanation}</p>
+					<Quiz.ExplainerNextButton state={state}>Next</Quiz.ExplainerNextButton>
 				</div>
 			)}
 		</>
@@ -307,12 +313,14 @@ Explainer.displayName = "Explainer";
 Quiz.Explainer = Explainer;
 
 const ResultPage = ({ children, state }: { children?: React.ReactNode; state: QuizStateProps }) => {
-	const { result } = state;
+	const { result, quizData } = state;
+	const resultsCopy = quizData.results;
 	return (
 		<>
 			{children || (
 				<div className="quiz-result-page">
 					<h2>Your results is: {result}</h2>
+					{resultsCopy && <p>{resultsCopy[result!].description}</p>}
 					<Quiz.StartButton state={state}>Play again</Quiz.StartButton>
 				</div>
 			)}
