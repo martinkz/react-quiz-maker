@@ -4,6 +4,7 @@ import { evaluateScore, evaluatePersonality, getAnswerBtnsNewState, createTimeou
 import {
 	QuizData,
 	QuestionData,
+	quizTypeList,
 	QuizType,
 	QuizState,
 	AnimationVariants,
@@ -75,7 +76,7 @@ export const useQuiz = (data: QuizData, config: QuizConfig) => {
 		explainerNewPage = false,
 	} = config || {};
 
-	const showCorrectAnswer = quizType === QuizType.SCORED && revealAnswer === true;
+	const showCorrectAnswer = quizType === "scored" && revealAnswer === true;
 	const isAnswerBtnStateSet = currentAnswer !== undefined;
 	const isAnswerBtnDisabled = isAnswerBtnStateSet && (showCorrectAnswer || explainerVisible);
 	const answerBtnRequiredProps = {
@@ -86,16 +87,16 @@ export const useQuiz = (data: QuizData, config: QuizConfig) => {
 		style: { visibility: explainerVisible ? "hidden" : "visible" },
 	};
 
-	if (!Object.values(QuizType).includes(quizType)) {
+	if (!quizTypeList.includes(quizType)) {
 		throw new Error(`Invalid quiz type: ${quizType}. Please provide a valid quiz type.`);
 	}
 
-	if (evalCustom === undefined && quizType === QuizType.CUSTOM) {
+	if (evalCustom === undefined && quizType === "custom") {
 		throw new Error(
 			"Quiz type set as type 'custom' but no custom evaluation function was provided. Please provide a custom evaluation function parameter."
 		);
 	}
-	if (evalCustom !== undefined && quizType !== QuizType.CUSTOM) {
+	if (evalCustom !== undefined && quizType !== "custom") {
 		throw new Error(
 			`You provided a custom evaluation function parameter, but your quiz is of type ${quizType}. Please set the quiz type to 'custom' if you'd like to use a custom evaluator.}`
 		);
@@ -209,9 +210,9 @@ export const useQuiz = (data: QuizData, config: QuizConfig) => {
 	function endQuiz(userAnswers: UserAnswer[]) {
 		timersRef.current = {};
 		const evalFunctions = {
-			[QuizType.SCORED]: evaluateScore,
-			[QuizType.PERSONALITY]: evaluatePersonality,
-			[QuizType.CUSTOM]: evalCustom,
+			scored: evaluateScore,
+			personality: evaluatePersonality,
+			custom: evalCustom,
 		};
 
 		const evalResult = evalFunctions[quizType]!(userAnswers);

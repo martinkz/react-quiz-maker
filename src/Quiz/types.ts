@@ -1,10 +1,7 @@
 // These get bundled as types.d.ts in the final package
 
-export enum QuizType {
-	SCORED = "scored",
-	PERSONALITY = "personality",
-	CUSTOM = "custom",
-}
+export const quizTypeList = ["scored", "personality", "custom"] as const;
+export type QuizType = (typeof quizTypeList)[number];
 
 export enum QuizState {
 	START = "start",
