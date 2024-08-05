@@ -84,7 +84,7 @@ function QuestionBody(state: QuizStateProps) {
 				// 	{answerButtonState[index] === "correct" && <span> ✔</span>}
 				// </button>
 				<Quiz.AnswerButton
-					style={{ background: btnColors[answerButtonState[index]] }}
+					style={{ color: "white", background: btnColors[answerButtonState[index]] }}
 					key={index}
 					index={index}
 					state={state}
