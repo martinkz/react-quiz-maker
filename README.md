@@ -12,14 +12,14 @@ npm install react-quiz-maker
 
 ## Config
 
-| Option             | Type      | Values                                                   | Default     | Description                                                                                   |
-| ------------------ | --------- | -------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------- |
-| `autoResume`       | `boolean` |                                                          | `false`     | The quiz will resume automatically after the user has answered the question                   |
-| `autoResumeDelay`  | `number`  |                                                          | `1000`      | The delay after which the quiz will resume automatically                                      |
-| `revealAnswer`     | `boolean` |                                                          | `false`     | Reveal the correct answer after the user has chosen one of the answers                        |
-| `explainerEnabled` | `boolean` |                                                          | `false`     | Enable an explanation box which appears after each question has been answered                 |
-| `explainerNewPage` | `boolean` |                                                          | `false`     | Have the explanation box replace the question, instead of both being present at the same time |
-| `animation`        | `string`  | `"default", "slideUp", "slideLeft", "scale", "disabled"` | `"default"` | Choose an animation style (or disable the animation)                                          |
+| Option             | Type      | Values                                                 | Default   | Description                                                                                   |
+| ------------------ | --------- | ------------------------------------------------------ | --------- | --------------------------------------------------------------------------------------------- |
+| `autoResume`       | `boolean` |                                                        | `false`   | The quiz will resume automatically after the user has answered the question                   |
+| `autoResumeDelay`  | `number`  |                                                        | `1000`    | The delay after which the quiz will resume automatically                                      |
+| `revealAnswer`     | `boolean` |                                                        | `false`   | Reveal the correct answer after the user has chosen one of the answers                        |
+| `explainerEnabled` | `boolean` |                                                        | `false`   | Enable an explanation box which appears after each question has been answered                 |
+| `explainerNewPage` | `boolean` |                                                        | `false`   | Have the explanation box replace the question, instead of both being present at the same time |
+| `animation`        | `string`  | `"mixed", "slideUp", "slideLeft", "scale", "disabled"` | `"mixed"` | Choose an animation style (or disable the animation)                                          |
 
 ## API
 
