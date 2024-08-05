@@ -4,6 +4,7 @@ import { QuizData } from "./Quiz/types";
 import QuizComposed from "./QuizComposed";
 import personalityQuizData from "./personalityQuiz.json";
 import scoredQuizData from "./scoredQuiz.json";
+import "./Quiz/react-quiz.css";
 
 // import { type UserAnswer } from "./Quiz/QuizContext";
 // function customAnswerEval(userAnswers: UserAnswer[]) {
@@ -17,9 +18,6 @@ function App() {
 			{/* <QuizComposed />
 			<div style={{ margin: "80px 0" }}></div> */}
 
-			<MyQuiz />
-			<div style={{ margin: "80px 0" }}></div>
-
 			<Quiz
 				data={scoredQuizData as QuizData}
 				config={{
@@ -28,10 +26,13 @@ function App() {
 					autoResumeDelay: 1200,
 					revealAnswer: false,
 					explainerEnabled: true,
-					// explainerNewPage: true,
+					explainerNewPage: true,
 					animation: "mixed",
 				}}
 			/>
+
+			<div style={{ margin: "80px 0" }}></div>
+			<MyQuiz />
 		</>
 	);
 }

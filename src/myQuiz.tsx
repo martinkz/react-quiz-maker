@@ -1,4 +1,4 @@
-import styles from "./Quiz/styles.module.css";
+import styles from "./styles.module.css";
 import { Quiz } from "./Quiz/Quiz";
 import type { QuizConfig, QuizAnswer, QuizData } from "./Quiz/types";
 import type { QuizStateProps } from "./Quiz/useQuiz";
@@ -84,7 +84,7 @@ function QuestionBody(state: QuizStateProps) {
 				// 	{answerButtonState[index] === "correct" && <span> ✔</span>}
 				// </button>
 				<Quiz.AnswerButton
-					style={{ background: btnColors[answerButtonState[index]] }}
+					style={{ color: "white", background: btnColors[answerButtonState[index]] }}
 					key={index}
 					index={index}
 					state={state}
