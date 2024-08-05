@@ -1,6 +1,5 @@
 {
 	"name": "react-quiz-maker",
-	"private": true,
 	"version": "0.0.2",
 	"type": "module",
 	"main": "./dist/react-quiz-maker.umd.cjs",
