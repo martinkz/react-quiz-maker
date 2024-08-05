@@ -9,7 +9,7 @@ import { libInjectCss } from "vite-plugin-lib-inject-css";
 export default defineConfig({
 	plugins: [
 		react(),
-		libInjectCss(),
+		// libInjectCss(),
 		dts({
 			include: ["src/Quiz"],
 			insertTypesEntry: true,
