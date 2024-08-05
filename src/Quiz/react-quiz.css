@@ -35,7 +35,7 @@
 
 .quiz-wrapper {
 	position: relative;
-	max-width: 930px;
+	max-width: 970px;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
@@ -115,18 +115,18 @@
 	border-radius: 1rem;
 }
 
-.quiz-progress {
+.quiz-main-progress {
 	flex: 1;
 	background-color: transparent;
 	border-radius: 100px;
 	overflow: hidden;
 }
 
-.quiz-progress::-webkit-progress-bar {
+.quiz-main-progress::-webkit-progress-bar {
 	background-color: rgba(255, 255, 255, 0.4);
 }
 
-.quiz-progress::-webkit-progress-value {
+.quiz-main-progress::-webkit-progress-value {
 	transition: all 1s ease;
 	background-color: rgba(255, 255, 255, 0.8);
 	border-radius: 100px;
@@ -185,20 +185,24 @@
 	}
 }
 
-.quiz-question-body .quiz-button {
+.answer-wrap .quiz-button.default {
 	background-color: var(--color-answer-btn-default);
 }
 
-.quiz-question-body .quiz-button.selected {
+.answer-wrap .quiz-button.unset {
+	background-color: var(--color-answer-btn-unset);
+}
+
+.answer-wrap .quiz-button.selected {
 	background-color: var(--color-answer-btn-selected);
 	transform: scale(1.07);
 }
 
-.quiz-question-body .quiz-button.correct {
+.answer-wrap .quiz-button.correct {
 	background-color: var(--color-answer-btn-correct);
 }
 
-.quiz-question-body .quiz-button.incorrect {
+.answer-wrap .quiz-button.incorrect {
 	background-color: var(--color-answer-btn-incorrect);
 }
 

@@ -174,6 +174,7 @@ function ResumeProgress({ state, ...props }: ResumeProgressProps) {
 			aria-valuemax={100}
 			aria-label="Waiting to continue"
 			{...props}
+			className={`quiz-auto-resume-progress ${props?.className}`}
 		>
 			<div
 				style={{
@@ -213,7 +214,7 @@ const QuestionHeader = ({ children, state }: { children?: React.ReactNode; state
 					<h3>
 						{currentQuestion.index} <span className="">/</span> {maxQuestions}
 					</h3>
-					<progress className="quiz-progress" max="100" value={progress}></progress>
+					<progress className="quiz-main-progress" max="100" value={progress}></progress>
 					<h3 className="">{`${progress}%`}</h3>
 				</div>
 			)}
@@ -281,7 +282,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 						</p>
 					)}
 
-					{autoResume && <Quiz.ResumeProgress className="quiz-auto-resume-progress" state={state} />}
+					{autoResume && <Quiz.ResumeProgress state={state} />}
 				</div>
 			)}
 		</>

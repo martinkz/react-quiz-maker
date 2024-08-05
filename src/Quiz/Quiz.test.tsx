@@ -337,7 +337,7 @@ describe("Quiz", () => {
 		await user.click(thirdQuestionAnswerBtns[0]);
 		await act(() => vi.runAllTimers());
 
-		screen.getByText(/3/i);
+		screen.getAllByText(/3/i);
 
 		q.getPlayAgainBtn();
 	});
