@@ -1,6 +1,6 @@
 {
 	"name": "react-quiz-maker",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"type": "module",
 	"main": "./dist/react-quiz-maker.umd.cjs",
 	"module": "./dist/react-quiz-maker.js",
