@@ -158,11 +158,11 @@ function QuizWrapper({ children, components }: { children: React.ReactNode; comp
 	return <>{children}</>;
 }
 
-interface ResumeProgressProps extends HTMLAttributes<HTMLDivElement> {
+interface AutoResumeProgressProps extends HTMLAttributes<HTMLDivElement> {
 	state: QuizStateProps;
 }
 
-function ResumeProgress({ state, ...props }: ResumeProgressProps) {
+function AutoResumeProgress({ state, ...props }: AutoResumeProgressProps) {
 	const { config, currentAnswer } = state;
 	const waitingForDelay = config?.autoResume && currentAnswer !== undefined;
 	const progress = waitingForDelay ? 100 : 0;
@@ -185,7 +185,7 @@ function ResumeProgress({ state, ...props }: ResumeProgressProps) {
 		</div>
 	);
 }
-Quiz.ResumeProgress = ResumeProgress;
+Quiz.AutoResumeProgress = AutoResumeProgress;
 
 function QuestionPage({ children }: { children: React.ReactNode }) {
 	return (
@@ -282,7 +282,7 @@ const QuestionBody = ({ children, state }: { children?: React.ReactNode; state: 
 						</p>
 					)}
 
-					{autoResume && <Quiz.ResumeProgress state={state} />}
+					{autoResume && <Quiz.AutoResumeProgress state={state} />}
 				</div>
 			)}
 		</>

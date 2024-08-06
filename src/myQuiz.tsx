@@ -105,7 +105,7 @@ function QuestionBody(state: QuizStateProps) {
 				<Quiz.QuestionNextButton state={state}>Next</Quiz.QuestionNextButton>
 			</p>
 			<div>
-				<Quiz.ResumeProgress className={styles["auto-resume-progress"]} state={state} />
+				<Quiz.AutoResumeProgress className={styles["auto-resume-progress"]} state={state} />
 			</div>
 		</div>
 	);
