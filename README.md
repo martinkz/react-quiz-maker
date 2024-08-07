@@ -83,7 +83,7 @@ This visualises how the implementable components wrap each other to help you wit
 
 ## Code example
 
-This is an example of how to use the basic quiz with default styles.
+This is an example of how to use the basic quiz with default styles. For a custom implementation see the Stackblitz examples at the top.
 
 ### App.tsx
 
