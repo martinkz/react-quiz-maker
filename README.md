@@ -1,6 +1,6 @@
 # React Quiz Maker
 
-This is a quiz building library which allows developers to implement a variety of animated quiz types with a custom design, without having to implement most of the quiz logic.
+This is a quiz building library which allows developers to implement a variety of animated quiz types with a custom design, without having to implement most of the quiz logic. Uses motion framer under the hood.
 
 ## Live Demo
 
