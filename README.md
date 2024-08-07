@@ -2,7 +2,21 @@
 
 This is a quiz building library which allows developers to implement a variety of animated quiz types with a custom design, without having to implement most of the quiz logic.
 
-[Show me some code](#code-example) | [Demo]()
+## Live Demo
+
+Here you can preview different configuration options.
+
+https://react-quiz-demo.vercel.app/
+
+## Stackblitz examples
+
+(These might not work on Safari currently due to a Stackblitz issue, try Chrome or Firefox)
+
+[Basic demo](https://stackblitz.com/~/github.com/martinkz/react-quiz-basic-demo?file=src/App.tsx)
+
+[Custom quiz using tailwind css](https://stackblitz.com/~/github.com/martinkz/react-quiz-custom-demo-tailwind?file=src/App.tsx)
+
+[Custom quiz using plain css](https://stackblitz.com/~/github.com/martinkz/react-quiz-custom-demo-css?file=src/App.tsx)
 
 ## Installation
 
@@ -57,7 +71,7 @@ This visualises how the implementable components wrap each other to help you wit
 
 #### Intro
 
-![Question](/docs/quiz-intro.png)
+![Intro](/docs/quiz-intro.png)
 
 #### Question and explainer
 
@@ -65,41 +79,44 @@ This visualises how the implementable components wrap each other to help you wit
 
 #### Result
 
-![Question](/docs/quiz-result.png)
+![Result](/docs/quiz-result.png)
 
 ## Code example
 
-This is an example of a custom quiz which uses the available implementable components. Uses tailwind css for styling. If it's not clear what each component contains, look at the pictures above this section. This is the same design/implementation as in the [demo]().
+This is an example of how to use the basic quiz with default styles.
 
 ### App.tsx
 
 ```js
-
-import type { QuizData } from "react-quiz-maker";
-import MyQuiz from "./components/MyQuiz";
-import scoredQuizData from "./scoredQuiz.json";
+import { Quiz, type QuizData } from "react-quiz-maker";
+import quizData from "./scoredQuiz.json";
+import "./react-quiz.css";
 
 const config = {
 	autoResume: true,
 	autoResumeDelay: 1200,
-	revealAnswer: false,
+	revealAnswer: true,
 	explainerEnabled: false,
 	explainerNewPage: false,
-	animation: "slideUp",
+	animation: "mixed",
 } as const;
 
 function App() {
-	return <MyQuiz config={config} data={scoredQuizData as QuizData} />;
+	return <Quiz config={config} data={quizData as QuizData} />;
 }
 
 export default App;
 ```
 
-### scoredQuiz.json
+### Quiz data json
 
-See [here](https://github.com/martinkz/react-quiz-demo/blob/main/src/scoredQuiz.json).
+Download [scored quiz json](https://github.com/martinkz/react-quiz-demo/blob/main/src/scoredQuiz.json) or [personality quiz json](https://github.com/martinkz/react-quiz-maker/blob/main/src/personalityQuiz.json).
 
-## Important points
+### CSS
 
-- If you omit any of the implementable components, it will use a default one. If you wish to omit it entirely (for example QuestionHeader), you can create a component that returns null.
-- If you'd like to omit the intro page, you can create an IntroPage component which in its body calls the handleStartBtnClick() function from the state to automatically start the quiz (will add code example in the near future).
+Download [here](https://github.com/martinkz/react-quiz-maker/blob/main/src/Quiz/react-quiz.css)
+
+## Tips
+
+- If you omit any of the implementable components, it will use a default one. If you wish to omit it entirely (for example QuestionHeader), you can create a component which returns false.
+- If you'd like to omit the intro page, you can create an IntroPage component which in its body calls the handleStartBtnClick() function to automatically start the quiz (will add code example in the near future).
